@@ -1,0 +1,16 @@
+Creation d'une nouvelle branche avec le nom "testing":
+ -> git branch testing
+	a ce moemnt, la branche testing pointe sur le noeud ou on se trouve a la creation de la branche.
+
+Pour travailler sur la nouvelle branche:
+ -> git checkout testing
+	a ce moment HEAD (qui est le pointeur de "travaille") va pointer sur le noeud de la nouvelle branche.
+
+En une ligne on peut faire (creation + pointer dessus):
+ -> git checkout -b <nouvelle-banche>
+
+ Une fois qu'on est sur que notre branche n'a pas d'erreur, on peut merger:
+	-> git checkout master (on revient sur le master avant la creation de notre branche)
+	-> git merge <nouvelle-banche> (on merge notre banche avec le pointeur master)
+	-> git branch -d <nouvelle-branche> (on supprime le pointeur de la branche car on n'en a plus besoin)
+	
