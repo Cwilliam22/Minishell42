@@ -1,0 +1,101 @@
+MINISHELL
+    -> Interpréteur De Commandes
+    -> Imite Bash
+    -> Fonctionnalités De Base
+    -> Mode Interactif (pas de scripts)
+
+Parties :
+
+- Boucle Principale
+- Parsing & Tokenization
+- Gestion des Processus
+- Gestions des Builtins
+- Gestions des Signaux
+- Gestions de la mémoire et des erreurs
+
+
+Boucle Principale :
+
+-> Attend les commandes de l'utilisateur, analyse et exécute en boucle jusqu'à ce que l'utilisateur quitte le shell
+
+    Contenu dans la boucle :  
+        Afficher un prompt -> $>
+        Attendre l'entrée utilisateur -> char *readline (const char *prompt);
+        Stocker l'historique des commandes -> void add_history(char *s)
+        Parser la commande -> découper et analyser
+        Exécuter la commande -> soit un builtin (process interne), soit un processus externe
+        Gérer les erreurs -> syntaxe, commande introuvable, etc
+        Libérer la mémoire -> free 
+        
+        (Recommencer)
+
+Parsing & Tokenization : 
+
+-> Découper la commande en token/éléments exploitables (Tokenization)
+-> Préparer ces éléments à l'exécution (Parsing)
+
+
+    -> Exemple Input : echo "Hello" > file.txt
+
+    Tokenization : 
+        -> Chaque token représente un mot, une commande, un argument ou un opérateur
+
+        -> Exemple Après Tokenization : ["echo", "Hello", ">", "file.txt"]
+
+        Etapes : 
+            - Séparer les mots par les espaces (ls, -l, grep, etc.).
+            - Identifier les opérateurs spéciaux (|, <, >, >>, <<).
+            - Gérer les guillemets (' et ") :
+            - Texte entre " -> Les variables $VAR sont expansées.
+            - Texte entre ' -> Tout est pris tel quel.
+            - Ignorer les espaces en trop
+
+        Opérateurs spéciaux : 
+            - Pipes
+                | -> Indiquent que la sortie d'une commande est envoyée en entrée de la suivante
+            - Redirections
+                > -> Redirige la sortie vers un fichier (écrase)
+                >> -> Redirige la sortie (ajoute à la fin)
+                < -> Utilise un fichier comme entrée
+                << -> Here-doc (lire entrée jusqu'à un mot-clé)
+
+    Parsing : 
+        -> Transforme la liste de tokens en une structure compréhensible pour le shell
+
+        -> Exemple Après Parsing :  Commande : "echo"
+                                    Arguments : ["Hello"]
+                                    Redirection de sortie : "file.txt"
+    
+        
+
+Gestions des Builtins : 
+
+-> Executions de CMDs
+
+2 cas : 
+    - CMD interne (builtin) -> Execution directement dans le shell
+    - CMD externe -> Nécessite un nouveau processus (fork() & exceve())
+
+    CMDs internes : 
+        - echo -> affiche du texte
+        - cd -> change de répertoire
+        - pwd -> affiche le répertoire courant
+        - export -> ajoute/modifie une variable d’environnement
+        - unset -> supprime une variable d’environnement 
+        - env -> affiche les variables d’environnement
+        - exit -> ferme le shell
+        
+        - autres ??
+
+    CMDs externes : 
+
+    -> On utilise : 
+            - fork() -> Crée un nouveau processus.
+            - execve() -> Remplace ce processus par le programme demandé.
+            - waitpid() -> Attend la fin du processus.
+
+-> Condition de détection entre interne (builtin) et externe
+        if (c_est_un_builtin())
+            ...
+        else
+            c_est_un_externe()
