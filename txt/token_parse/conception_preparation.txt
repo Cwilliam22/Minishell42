@@ -1,2 +1,26 @@
-Fonctionnalités:
-- 
+Fonctionnalités a implementer :
+1 Lecture de l'entrée
+	- Le processus commence par la lecture de la ligne de commande
+	- Si la ligne est vide, on retourne au début pour attendre une nouvelle commande
+
+2 Tokenization (analyse lexicale)
+	- Une liste de tokens est initialisée
+	- Pour chaque caractère de la ligne :
+		* Les espaces et tabulations sont ignorés
+		* Les caractères spéciaux (|, <, >, &, etc.) sont identifiés comme tokens spécifiques
+		* Le contenu entre guillemets est traité comme une unité
+		* Les mots standards sont extraits jusqu'au prochain délimiteur
+
+3 Analyse syntaxique (parsing)
+	- Vérification de la validité syntaxique des tokens :
+		* Cohérence des pipes
+		* Structure correcte des redirections
+		* Fermeture des guillemets
+		* Utilisation appropriée des opérateurs logiques
+	- Construction de l'arbre syntaxique si tout est valide
+
+3 Traitement des erreurs
+	- Affichage des erreurs de syntaxe si détectées
+	- Retour au début pour une nouvelle saisie
+
+Fait:
