@@ -1,0 +1,49 @@
+flowchart TD
+    A[Début] --> B[Lecture de la ligne de commande]
+    B --> C{Ligne vide?}
+    C -->|Oui| A
+    C -->|Non| D[Initialiser liste de tokens]
+    
+    D --> E[Analyser caractère courant]
+    
+    E --> F{Espace ou\ntabulation?}
+    F -->|Oui| G[Passer au\ncaractère suivant]
+    G --> N
+    
+    F -->|Non| H{Caractère\nspécial?}
+    H -->|Oui| I[Créer token\nspécial]
+    I --> N
+    
+    H -->|Non| J{Guillemet\nsimple/double?}
+    J -->|Oui| K[Traiter contenu\nentre guillemets]
+    K --> N
+    
+    J -->|Non| L[Extraire mot\njusqu'au délimiteur]
+    L --> M[Créer token\npour le mot]
+    M --> N{Fin de\nla ligne?}
+    
+    N -->|Non| E
+    N -->|Oui| O[Analyse syntaxique\nde la liste de tokens]
+    
+    O --> P{Syntaxe\nvalide?}
+    P -->|Non| Q[Afficher erreur\nde syntaxe]
+    Q --> A
+    
+    P -->|Oui| R[Construire l'arbre\nsyntaxique]
+    R --> S[Fin]
+    
+    subgraph "Traitement caractères spéciaux"
+        I1["|" - Pipe]
+        I2["< ou >" - Redirection]
+        I3["<< ou >>" - Heredoc/Append]
+        I4["&& ou ||" - Opérateurs logiques]
+        I5["( )" - Groupes]
+        I6[";" - Séparateur]
+    end
+    
+    subgraph "Règles de parsing"
+        R1[Vérifier la cohérence des pipes]
+        R2[Vérifier les redirections]
+        R3[Vérifier les paires de guillemets]
+        R4[Vérifier la syntaxe des opérateurs]
+    end
