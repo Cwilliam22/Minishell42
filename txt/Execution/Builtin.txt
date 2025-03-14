@@ -1,0 +1,228 @@
+BUILTIN : 
+
+Commandes internes implémentées directement dans le shell, sans avoir besoin d'appeler un programme externe.
+Elles sont essentielles car certaines d’entre elles affectent directement l’environnement du shell.
+
+Builtins à implémenter : 
+    - echo (-n)
+    - cd (chemin absolu ou relatif)
+    - pwd (sans option)
+    - export sans aucune option
+    - unset sans aucune option
+    - env sans aucune option ni argument
+    - exit sans aucune option
+
+
+echo (CMD) :
+    -> Sert à afficher du texte sur la sortie standard.
+    -> Affiche la ligne fournie et ajoute un saut de ligne (\n) à la fin.
+    -> Avec Option :
+        (-n) -> sans saut de ligne à la fin
+    -> Exemples : 
+        (1) : INPUT -> echo
+              OUTPUT -> (\n)
+
+        (2) : INPUT -> echo echo
+              OUTPUT -> echo
+
+        (3) : INPUT -> echo -n
+              OUTPUT -> %
+
+        (4) : INPUT -> echo -n Hello
+              OUTPUT -> Hello%
+
+        (5) : INPUT -> echo -nnnn
+              OUTPUT -> %
+
+        (6) : INPUT -> echo -nnn Hello
+              OUTPUT -> Hello%
+
+        (7) : INPUT -> echo -n -n
+              OUTPUT -> %
+
+        (8) : INPUT -> echo -n -n Hello
+              OUTPUT -> Hello%
+
+        (9) : INPUT -> echo Hello -n
+              OUTPUT -> Hello -n
+
+        (10) : INPUT -> echo Hello Wolrd
+               OUTPUT -> Hello Wolrd
+
+        (% représente le prompt qui suit la commande exécutée)
+
+cd (CMD) : 
+    -> Permet de changer de répertoire de travail.
+    -> Avec argument :
+            - chemin absolu → Va directement à ce répertoire.
+                -> Exemples : 
+                        minishell$ pwd
+                        /home/user
+                        minishell$ cd /usr/local/bin
+                        minishell$ pwd
+                        /usr/local/bin
+
+            - chemin relatif → Se déplace en fonction du répertoire courant.
+                -> Exemples : 
+                        minishell$ pwd
+                        /home/user
+                        minishell$ cd Documents
+                        minishell$ pwd
+                        /home/user/Documents
+
+            -> (.) et (..) -> Cas particuliers
+                - (..) -> Remonte d’un dossier
+                - (.) -> Reste dans le dossier actuel
+                - Exemples : 
+                        minishell$ pwd
+                        /home/user/Documents
+                        minishell$ cd ..
+                        minishell$ pwd
+                        /home/user
+                        minishell$ cd .
+                        minishell$ pwd
+                        /home/user
+
+    -> Sans argument : 
+            - Se déplace vers $HOME.
+
+pwd (CMD) :
+    -> Sert à afficher le chemin absolu du répertoire courant.
+    -> Ne prend aucune option ni argument.
+    -> Exemples :
+        (1) : INPUT -> pwd
+              OUTPUT -> /home/user/Documents
+
+        (2) : INPUT -> pwd Hello World
+              OUTPUT -> /home/user/Documents
+
+export (CMD) :
+    -> Sert à ajouter ou modifier des variables d’environnement.
+    -> Affiche toutes les variables exportées sous forme declare -x VAR="valeur".
+    -> Exemples : 
+        (1) : INPUT -> export VAR="Hello"
+              OUTPUT -> Crée une variable d’environnement VAR=Hello.
+
+        (2) : INPUT -> echo $VAR
+              OUTPUT -> Hello (Affiche la valeur de VAR).
+
+        (3) : INPUT -> export PATH="/new/path:$PATH"
+              OUTPUT -> Modifie le $PATH en ajoutant /new/path.
+
+        (4) : INPUT -> export
+              OUTPUT -> declare -x HOME="/home/user"
+                       declare -x PATH="/usr/bin:/bin"
+                       declare -x VAR="Hello"
+        
+        (5) : INPUT -> export 123VAR="Test"
+              OUTPUT -> export: '123VAR': not a valid identifier.
+
+unset (CMD) :
+    -> Sert à supprimer une variable d’environnement.
+    -> Ne produit aucune sortie si la variable est supprimée.
+    -> Ne fait rien si la variable n'existe pas.
+    -> Exemples : 
+        (1) : INPUT -> unset VAR
+              OUTPUT -> Supprime VAR.
+
+        (2) : INPUT -> echo $VAR
+              OUTPUT -> (Rien, car VAR est supprimé).
+
+        (3) : INPUT -> unset PATH
+              OUTPUT -> Supprime $PATH, ce qui peut rendre le shell inutilisable.
+                -> Le shell ne saura donc plus où chercher les commandes externes (ls, echo, pwd, etc)
+                -> Toutes les commandes externes ne fonctionneront plus, sauf si elles sont appelées 
+                    avec leur chemin absolu.
+                -> Pour remettre le PATH d'une commande -> Utiliser export 
+                    -> Exemple : export PATH="/usr/bin:/bin:/usr/sbin:/sbin"
+
+        (4) : INPUT -> unset
+              OUTPUT -> (Ne fait rien).
+
+        (5) : INPUT -> unset 123VARDans ce cas la 
+              OUTPUT -> unset: '123VAR': not a valid identifier.
+
+env (CMD) :
+
+exit (CMD) : 
+    -> Sert à quitter le shell avec un code de sortie.
+    -> (Sans argument) Quitte avec le dernier code de retour ($?).
+    -> (Avec un nombre) Quitte avec ce code.
+        -> le code de sortie est une information qui peut être récupérée par 
+            un autre programme ou un script shell.
+    -> (Avec un argument non numérique) Affiche une erreur et ne quitte pas.
+    -> Exemples :
+        (1) : INPUT -> exit
+              OUTPUT -> Ferme le shell avec le dernier code de retour.
+
+        (2) : INPUT -> exit 42
+              OUTPUT -> Ferme le shell avec le code 42.
+                    -> Se ferme et retourne la valeur 42
+                    -> Cependant la réouverture du Terminal réinitilisera la valeur à zéro.
+                    -> Donc echo $? donnera 0 et non 42.
+                    -> Pour tester cette CMD on peut la tester dans un sous-shell bash.
+                        -> Exemple : 
+                                bash$ bash
+                                bash$ exit 42 
+                                exit
+                                bash$ echo $?
+                                42
+
+        (3) : INPUT -> exit -1
+              OUTPUT -> Ferme le shell avec le code -1.
+                    -> Se ferme et retourne la valeur -1
+                    -> Attention sous Unix/Linuxle code de retour est stocké sur 1 octet (8 bits),
+                        ce qui signifie que toute valeur négative est convertie en un entier positif 
+                        entre 0 et 255.
+                        -> Exemple :
+                                bash$ bash
+                                bash$ exit -1
+                                exit
+                                bash$ echo $?
+                                255  ->  (-1 + 256) % 256 = 255
+
+        (4) : INPUT -> exit hello
+              OUTPUT -> Ferme le shell
+                    -> Cependant dans un sous-shell bash la CMD n'a pas le même effet.
+                        -> Exemple : 
+                                bash$ bash
+                                bash$ exit hello 
+                                exit
+                                bash: exit: hello: numeric argument required
+                                bash$ echo $?
+                                2
+
+        (5) : INPUT -> exit hello World
+            OUTPUT -> Ferme le shell
+                    -> Cependant dans un sous-shell bash la CMD n'a pas le même effet.
+                        -> Exemple : 
+                                bash$ bash
+                                bash$ exit hello world
+                                exit
+                                bash: exit: hello: numeric argument required
+                                bash$ echo $?
+                                2
+
+        (6) : INPUT -> exit 1 2
+              OUTPUT -> exit (\n) bash: exit: too many arguments
+                    -> Exemple : 
+                                bash$ bash
+                                bash$ exit 1 2
+                                exit
+                                bash: exit: too many arguments
+                                bash$ echo $?
+                                1
+
+        - Si on refait la CMD echo $? pour afficher la valeur de retour après l'avoir déja fait une fois on obtient 0.
+            -> Exemple : 
+                    bash$ bash
+                    bash$ exit 42 
+                    exit
+                    bash$ echo $?
+                    42
+                    bash$ echo $?
+                    0
+            -> Raison : $? peut être utiliser qu'une seule fois avec la valeur actuelle.
+                        Dés qu'une nouvelle commande est exécutée, il est remplacé par le 
+                        code de retour de cette nouvelle commande autrement dit 0.
+
