@@ -6,7 +6,7 @@
 /*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:11:44 by alfavre           #+#    #+#             */
-/*   Updated: 2025/03/18 14:19:49 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/03/18 15:20:04 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,15 @@ typedef struct	s_token
 	char			*value;
 	struct s_token	*next;
 }	t_token;
+
+t_token	*tokenize(char *input);
+void	free_token_list(t_token *head);
+
+char	*skip_spaces(char *str);
+char	*extract_word(char *str, int *pos);
+char	*handle_quotes(char *str, int *pos, char quote_type);
+int		is_operator_char(char c);
+t_token	*create_operator_token(char *str, int *pos);
+t_token	*add_token(t_token **head, t_token_type type, char *value);
 
 #endif
