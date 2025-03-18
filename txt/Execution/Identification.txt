@@ -1,0 +1,10 @@
+IDENTIFICATION :
+
+Avant d'exécuter une CMD il est important de savoir s'il sagit d'une CMD interne (builtin) ou d'une CMD externe.
+
+Exemple :
+    if (c_est_un_builtin())
+        execute_builtin();
+    else
+        execute_externe();
+

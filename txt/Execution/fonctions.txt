@@ -1,0 +1,211 @@
+FONCTIONS : 
+
+#/////////////////////////////////////////////////////////////////////////////#
+#		1. Gestion de l’entrée/sortie standard et mémoire                     #
+#/////////////////////////////////////////////////////////////////////////////#
+
+    - printf(const char *format, ...)
+    - write(int fd, const void *buf, size_t count)
+    - malloc(size_t size)
+    - free(void *ptr)
+
+#/////////////////////////////////////////////////////////////////////////////#
+#		2. Gestion des fichiers et des répertoires                            #
+#/////////////////////////////////////////////////////////////////////////////#
+
+    (Fichiers)
+        - access(const char *pathname, int mode)
+            -> Vérifie si un fichier existe et si l'utilisateur a les permissions demandées pour y accéder.
+            -> const char *pathname : Chemin du fichier à tester.
+            -> int mode : Type d'accès à vérifier. Il peut prendre les valeurs suivantes :
+                    - F_OK : Vérifie si le fichier existe (0 en int).
+                    - R_OK : Vérifie si le fichier est lisible (4 en int).
+                    - W_OK : Vérifie si le fichier est modifiable (2 en int).
+                    - X_OK : Vérifie si le fichier est exécutable (1 en int).
+                    -> F_OK, R_OK, etc sont ici des macros qui sont utilisées pour représenter des valeurs spécifiques (en int).
+                    -> Ici l'int est important car il va nous permettre de combiner plusieurs permissions avec l'opérateur OU bit à bit (|).
+                        -> Exemple : access("fichier.txt", R_OK | W_OK);
+            -> Return (0) si l'accès est autorisé.
+            -> Return (-1) en cas d'erreur (fichier inexistant ou accès refusé).
+
+        - open(const char *pathname, int flags, mode_t mode)
+            -> Utilisée pour ouvrir un fichier et renvoie un descripteur de fichier qui pourra être utilisé pour lire, écrire ou modifier le fichier.
+            -> const char *pathname : Chemin du fichier à ouvrir.
+            -> int flags : Mode d'ouverture du fichier (ex: O_RDONLY, O_WRONLY).
+                -> Mode d'ouverture : 
+                    - O_RDONLY (0) : Ouvre le fichier en lecture seule.
+                    - O_WRONLY (1) : Ouvre le fichier en écriture seule.
+                    - O_RDWR (2) : Ouvre le fichier en lecture et écriture.
+            -> mode_t mode : Permissions du fichier si il est créé (ex: 0644).
+                -> Cependant le nombre relatif au permissions (rwx) UNIX est compté en octal (base 8). 
+                    C'est pour cette raison que nous devons rajouté un zéro devant sinon il 
+                    serait interprété comme un nombre en décimale (base 10).
+            -> Return (nbr >= 0) en cas de succès.
+                -> Cette valeur sera le descripteur du fichier et sera stocké dans une variable locale pour être utilisé par la suite (fd).
+            -> Return (-1) en cas d'erreur.
+
+        - read(int fd, void *buf, size_t count)
+            -> Permet de lire des données à partir d'un fichier et de les stocker dans un buffer.
+            -> int fd : Descripteur de fichier à partir duquel lire les données.
+                -> Descripteurs standards :
+                    - 0 : STDIN_FILENO (entrée standard)
+                    - 1 : STDOUT_FILENO (sortie standard)
+                    - 2 : STDERR_FILENO (erreur standard)
+            -> void *buf : Pointeur vers un buffer où les données seront stockées.
+                -> Doit être alloué avant l’appel à read().
+            -> size_t count : Nombre maximal d'octets à lire.
+                -> La fonction peut lire moins d'octets que demandé (fin de fichier atteinte).
+            -> La valeur de retour nous indique combien d’octets ont été réellement lus. 
+            -> Return (nbr > 0)	indique le nombre d'octets réellement lus.
+            -> Return (0) en cas de fin de fichier atteinte.
+            -> Return (-1) en cas d'erreur. 
+
+
+        - close(int fd)
+            -> Permet de fermer un descripteur de fichier ouvert pour libérer les ressources associées.
+            -> int fd : Descripteur du fichier à fermer (obtenu avec open() ou dup()).
+            -> Return (0) en cas de succès (le fichier est fermé correctement).
+            -> Return (-1) en cas d'erreur.
+
+        - stat(const char *pathname, struct stat *statbuf)
+            -> Permet d’obtenir des informations sur un fichier ou un répertoire.
+            -> const char *pathname : Chemin du fichier ou du répertoire dont on veut obtenir les informations.
+            -> struct stat *statbuf : Pointeur vers une structure stat où les informations du fichier seront stockées.
+                -> La structure statbuf est rempli par la fonction stat().
+            -> Return (0) en cas de succès (la structure statbuf contient les informations).
+            -> Return (-1) en cas d'erreur (si le fichier n'existe pas).
+
+        - lstat(const char *pathname, struct stat *statbuf)
+            -> 
+            -> const char *pathname : 
+            -> struct stat *statbuf : 
+
+        - fstat(int fd, struct stat *statbuf)
+            -> 
+            -> int fd : 
+            -> struct *statbuf : 
+
+        - unlink(const char *pathname)
+            -> 
+            -> const char *pathname
+    
+    (Répertoires)
+        - opendir(const char *name)
+            -> 
+            -> const char *name : 
+
+        - readdir(DIR *dirp)
+            -> 
+            -> DIR *dirp : 
+
+        - closedir(DIR *dirp)
+            -> 
+            -> DIR *dirp : 
+
+#/////////////////////////////////////////////////////////////////////////////#
+#		3. Gestion des processus                                              #
+#/////////////////////////////////////////////////////////////////////////////#
+
+    - fork(void)
+        ->
+        -> void : 
+
+    - wait(int *status)
+        -> 
+        -> int *status : 
+
+    - waitpid(pid_t pid, int *status, int options)
+        ->
+        -> pid_t pid : 
+        -> int *status : 
+        -> int options :
+
+    - wait3(int *status, int options, struct rusage *rusage)
+        -> 
+        -> int *status :
+        -> int options :
+        -> struct rusage *rusage : 
+
+    - wait4(pid_t pid, int *status, int options, struct rusage *rusage)
+        -> 
+        -> pid_t pid : 
+        -> int *status :
+        -> int options : 
+        -> struct rusage *rusage : 
+
+    - execve(const char *filename, char *const argv[], char *const envp[])
+        -> 
+        -> const char *filename :
+        -> char *const argv[] : 
+        -> char *const envp[] :
+
+    - exit(int status)
+        ->
+        -> int status : 
+
+#/////////////////////////////////////////////////////////////////////////////#
+#		4. Gestion des signaux (UNIX)                                         #
+#/////////////////////////////////////////////////////////////////////////////#
+
+    - signal(int signum, void (*handler)(int))
+    - sigaction(int signum, const struct sigaction *act, struct sigaction *oldact)
+    - sigemptyset(sigset_t *set)
+    - sigaddset(sigset_t *set)
+    - kill(pid_t pid, int sig)
+
+
+#/////////////////////////////////////////////////////////////////////////////#
+#		5. Gestion des descripteurs de fichiers                               #
+#/////////////////////////////////////////////////////////////////////////////#
+
+    - dup(int oldfd)
+    - dup2(int oldfd, int newfd)
+    - pipe(int pipefd[2])
+
+#/////////////////////////////////////////////////////////////////////////////#
+#		6. Gestion de l’environnement et du terminal                          #
+#/////////////////////////////////////////////////////////////////////////////#
+
+    (Variables d’environnement)
+        - getenv(const char *name)
+    
+    (Gestion des répertoires de travail)
+        - getcwd(char *buf, size_t size)
+        - chdir(const char *path)
+    
+    (gestion avancée des terminaux -> Termcap)
+        - tgetent(char *bp, const char *name)
+        - tgetflag(const char *id)
+        - tgetnum(const char *id)
+        - tgetstr(const char *id, char **area)
+        - tgoto(const char *cap, int col, int row)
+        - tputs(const char *str, int affcnt, int (*putc)(int))
+    
+    (gestion des terminaux -> TTY)
+        - isatty(int fd)
+        - ttyname(int fd)
+        - ttyslot(void)
+        - ioctl(int fd, unsigned long request, ...)
+    
+    (Configuration du terminal)
+        - tcsetattr(int fd, int optional_actions, const struct termios *termios_p)
+        - tcgetattr(int fd, struct termios *termios_p)
+
+#/////////////////////////////////////////////////////////////////////////////#
+#		7. Gestion des erreurs                                                #
+#/////////////////////////////////////////////////////////////////////////////#
+
+    - strerror(int errnum)
+    - perror(const char *s)
+
+#/////////////////////////////////////////////////////////////////////////////#
+#		8. Bibliothèque Readline -> Interaction avec l'utilisateur            #
+#/////////////////////////////////////////////////////////////////////////////#
+
+    - readline(const char *prompt)
+    - rl_clear_history(void)
+    - rl_on_new_line(void)
+    - rl_replace_line(const char *text, int clear_undo)
+    - rl_redisplay(void)
+    - add_history(const char *line)
+

@@ -1,0 +1,10 @@
+EXTERNE :
+
+- Récupérer la commande et vérifier si elle est exécutable.
+- Chercher son chemin d’accès si l’utilisateur a entré un nom sans chemin absolu.
+- Créer un processus fils (fork()) pour exécuter la commande.
+- Exécuter la commande avec execve().
+- Gérer les erreurs et attendre la fin du processus.
+
+
+Lorsqu’un utilisateur entre une commande, on doit d’abord déterminer si elle est exécutable directement.

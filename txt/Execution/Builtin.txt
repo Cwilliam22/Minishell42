@@ -143,6 +143,19 @@ unset (CMD) :
               OUTPUT -> unset: '123VAR': not a valid identifier.
 
 env (CMD) :
+      -> Affiche toutes les variables d’environnement du shell.
+      -> Ne modifie rien.
+      -> Exemple : 
+            (1) : INPUT -> env
+                  OUTPUT -> PATH=/usr/bin:/bin:/usr/sbin:/sbin
+                            HOME=/home/user
+                            USER=user
+            (2) : INPUT -> env 2
+                  OUTPUT -> env: ‘2’: No such file or directory
+            (2) : INPUT -> env 2 3
+                  OUTPUT -> env: ‘2’: No such file or directory
+
+
 
 exit (CMD) : 
     -> Sert à quitter le shell avec un code de sortie.

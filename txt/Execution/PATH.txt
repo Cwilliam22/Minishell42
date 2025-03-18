@@ -1,0 +1,14 @@
+PATH : 
+
+-> Cette partie consistera à faire que le shell trouve le chemin de son exécutable avant de l'exécuter avec execve().
+-> Le système ne sait pas automatiquement où se trouve les commandes que l'utilisateur souhaite exécuter.
+    Voilà pourquoi il va chercher le chemin vers les exécutables. Ces derniers sont stockés dans des 
+    répertoires spécifiques listés dans la variable d’environnement $PATH.
+
+Étapes pour trouver un binaire dans $PATH :
+    - Récupérer le contenu de $PATH
+    - Découper $PATH
+    - Tester chaque dossier
+    - Vérifier si le fichier est exécutable
+    - Retourner le chemin valide ou afficher command not found
+
