@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.h                                            :+:      :+:    :+:   */
+/*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:11:44 by alfavre           #+#    #+#             */
-/*   Updated: 2025/03/17 15:49:43 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/03/18 14:19:49 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSE_H
-# define PARSE_H
+#ifndef LEXER_H
+# define LEXER_H
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -26,9 +26,6 @@ typedef enum e_token_type
 	TOKEN_REDIR_OUT,			// >
 	TOKEN_APPEND,				// >>
 	TOKEN_HEREDOC,				// <<
-	TOKEN_AND,					// &&
-	TOKEN_OR,					// ||
-	TOKEN_SEMICOLON,			// ;
 	TOKEN_OPEN_PARENTHESES,		// (
 	TOKEN_CLOSE_PARENTHESES,	// )
 	TOKEN_EOF					// End of line
