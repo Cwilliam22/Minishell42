@@ -12,3 +12,14 @@ PATH :
     - Vérifier si le fichier est exécutable
     - Retourner le chemin valide ou afficher command not found
 
+(char *** -> pour stocker les variables d'environement)
+
+
+Recuperer le PATH dans la variable d'environnement $PATH.
+Gerer les variables d'environnement avant pour ensuite y recuperer le PATH.
+Comment acceder a ces variables ??
+Ces variables sont accessibles via le troisieme argument de la fonction main.
+Exemple : 
+    int main(int argc, char **argv, char **envp)
+-> envp : est un tableau de chaînes de caractères contenant toutes les variables d’environnement sous la forme "NOM=VALEUR".
+Faire une fonction pour copier les variables d'environnement dans un tableau afin de pouvoir les manipuler correctement.
