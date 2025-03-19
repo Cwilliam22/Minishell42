@@ -6,7 +6,7 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:49:18 by wcapt             #+#    #+#             */
-/*   Updated: 2025/03/18 16:33:55 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/03/19 15:35:24 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,15 @@
 #include <stdio.h>
 #include <unistd.h>
 # include "../libft/includes/libft.h"
+
+typedef struct s_exec {
+    char    **args;     
+    char    *cmd_path;     
+    int     fd_in;  
+    int     fd_out;
+    int     is_pipe;
+    struct s_exec *next;
+} t_exec;
 
 // copy_env.c
 char ***copy_env(char **envp);
