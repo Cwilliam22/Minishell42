@@ -1,36 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   builtin2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wcapt <wcapt@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/18 13:18:47 by wcapt             #+#    #+#             */
-/*   Updated: 2025/03/22 15:32:05 by wcapt            ###   ########.fr       */
+/*   Created: 2025/03/22 15:54:03 by wcapt             #+#    #+#             */
+/*   Updated: 2025/03/22 17:09:49 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/exec.h"
 
-char	*ft_strfchr(const char *s, int c)
+int builtin_unset()
 {
-	char	*str;
-	int		i;
-	int		j;
-
-	i = 0;
-	while (s[i] && s[i] != (char)c)
-		i++;
-	i--;
-	str = malloc(sizeof(char) * (i + 1));
-	if (!str)
-		return (NULL);
-	j = 0;
-	while (j < i)
-	{
-		str[j] = s[j];
-		j++;
-	}
-	str[j] = '\0';
-	return (str);
+    return (1);
+}
+int builtin_env()
+{
+    return (1);
+}
+int builtin_exit()
+{
+    return (1);
 }
