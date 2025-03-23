@@ -1,30 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/16 14:04:08 by alfavre           #+#    #+#             */
-/*   Updated: 2025/03/18 14:20:16 by alfavre          ###   ########.fr       */
+/*   Created: 2025/03/17 16:08:07 by alfavre           #+#    #+#             */
+/*   Updated: 2025/03/23 15:35:18 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-int	main(int argc, char **argv)
-{
-	char	*input;
-	char	**token;
-
-	(void)argc;
-	(void)argv;
-	input = readline("Entrer une commande: ");
-	if (input && *input)
-		add_history(input);
-	token = ft_split(input, ' ');
-	while (*token)
-		ft_printf("Vous avez entre : %s\n", *(token++));
-	free(input);
-	return (0);
-}

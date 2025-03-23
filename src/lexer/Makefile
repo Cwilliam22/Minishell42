@@ -6,14 +6,14 @@
 #    By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/16 14:07:31 by alfavre           #+#    #+#              #
-#    Updated: 2025/03/16 14:34:14 by alfavre          ###   ########.fr        #
+#    Updated: 2025/03/23 15:34:00 by alfavre          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 #############################################################################
 #								Variables									#
 #############################################################################
-NAME = parse
+NAME = lexer
 LIBFT = ./libft/libft.a
 SRC_DIR = src/
 OBJ_DIR = obj/
@@ -25,7 +25,7 @@ FLAGS = -g -Wall -Wextra -Werror
 #############################################################################
 #									Sources									#
 #############################################################################
-SRC_FILES = parse
+SRC_FILES = lexer_utils token token_utils op_token
 
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
 OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
