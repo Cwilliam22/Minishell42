@@ -1,32 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin2.c                                         :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: william <william@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/22 15:54:03 by wcapt             #+#    #+#             */
-/*   Updated: 2025/03/31 14:54:25 by william          ###   ########.fr       */
+/*   Created: 2025/03/31 14:00:15 by william           #+#    #+#             */
+/*   Updated: 2025/03/31 15:09:56 by william          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/exec.h"
+#include "includes/libft.h"
 
-int builtin_unset(char *arg, char ***env)
+int ft_strcmp(const char *s1, const char *s2)
 {
-    apply_path(env, arg);
-    ft_printf("unset\n");
-    return (1);
-}
-int builtin_env(char *arg, char ***env)
-{
-    apply_path(env, arg);
-    ft_printf("env\n");
-    return (1);
-}
-int builtin_exit(char *arg, char ***env)
-{
-    apply_path(env, arg);
-    ft_printf("exit\n");
-    return (1);
+    size_t	i;
+
+	i = 0;
+	while (s1[i] != '\0' && s2[i] != '\0')
+	{
+		if (s1[i] != s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
+	}
+	return (0);
 }

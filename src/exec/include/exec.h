@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt <wcapt@student.42.fr>                +#+  +:+       +#+        */
+/*   By: william <william@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:49:18 by wcapt             #+#    #+#             */
-/*   Updated: 2025/03/22 17:13:52 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/03/31 15:11:52 by william          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ typedef struct s_exec
 typedef struct s_builtin
 {
 	char	*builtin;
-	int		(*fonction)(char **args, char ***env);
+	int		(*fonction)(char *args, char ***env);
 }	t_builtin;
 
 // copy_env.c
@@ -43,16 +43,21 @@ int		find_var_path(char ***env);
 char	*read_in_path(char ***env, int place);
 int		apply_path(char ***env, char *command);
 
+// Identification.c
+int		identification(char *arg, char ***env);
+int		its_a_builtin(char *argv, char ***env);
+int		execute_externe(char *arg, char ***env);
+
 // builtin1.;
-int builtin_echo();
-int builtin_cd();
-int builtin_pwd();
-int builtin_export();
+int builtin_echo(char *arg, char ***env);
+int builtin_cd(char *arg, char ***env);
+int builtin_pwd(char *arg, char ***env);
+int builtin_export(char *arg, char ***env);
 
 // builtin2.c
-int builtin_unset();
-int builtin_env();
-int builtin_exit();
+int builtin_unset(char *arg, char ***env);
+int builtin_env(char *arg, char ***env);
+int builtin_exit(char *arg, char ***env);
 
 // utils.c
 char	*ft_strfchr(const char *s, int c);
