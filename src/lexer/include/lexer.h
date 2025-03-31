@@ -6,7 +6,7 @@
 /*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:11:44 by alfavre           #+#    #+#             */
-/*   Updated: 2025/03/23 15:35:59 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/03/31 14:31:49 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_token	*tokenize(char *input);
 void	free_token_list(t_token *head);
 
 char	*skip_spaces(char *str);
-char	*extract_word(char *str);
+char	*extract_word(char *str, int *pos);
 char	*handle_quotes(char *str, int *pos, char quote_type);
 int		is_operator_char(char c);
 t_token	*create_operator_token(char *str, int *pos);

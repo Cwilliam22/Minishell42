@@ -6,7 +6,7 @@
 /*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:25:00 by alfavre           #+#    #+#             */
-/*   Updated: 2025/03/23 15:35:40 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/03/31 14:34:23 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,32 +68,19 @@ static char	*ft_strndup(char *src, int n)
 }
 
 /**
- * @brief Extract a word until the next delimiter, by managing quotes
+ * @brief Extract a word until the next delimiter
  * @param str The string to extract from
- * @return The extracted word 
+ * @param pos The pointer to the current position
+ * @return The extracted word (to free)
  */
-char	*extract_word(char *str)
+char	*extract_word(char *str, int *pos)
 {
-	int		length;
-	char	quote;
+	int		start;
 	char	*word;
 
-	if (!str || !*str)
-		return (NULL);
-	length = 0;
-	quote = 0;
-	while (str[length] && (!is_delimiter(str[length]) || quote))
-	{
-		if ((str[length] == '\'' || str[length] == '\"')
-			&& (!quote || quote == str[length]))
-		{
-			if (quote)
-				quote = 0;
-			else
-				quote = str[length];
-		}
-		length++;
-	}
-	word = ft_strndup(str, (length + 1));
+	start = *pos;
+	while (str[*pos] && (!is_delimiter(str[*po])))
+		*pos++;
+	word = ft_strndup(str, (*pos - start + 1));
 	return (word);
 }
