@@ -60,7 +60,6 @@ FONCTIONS :
             -> Return (0) en cas de fin de fichier atteinte.
             -> Return (-1) en cas d'erreur. 
 
-
         - close(int fd)
             -> Permet de fermer un descripteur de fichier ouvert pour libérer les ressources associées.
             -> int fd : Descripteur du fichier à fermer (obtenu avec open() ou dup()).
@@ -76,31 +75,43 @@ FONCTIONS :
             -> Return (-1) en cas d'erreur (si le fichier n'existe pas).
 
         - lstat(const char *pathname, struct stat *statbuf)
-            -> 
-            -> const char *pathname : 
-            -> struct stat *statbuf : 
+            -> Permet d'obtenir des informations sur un fichier.
+            -> Librairie : <sys/stat.h>
+            -> const char *pathname : Chemin du fichier ou du répertoire dont on veut obtenir les informations.
+            -> struct stat *statbuf : Pointeur vers une structure stat où les informations du fichier seront stockées.
 
         - fstat(int fd, struct stat *statbuf)
-            -> 
-            -> int fd : 
-            -> struct *statbuf : 
+            -> Permet d’obtenir des informations sur un fichier à partir d’un descripteur de fichier (fd) plutôt qu’un chemin.
+            -> int fd : Descripteur de fichier (s'obtient ave open())
+            -> struct stat *statbuf : Pointeur vers une structure stat où les informations du fichier seront stockées.
 
         - unlink(const char *pathname)
-            -> 
-            -> const char *pathname
+            -> Permet de supprimer un fichier (ou un lien) du système de fichiers.
+            -> Supprime le lien (entrée) dans le répertoire vers le fichier désigné par pathname.
+            -> Cette fonction ne fonctionne que pour les fichiers.
+            -> Pour supprimer un répertoire, on utilise rmdir().
+            -> const char *pathname : Chemin du fichier ou du répertoire dont on veut obtenir les informations.
     
     (Répertoires)
         - opendir(const char *name)
-            -> 
+            -> Permet d’ouvrir un répertoire (dossier) et de préparer sa lecture.
+            -> Retourne un pointeur vers une structure DIR, qui représente le répertoire ouvert 
+                (comme un descripteur de fichier pour un fichier).
             -> const char *name : 
 
         - readdir(DIR *dirp)
-            -> 
-            -> DIR *dirp : 
+            -> Permet de lire une entrée (dossier) du répertoire ouvert avec opendir.
+            -> Retourne un pointeur vers une structure dirent si une entrée est trouvée ✅
+            -> Retourne NULL si :
+                - Fin du répertoire atteinte (plus rien à lire)
+                - Erreur
+            -> DIR *dirp : Pointeur vers le répertoire ouvert, obtenu grâce à opendir.
 
         - closedir(DIR *dirp)
-            -> 
-            -> DIR *dirp : 
+            -> Permet de fermer proprement un répertoire ouvert avec opendir.
+            -> Retourne 0 en cas de succès.
+            -> Retourne -1 en cas d’erreur.
+            -> DIR *dirp : Pointeur vers le répertoire ouvert, obtenu grâce à opendir.
 
 #/////////////////////////////////////////////////////////////////////////////#
 #		3. Gestion des processus                                              #
@@ -168,35 +179,121 @@ FONCTIONS :
 
     (Variables d’environnement)
         - getenv(const char *name)
+            -> Récupère la valeur d'une variable d'environnement donnée.
+            -> Retourne un pointeur vers une chaîne de caractères contenant la valeur de la variable.
+            -> Retourne NULL si la variable n'existe pas.
+            -> const char *name : le nom de la variable d'environnement
     
     (Gestion des répertoires de travail)
         - getcwd(char *buf, size_t size)
+            -> Permet d'obtenire le chemin absolu du répertoire de travail courant.
+            -> Retourne pointeur vers buf en cas de succès. 
+            -> Retourne NULL sinon.
+            -> char *buf : buffer où sera stocké le chemin
+            -> size_t size : taille du buffer
+
         - chdir(const char *path)
+            -> Change le répertoire de travail courant.
+            -> Retourne 0 en cas de succès.
+            -> Retourne -1 en cas d'erreur.
+            -> const char *path : chemin du nouveau répertoire
     
     (gestion avancée des terminaux -> Termcap)
         - tgetent(char *bp, const char *name)
+            -> Charge l'entrée termcap pour le terminal donné.
+            -> Retourne 1 si succès.
+            -> Retourne 0 si pas trouvé.
+            -> Retourne -1 si erreur.
+            -> char *bp : buffer de stockage
+            -> const char *name : nom du terminal
+
         - tgetflag(const char *id)
+            -> Vérifie la présence d'une capacité booléenne dans termcap.
+            -> Retourne 1 si présente. 
+            -> Retourne 0 sinon.
+            -> const char *id : identifiant de la capacité.
+
         - tgetnum(const char *id)
+            -> Récupère une valeur numérique (capacité) dans termcap.
+            -> Retourne la valeur numérique.
+            -> Retourne -1 si non trouvée.
+            -> const char *id : identifiant de la capacité
+
         - tgetstr(const char *id, char **area)
+            -> Récupère une chaîne de contrôle (string capability).
+            -> Retourne un pointeur vers la chaîne, ou NULL.
+            -> const char *id : identifiant
+            -> char **area : adresse d'un pointeur vers un buffer de chaîne (optionnel)
+
         - tgoto(const char *cap, int col, int row)
+            -> Formate une chaîne de positionnement du curseur.
+            -> Retourne une chaîne utilisable pour positionner le curseur.
+            -> const char *cap : chaîne obtenue par tgetstr
+            -> int col, int row : position cible du curseur
+
         - tputs(const char *str, int affcnt, int (*putc)(int))
+            -> Affiche une chaîne de contrôle sur le terminal.
+            -> Retourne 0 si tout s'est bien passé.
+            -> const char *str : chaîne à afficher.
+            -> int affcnt : nombre de lignes affectées (souvent 1).
+            -> int (*putc)(int) : fonction pour afficher un caractère (souvent putchar).
     
     (gestion des terminaux -> TTY)
         - isatty(int fd)
+            -> Vérifie si un descripteur correspond à un terminal.
+            -> Retourne 1 si oui. 
+            -> Retourne 0 sinon.
+            -> int fd : descripteur de fichier
+
         - ttyname(int fd)
+            -> Récupère le nom du terminal associé à un descripteur.
+            -> Retourne le nom du terminal (chaîne).
+            -> Retourne NULL en cas d'erreur.
+            -> int fd : descripteur de fichier
+
         - ttyslot(void)
+            -> Donne l'indice de l'entrée dans /etc/ttys correspondant au terminal courant.
+            -> Retourne le numéro de slot.
+            -> Retourne 0 si non trouvé.
+            -> Aucun paramètre
+
         - ioctl(int fd, unsigned long request, ...)
+            -> Permet de contrôler ou configurer un périphérique (souvent un terminal).
+            -> Retourne 0 si succès. 
+            -> Retourne -1 si erreur.
+            -> int fd : descripteur de fichier
+            -> unsigned long request : opération à effectuer
+            -> ... : paramètres supplémentaires selon l'opération
     
     (Configuration du terminal)
         - tcsetattr(int fd, int optional_actions, const struct termios *termios_p)
+            -> Applique une nouvelle configuration du terminal.
+            -> Retourne 0 si succès. 
+            -> Retourne -1 si erreur.
+            -> int fd : descripteur de terminal.
+            -> int optional_actions : quand appliquer les changements (TCSANOW, TCSADRAIN, TCSAFLUSH).
+            -> const struct termios *termios_p : nouvelle config.
+
         - tcgetattr(int fd, struct termios *termios_p)
+            -> Récupère la configuration actuelle du terminal.
+            -> Retourne 0 si succès.
+            -> Retourne -1 si erreur.
+            -> int fd : descripteur de terminal
+            -> struct termios *termios_p : pointeur vers la structure à remplir
 
 #/////////////////////////////////////////////////////////////////////////////#
 #		7. Gestion des erreurs                                                #
 #/////////////////////////////////////////////////////////////////////////////#
 
-    - strerror(int errnum)
-    - perror(const char *s)
+        - strerror(int errnum)
+            -> Retourne une chaîne de caractères descriptive correspondant à un code d'erreur.
+            -> Retourne un pointeur vers un message d'erreur standard correspondant au code errnum.
+            -> int errnum : le code d'erreur (généralement errno)
+
+        - perror(const char *s)
+            -> Affiche un message d'erreur sur la sortie d'erreur standard (stderr).
+            -> Retourne Rien (fonction void)
+            -> const char *s : message personnalisé affiché avant la description de l'erreur
 
 #/////////////////////////////////////////////////////////////////////////////#
 #		8. Bibliothèque Readline -> Interaction avec l'utilisateur            #
