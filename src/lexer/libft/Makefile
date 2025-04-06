@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+         #
+#    By: alexis <alexis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/14 10:55:02 by alfavre           #+#    #+#              #
-#    Updated: 2025/02/03 09:40:03 by alfavre          ###   ########.fr        #
+#    Updated: 2025/04/03 12:34:58 by alexis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,10 +51,6 @@ FTLST		=	ft_lstnew ft_lstadd_front \
 				ft_lstadd_back ft_lstdelone \
 				ft_lstclear ft_lstiter \
 				ft_lstmap
-
-FTPRINTF_DIR=	ft_printf/
-FTPRINTF	=	ft_printf ft_printf_hexa ft_printf_number \
-				ft_printf_word
 
 FTGNL_DIR	=	get_next_line/
 FTGNL		=	get_next_line
