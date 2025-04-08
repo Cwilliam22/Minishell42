@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alfavre <alfavre@student.42lausanne.ch>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/17 16:08:07 by alfavre           #+#    #+#             */
-/*   Updated: 2025/04/06 11:40:51 by alexis           ###   ########.fr       */
+/*   Created: 2025/04/08 14:45:41 by alfavre           #+#    #+#             */
+/*   Updated: 2025/04/08 14:56:42 by alfavre          ###   ########.ch       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,3 +66,49 @@ t_token	*handle_redirection(char *input, int *i)
 	return (NULL);
 }
 
+
+t_token	*tokenize(char *input)
+{
+	t_token	*tokens;
+	int		i;
+	char	*word;
+
+	i = 0;
+	tokens = NULL;
+	while (input[i])
+	{
+		if (is_whitespace(input[i]))
+			i++;
+		if (input[i] == '|')
+		{
+			add_token(&tokens, new_token(TOKEN_PIPE, "|"));
+			i++;
+		}
+		else if (input[i] == '<' || input[i] == '>')
+			add_token(&tokens, handle_redirection(input, &i));
+		else
+		{
+			word = extract_word(input, &i);
+			if (word)
+			{
+				add_token(&tokens, new_token(TOKEN_WORD, word));
+				free(word);
+			}
+		}
+	}
+	add_token(&tokens, new_tokens(TOKEN_EOF, "EOF"));
+	return (tokens);
+}
+
+void	free_tokens(t_token *tokens)
+{
+	t_token	*ptr;
+
+	while (tokens)
+	{
+		ptr = tokens;
+		tokens = tokens->next;
+		free(ptr->value);
+		free(ptr);
+	}
+}
