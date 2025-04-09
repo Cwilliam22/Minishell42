@@ -6,7 +6,7 @@
 /*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:11:44 by alfavre           #+#    #+#             */
-/*   Updated: 2025/04/06 10:06:39 by alexis           ###   ########.fr       */
+/*   Updated: 2025/04/09 15:10:30 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ typedef enum	e_token_type
 	TOKEN_REDIR_OUT,			// >
 	TOKEN_APPEND,				// >>
 	TOKEN_HEREDOC,				// <<
-	TOKEN_OPEN_PARENTHESES,		// (
-	TOKEN_CLOSE_PARENTHESES,	// )
 	TOKEN_EOF					// End of line
 }	t_token_type;
 
@@ -55,7 +53,7 @@ typedef struct	s_command
 	char				*name;
 	char				**args;
 	t_redir				*redirections;
-	struct t_command	*next;
+	struct s_command	*next;
 }	t_command;
 
 typedef struct	s_env
@@ -77,12 +75,30 @@ typedef struct	s_shell
 t_token	*tokenize(char *input);
 void	free_tokens(t_token *tokens);
 
-/*Parsing functions*/
-t_command	*parse(t_token *tokens, t_env *env);
-void		free_commands(t_command *cmd);
-
-/*Utils functions*/
+/*Token utils functions*/
 int		is_whitespace(char c);
-int		is_special_char(char c);
+char	*extract_word(char *input, int *i);
+
+/*Parsing functions*/
+t_command	*parse(t_token *tokens, t_env *env, int last_exit_code);
+
+/*Parse utils functions*/
+t_command	*new_command(void);
+t_redir	*new_redirection(t_token_type type, char *file);
+void	add_redirection(t_command *cmd, t_redir *new);
+int	count_args(t_token *tokens);
+char	**extract_args(t_token **tokens, int arg_count);
+
+/*Parse free functions*/
+void	free_redirection(t_redir *redirections);
+void	free_command(t_command *cmd);
+void	free_commands(t_command *cmd);
+
+/*Debug functions*/
+void	print_token(t_token *token);
+void	print_all_tokens(t_token *tokens);
+void	print_redirection(t_redir *redir);
+void	print_command(t_command *cmd);
+void	print_all_commands(t_command *cmd);
 
 #endif

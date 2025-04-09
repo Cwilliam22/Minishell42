@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+         #
+#    By: alexis <alexis@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/16 14:07:31 by alfavre           #+#    #+#              #
-#    Updated: 2025/03/23 15:34:00 by alfavre          ###   ########.fr        #
+#    Updated: 2025/04/09 13:01:57 by alexis           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,14 +18,16 @@ LIBFT = ./libft/libft.a
 SRC_DIR = src/
 OBJ_DIR = obj/
 INC = -Iinclude -Ilibft
-LIB = -Llibft -lft -lreadline -lhistory
+LIB = -Llibft -lft
 CC = gcc
 FLAGS = -g -Wall -Wextra -Werror
 
 #############################################################################
 #									Sources									#
 #############################################################################
-SRC_FILES = lexer_utils token token_utils op_token
+SRC_FILES = debug test\
+			parser_free parser_utils parser \
+			token_utils token
 
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
 OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))

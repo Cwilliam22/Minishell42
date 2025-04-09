@@ -6,7 +6,7 @@
 /*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:23:24 by alfavre           #+#    #+#             */
-/*   Updated: 2025/04/06 11:23:38 by alexis           ###   ########.fr       */
+/*   Updated: 2025/04/09 12:57:50 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	is_whitespace(char c)
 	return (c == ' ' || c == '\t' || c == '\n');
 }
 
-int	is_special_char(char c)
+static int	is_special_char(char c)
 {
 	return (c == '|' || c == '<' || c == '>');
 }
@@ -50,8 +50,8 @@ char	*extract_word(char *input, int *i)
 	length = 0;
 	single_quote = 0;
 	double_quote = 0;
-	while (input[*i] && (single_quote || double_quote)
-		|| (!is_whitespace(input[*i]) && !is_special_char(input[*i])))
+	while (input[*i] && ((single_quote || double_quote)
+		|| (!is_whitespace(input[*i]) && !is_special_char(input[*i]))))
 	{
 		handle_quotes(input, i, &single_quote, &double_quote);
 		length = *i - start;

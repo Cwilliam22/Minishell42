@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfavre <alfavre@student.42lausanne.ch>    +#+  +:+       +#+        */
+/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:45:41 by alfavre           #+#    #+#             */
-/*   Updated: 2025/04/08 14:56:42 by alfavre          ###   ########.ch       */
+/*   Updated: 2025/04/09 12:58:51 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 
-t_token	*new_token(t_token_type type, char *value)
+static t_token	*new_token(t_token_type type, char *value)
 {
 	t_token	*token;
 
@@ -25,19 +25,22 @@ t_token	*new_token(t_token_type type, char *value)
 	return (token);
 }
 
-void	add_token(t_token **tokens, t_token *new)
+static void	add_token(t_token **tokens, t_token *new)
 {
 	t_token *current;
 
 	if (!*tokens)
-		return (*tokens = new);
+	{
+		*tokens = new;
+		return ;
+	}
 	current = *tokens;
 	while (current->next)
 		current = current->next;
 	current->next = new;
 }
 
-t_token	*handle_redirection(char *input, int *i)
+static t_token	*handle_redirection(char *input, int *i)
 {
 	t_token_type	type;
 
@@ -96,7 +99,7 @@ t_token	*tokenize(char *input)
 			}
 		}
 	}
-	add_token(&tokens, new_tokens(TOKEN_EOF, "EOF"));
+	add_token(&tokens, new_token(TOKEN_EOF, "EOF"));
 	return (tokens);
 }
 
