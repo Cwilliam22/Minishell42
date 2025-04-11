@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   ft_arraylen.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: william <william@student.42.fr>            +#+  +:+       +#+        */
+/*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/31 14:00:15 by william           #+#    #+#             */
-/*   Updated: 2025/04/07 16:51:36 by william          ###   ########.fr       */
+/*   Created: 2025/04/10 15:29:57 by wcapt             #+#    #+#             */
+/*   Updated: 2025/04/10 15:31:14 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/libft.h"
 
-int ft_strcmp(const char *s1, const char *s2)
+int ft_arraylen(char **array)
 {
-    size_t i = 0;
-    while (s1[i] && s2[i])
-    {
-        if (s1[i] != s2[i])
-            return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+    int i;
+
+    i = 0;
+    while (array[i])
         i++;
-    }
-    return ((unsigned char)s1[i] - (unsigned char)s2[i]); // <-- différence ici
+    return (i);
 }

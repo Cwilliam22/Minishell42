@@ -1,25 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: william <william@student.42.fr>            +#+  +:+       +#+        */
+/*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/31 14:00:15 by william           #+#    #+#             */
-/*   Updated: 2025/04/07 16:51:36 by william          ###   ########.fr       */
+/*   Created: 2025/04/07 17:27:26 by wcapt             #+#    #+#             */
+/*   Updated: 2025/04/07 17:39:14 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/libft.h"
 
-int ft_strcmp(const char *s1, const char *s2)
+char *ft_strcat(char *dest, const char *src)
 {
-    size_t i = 0;
-    while (s1[i] && s2[i])
-    {
-        if (s1[i] != s2[i])
-            return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+    int i;
+    int j;
+
+    i = 0;
+    j = 0;
+    while (dest[i] != '\0')
         i++;
+    while (src[j] != '\0')
+    {
+        dest[i] = src[j];
+        i++;
+        j++;
     }
-    return ((unsigned char)s1[i] - (unsigned char)s2[i]); // <-- différence ici
+    dest[i] = '\0';
+    return (dest);
 }

@@ -3,40 +3,63 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: william <william@student.42.fr>            +#+  +:+       +#+        */
+/*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:54:07 by wcapt             #+#    #+#             */
-/*   Updated: 2025/03/31 14:52:24 by william          ###   ########.fr       */
+/*   Updated: 2025/04/10 16:02:12 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/exec.h"
 
+char *tab_arg[] = {"export", "CACA", "=", "/bin", NULL}; 
+//"export PATH=/bin"
+
+void	init_all(t_exec *exec)
+{
+	exec->args = NULL;
+	exec->env_sorted = NULL;
+	exec->env = NULL;
+	exec->cmd = NULL;
+	exec->cmd_path = NULL;
+	exec->path = NULL;
+	exec->fd_in = 0;
+	exec->nbr_arg = 0;
+	exec->nbr_var_env = 0;
+	exec->fd_out = 0;
+	exec->is_pipe = 0;
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	char	***env;
-	char	*command;
+	t_exec exec;
 
+	init_all(&exec);
+	(void)argc;
 	(void)argv;
-	// Nbr argument (executable + command)
-	if (argc != 2)
-		return (printf("The number of arguments is wrong!\n"), 1);
 	// Variable command
-	command = argv[1];
+	exec.cmd = tab_arg[0];
+	// Count args
+	exec.nbr_arg = ft_tablen(tab_arg);
 	// Copy env in a variable (char *** type)
-	env = copy_env(envp);
+	exec.env = copy_env1(envp);
+	if (!copy_env_sorted(&exec))
+		return (1);
+	exec.nbr_var_env = ft_envlen(exec.env);
 	// Security
-	if (!env)
+	if (!exec.env)
 		return (1);
 	// Test tab ***
-	print_env(env);
+	if (!print_env(exec.env_sorted))
+		return (1);
+	if (!print_env(exec.env))
+		return (1);
 	// Test path
-	printf("PATH: %s\n", env[find_var_path(env)][1]);
+	exec.path = ft_strdup(exec.env[find_var_path(exec.env)][1]);
+	//printf("PATH: %s\n", exec.path);
 	// Look at the command
-	if (!identification(command, env))
+	if (!identification(tab_arg, &exec))
 		return (ft_printf("Not a command valid\n"), 1);
-	
-	apply_path(env, command);
-	
+	apply_path(exec.env, exec.cmd);
 	return (0);
 }

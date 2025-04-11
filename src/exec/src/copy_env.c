@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   copy_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt <wcapt@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 14:10:27 by wcapt             #+#    #+#             */
-/*   Updated: 2025/03/22 15:35:28 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/10 16:08:10 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	**split_var_env(char *env_var)
 	return (split);
 }
 
-char	***copy_env(char **envp)
+char	***copy_env1(char **envp)
 {
 	int		i;
 	int		j;
@@ -58,16 +58,45 @@ char	***copy_env(char **envp)
 	return (env);
 }
 
-void	print_env(char ***env)
+int	print_env(char ***env)
 {
 	int	i;
 
 	i = 0;
 	while (env[i])
 	{
-		printf("[%s] [%s]\n", env[i][0], env[i][1] ? env[i][1] : "NULL");
+		if (env[i][1])
+			ft_printf("%s=%s\n", env[i][0], env[i][1]);
+		else
+		    ft_printf("%s=NULL\n", env[i][0]);
 		i++;
 	}
+	return (1);
+}
+
+int	copy_env_sorted(t_exec *exec)
+{
+	int	i;
+	int	j;
+	int place;
+	
+	i = 0;
+	place = get_var_in_order(0, exec);
+	if (exec->env_sorted != NULL)
+		free_env(exec->env_sorted);
+	while (exec->env[i])
+	{
+		j = 0;
+		place = get_var_in_order(i, exec);
+		while (exec->env[i][j])
+		{
+			exec->env_sorted[i][j] = ft_strdup(exec->env[place][j]);
+			j++;
+		}
+		i++;
+	}
+	exec->env_sorted[i] = NULL;
+	return (1);
 }
 
 /*
