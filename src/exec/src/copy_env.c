@@ -6,7 +6,7 @@
 /*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 14:10:27 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/10 16:08:10 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/12 18:59:57 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,26 +36,25 @@ char	**split_var_env(char *env_var)
 	return (split);
 }
 
-char	***copy_env1(char **envp)
+int	copy_env1(char **envp, t_exec *exec)
 {
 	int		i;
 	int		j;
-	char	***env;
 
 	i = 0;
 	j = 0;
 	while (envp[i])
 		i++;
-	env = malloc((i + 1) * sizeof(char **));
-	if (!env)
-		return (NULL);
+	exec->env = malloc((i + 1) * sizeof(char **));
+	if (!exec->env)
+		return (0);
 	while (j < i)
 	{
-		env[j] = split_var_env(envp[j]);
+		exec->env[j] = split_var_env(envp[j]);
 		j++;
 	}
-	env[i] = NULL;
-	return (env);
+	exec->env[i] = NULL;
+	return (1);
 }
 
 int	print_env(char ***env)
@@ -81,6 +80,9 @@ int	copy_env_sorted(t_exec *exec)
 	int place;
 	
 	i = 0;
+	exec->env_sorted = malloc((exec->nbr_var_env + 1) * sizeof(char **));
+	if (!exec->env_sorted)
+		return (0);
 	place = get_var_in_order(0, exec);
 	if (exec->env_sorted != NULL)
 		free_env(exec->env_sorted);

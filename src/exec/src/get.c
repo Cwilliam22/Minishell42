@@ -50,23 +50,49 @@ int	get_var_in_order(int index, t_exec *exec)
 {
 	int		i;
 	char	**temp;
-	
-	i = 0;
-	temp = malloc(sizeof(char *) * (exec->nbr_arg + 1));
+	char	**sorted;
+	char	*target;
+
+	if (index < 0 || index >= exec->nbr_var_env)
+		return (0);
+
+	temp = malloc(sizeof(char *) * (exec->nbr_var_env + 1));
 	if (!temp)
 		return (0);
+
+	i = 0;
 	while (exec->env[i])
 	{
 		temp[i] = ft_strdup(exec->env[i][0]);
+		if (!temp[i])
+		{
+			free_array(temp);
+			return (0);
+		}
 		i++;
 	}
-	temp = ft_sort_array(temp);
+	temp[i] = NULL;
+	sorted = ft_sort_array(temp);
+	if (!sorted)
+	{
+		free_array(temp);
+		return (0);
+	}
+	target = ft_strdup(sorted[index]);  // ✅ on garde une copie
+	free_array(temp);
+	free_array(sorted);
+	if (!target)
+		return (0);
 	i = 0;
 	while (exec->env[i])
 	{
-		if (ft_strcmp(exec->env[i][0], temp[index]) == 0)
+		if (ft_strcmp(exec->env[i][0], target) == 0)
+		{
+			free(target);
 			return (i);
+		}
 		i++;
 	}
+	free(target);
 	return (0);
 }

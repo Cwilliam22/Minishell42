@@ -25,3 +25,18 @@ int free_env(char ***env)
     return (1);
 }
 
+int free_array(char **array)
+{
+    int i;
+
+    i = 0;
+    if (!array)
+        return (0);
+    while (array[i])
+    {
+        free(array[i]);
+        i++;
+    }
+    free(array);
+    return (1);
+}

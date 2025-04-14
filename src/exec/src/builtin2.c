@@ -6,7 +6,7 @@
 /*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 15:54:03 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/08 14:21:10 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/12 19:06:36 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int builtin_exit(char **arg, t_exec *exec)
 {
     (void)arg;
     (void)exec;
+    free_env(exec->env);
     ft_printf("exit\n");
     return (1);
 }

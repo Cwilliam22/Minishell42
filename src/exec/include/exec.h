@@ -6,7 +6,7 @@
 /*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:49:18 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/10 16:03:48 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/13 22:20:29 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef struct s_builtin
 }	t_builtin;
 
 // copy_env.c
-char	***copy_env1(char **envp);
+int		copy_env1(char **envp, t_exec *exec);
 char	**split_var_env(char *env_var);
 int		print_env(char ***env);
 int		copy_env_sorted(t_exec *exec);
@@ -76,7 +76,8 @@ int		ft_envlen(char ***env);
 int		ft_tablen(char **tab_arg);
 
 // free.c
-int    free_env(char ***env);
+int		free_env(char ***env);
+int		free_array(char **array);
 
 // get.c
 int		find_sth_in_env(char *variable, char ***env);

@@ -6,13 +6,13 @@
 /*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:54:07 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/10 16:02:12 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/13 13:20:01 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/exec.h"
 
-char *tab_arg[] = {"export", "CACA", "=", "/bin", NULL}; 
+char *tab_arg[] = {"export", "HELLO", "=", "/bin", NULL}; 
 //"export PATH=/bin"
 
 void	init_all(t_exec *exec)
@@ -34,21 +34,33 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_exec exec;
 
-	init_all(&exec);
 	(void)argc;
 	(void)argv;
-	// Variable command
-	exec.cmd = tab_arg[0];
-	// Count args
-	exec.nbr_arg = ft_tablen(tab_arg);
-	// Copy env in a variable (char *** type)
-	exec.env = copy_env1(envp);
-	if (!copy_env_sorted(&exec))
+	// init all variable of the struct
+	init_all(&exec);
+	// copy env in a variable env
+	if (!copy_env1(envp, &exec))
 		return (1);
-	exec.nbr_var_env = ft_envlen(exec.env);
-	// Security
+	// security
 	if (!exec.env)
 		return (1);
+	// count the number of variable in env
+	exec.nbr_var_env = ft_envlen(exec.env);
+	// make a copy of env but in order in env_sorted
+	if (!copy_env_sorted(&exec))
+		return (1);
+	// security
+	if (!exec.env_sorted)
+		return (1);
+	if (!print_env(exec.env_sorted))
+		return (1);
+	free_env(exec.env);
+	free_env(exec.env_sorted);
+	/*
+	// get the cmd 
+	exec.cmd = tab_arg[0];
+	// get the number of argument after cmd
+	exec.nbr_arg = ft_tablen(tab_arg);
 	// Test tab ***
 	if (!print_env(exec.env_sorted))
 		return (1);
@@ -56,10 +68,11 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	// Test path
 	exec.path = ft_strdup(exec.env[find_var_path(exec.env)][1]);
-	//printf("PATH: %s\n", exec.path);
+	printf("PATH: %s\n", exec.path);
 	// Look at the command
 	if (!identification(tab_arg, &exec))
 		return (ft_printf("Not a command valid\n"), 1);
 	apply_path(exec.env, exec.cmd);
+	*/
 	return (0);
 }
