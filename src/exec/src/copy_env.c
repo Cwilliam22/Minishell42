@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   copy_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 14:10:27 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/12 18:59:57 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/14 13:42:46 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,21 +80,24 @@ int	copy_env_sorted(t_exec *exec)
 	int place;
 	
 	i = 0;
+	if (exec->env_sorted)
+		free_env(exec->env_sorted);
 	exec->env_sorted = malloc((exec->nbr_var_env + 1) * sizeof(char **));
 	if (!exec->env_sorted)
 		return (0);
-	place = get_var_in_order(0, exec);
-	if (exec->env_sorted != NULL)
-		free_env(exec->env_sorted);
-	while (exec->env[i])
+	while (i < exec->nbr_var_env)
 	{
 		j = 0;
 		place = get_var_in_order(i, exec);
-		while (exec->env[i][j])
+		exec->env_sorted[i] = malloc(3 * sizeof(char *));
+		if (!exec->env_sorted[i])
+			return (0);
+		while (exec->env[place][j])
 		{
 			exec->env_sorted[i][j] = ft_strdup(exec->env[place][j]);
 			j++;
 		}
+		exec->env_sorted[i][j] = NULL;
 		i++;
 	}
 	exec->env_sorted[i] = NULL;
