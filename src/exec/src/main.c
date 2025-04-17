@@ -6,7 +6,7 @@
 /*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:54:07 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/13 13:20:01 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/15 13:16:16 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,6 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	if (!print_env(exec.env_sorted))
 		return (1);
-	free_env(exec.env);
-	free_env(exec.env_sorted);
-	/*
 	// get the cmd 
 	exec.cmd = tab_arg[0];
 	// get the number of argument after cmd
@@ -73,6 +70,7 @@ int	main(int argc, char **argv, char **envp)
 	if (!identification(tab_arg, &exec))
 		return (ft_printf("Not a command valid\n"), 1);
 	apply_path(exec.env, exec.cmd);
-	*/
+	free_env(exec.env);
+	free_env(exec.env_sorted);
 	return (0);
 }

@@ -55,8 +55,6 @@ int	get_var_in_order(int index, t_exec *exec)
 	char	*target;
 
 	i = 0;
-	if (index < 0 || index >= exec->nbr_var_env)
-		return (0);
 	temp = malloc(sizeof(char *) * (exec->nbr_var_env + 1));
 	if (!temp)
 		return (0);
