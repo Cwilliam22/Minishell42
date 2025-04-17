@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 15:54:09 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/09 15:33:38 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/17 12:46:00 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int builtin_pwd(char **arg, t_exec *exec)
         return (0);
     printf("%s\n", path);
     free(path);
+    // change the old pwd in the env !!!
     return (1);
 }
 
@@ -93,19 +94,18 @@ int builtin_export(char **arg, t_exec *exec)
         j = find_sth_in_env(arg[1], exec->env_sorted);
         if (i == -1)
         {
-            if (!new_var_env(new_value, new_variable, exec))
-                return (0);
-            if (!new_var_env_sorted(new_value, new_variable, exec))
+            if (!new_var(new_value, new_variable, exec))
                 return (0);
         }
         else
         {
-            if (!replace_value_var(new_value, i, exec->env) && 
+            if (!replace_value_var(new_value, i, exec->env) || 
                 !replace_value_var(new_value, j, exec->env_sorted))
                 return (0);
         }
     }
     free(new_value);
+    free(new_variable);
     ft_printf("export\n");
     return (1);
 }

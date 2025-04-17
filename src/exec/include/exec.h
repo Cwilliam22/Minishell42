@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:49:18 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/13 22:20:29 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/17 12:08:29 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ int		find_var_place(char *new_variable, t_exec *exec);
 int		get_var_in_order(int index, t_exec *exec);
 
 // manage_env.c
+int		new_var(char *new_value, char *new_variable, t_exec *exec);
 int		new_var_env(char *new_value, char *new_variable, t_exec *exec);
 int		new_var_env_sorted(char *new_value, char *new_variable, t_exec *exec);
 int		replace_value_var(char *new_value, int i, char ***env);

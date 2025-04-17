@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:54:07 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/15 13:16:16 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/17 12:49:07 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ int	main(int argc, char **argv, char **envp)
 	// security
 	if (!exec.env_sorted)
 		return (1);
-	if (!print_env(exec.env_sorted))
-		return (1);
+	//if (!print_env(exec.env_sorted))
+	//	return (1);
 	// get the cmd 
-	exec.cmd = tab_arg[0];
+	exec.cmd = ft_strdup(tab_arg[0]);
 	// get the number of argument after cmd
 	exec.nbr_arg = ft_tablen(tab_arg);
 	// Test tab ***
@@ -69,8 +69,10 @@ int	main(int argc, char **argv, char **envp)
 	// Look at the command
 	if (!identification(tab_arg, &exec))
 		return (ft_printf("Not a command valid\n"), 1);
-	apply_path(exec.env, exec.cmd);
+	//apply_path(exec.env, exec.cmd);
 	free_env(exec.env);
 	free_env(exec.env_sorted);
+	free(exec.path);
+	free(exec.cmd);
 	return (0);
 }
