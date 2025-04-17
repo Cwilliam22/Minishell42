@@ -40,3 +40,14 @@ int free_array(char **array)
     free(array);
     return (1);
 }
+
+int free_all(t_exec *exec)
+{
+     if (!exec->env || !exec->env_sorted || !exec->path || !exec->cmd)
+        return (0);
+    free_env(exec->env);
+	free_env(exec->env_sorted);
+	free(exec->path);
+	free(exec->cmd);
+    return (1);
+}

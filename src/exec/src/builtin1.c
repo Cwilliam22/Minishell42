@@ -6,7 +6,7 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 15:54:09 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/17 12:46:00 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/17 20:18:54 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,13 @@ int builtin_export(char **arg, t_exec *exec)
     char    *new_value;
     char    *new_variable;
     
-    new_value = ft_strdup(arg[3]);
-    new_variable = ft_strdup(arg[1]);
+    new_value = NULL;
+    new_variable = NULL;
+    if (exec->nbr_arg == 4)
+    {
+        new_value = ft_strdup(arg[3]);
+        new_variable = ft_strdup(arg[1]);
+    }
     if (exec->nbr_arg == 1)
     {
         if (!print_env(exec->env_sorted))
@@ -104,8 +109,11 @@ int builtin_export(char **arg, t_exec *exec)
                 return (0);
         }
     }
-    free(new_value);
-    free(new_variable);
+    if (new_value != NULL || new_variable != NULL)
+    {
+        free(new_value);
+        free(new_variable);
+    }
     ft_printf("export\n");
     return (1);
 }

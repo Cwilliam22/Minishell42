@@ -6,7 +6,7 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:49:18 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/17 12:08:29 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/17 19:47:04 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int		ft_tablen(char **tab_arg);
 // free.c
 int		free_env(char ***env);
 int		free_array(char **array);
+int		free_all(t_exec *exec);
 
 // get.c
 int		find_sth_in_env(char *variable, char ***env);
