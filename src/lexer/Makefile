@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alexis <alexis@student.42.fr>              +#+  +:+       +#+         #
+#    By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/16 14:07:31 by alfavre           #+#    #+#              #
-#    Updated: 2025/04/09 13:01:57 by alexis           ###   ########.fr        #
+#    Updated: 2025/04/23 15:33:08 by alfavre          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ NAME = lexer
 LIBFT = ./libft/libft.a
 SRC_DIR = src/
 OBJ_DIR = obj/
-INC = -Iinclude -Ilibft
+INC = -I/home/alfavre/Documents/42_github/Minishell42/include -Ilibft
 LIB = -Llibft -lft
 CC = gcc
 FLAGS = -g -Wall -Wextra -Werror
