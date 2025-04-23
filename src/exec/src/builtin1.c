@@ -6,11 +6,11 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 15:54:09 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/17 20:18:54 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/23 15:30:09 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/exec.h"
+#include "../../../include/exec.h"
 
 int builtin_echo(char **arg, t_exec *exec)
 {

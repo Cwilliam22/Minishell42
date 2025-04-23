@@ -6,11 +6,11 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 14:10:27 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/14 13:42:46 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/23 15:30:30 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/exec.h"
+#include "../../../include/exec.h"
 
 char	**split_var_env(char *env_var)
 {

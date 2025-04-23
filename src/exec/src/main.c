@@ -6,11 +6,11 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:54:07 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/17 20:29:29 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/23 15:31:14 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/exec.h"
+#include "../../../include/exec.h"
 
 char *tab_arg[] = {"env", NULL}; 
 

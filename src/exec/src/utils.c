@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 13:18:47 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/10 01:03:56 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/23 15:31:33 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/exec.h"
+#include "../../../include/exec.h"
 
 char	*ft_strfchr(const char *s, int c)
 {

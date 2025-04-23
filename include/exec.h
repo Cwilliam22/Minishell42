@@ -6,7 +6,7 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:49:18 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/17 19:47:04 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/23 15:32:39 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <stdio.h>
 # include <unistd.h>
-# include "../libft/includes/libft.h"
+# include "../src/exec/libft/includes/libft.h"
 
 typedef struct s_exec
 {
