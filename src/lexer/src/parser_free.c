@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_free.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:40:37 by alexis            #+#    #+#             */
-/*   Updated: 2025/04/09 10:48:45 by alexis           ###   ########.fr       */
+/*   Updated: 2025/04/23 14:54:27 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ void	free_commands(t_command *cmd)
 {
 	t_command	*ptr;
 
-	ptr = cmd;
-	cmd = cmd->next;
-	free_command(ptr);
+	while (cmd)
+	{
+		ptr = cmd;
+		cmd = cmd->next;
+		free_command(ptr);
+	}
 }

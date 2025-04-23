@@ -8,7 +8,7 @@
 			"name": "(gdb) Launch",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "/home/alexis/Documents/42_github/Minishell42/src/lexer/lexer",
+			"program": "${workspaceFolder}/src/lexer/lexer",
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${fileDirname}",
