@@ -1,15 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtin1.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/22 15:54:09 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/23 15:30:09 by wcapt            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
+                           
 #include "../../../include/exec.h"
 
 int builtin_echo(char **arg, t_exec *exec)
@@ -90,7 +79,7 @@ int builtin_export(char **arg, t_exec *exec)
     }
     if (exec->nbr_arg == 1)
     {
-        if (!print_env(exec->env_sorted))
+        if (!print_env_sorted(exec->env_sorted))
             return (0);
     }
     else if (exec->nbr_arg == 4)

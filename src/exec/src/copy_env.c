@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   copy_env.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/18 14:10:27 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/23 15:30:30 by wcapt            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../../../include/exec.h"
 
@@ -64,6 +53,23 @@ int	print_env(char ***env)
 	i = 0;
 	while (env[i])
 	{
+		if (env[i][1])
+			ft_printf("%s=%s\n", env[i][0], env[i][1]);
+		else
+		    ft_printf("%s=NULL\n", env[i][0]);
+		i++;
+	}
+	return (1);
+}
+
+int	print_env_sorted(char ***env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+	{
+		ft_printf("declare -x ");
 		if (env[i][1])
 			ft_printf("%s=%s\n", env[i][0], env[i][1]);
 		else

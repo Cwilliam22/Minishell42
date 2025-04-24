@@ -66,7 +66,6 @@ int	get_var_in_order(int index, t_exec *exec)
 	temp[i] = NULL;
 	sorted = ft_sort_array(temp);
 	target = ft_strdup(sorted[index]);
-	free_array(temp);
 	free_array(sorted);
 	if (!target)
 		return (0);

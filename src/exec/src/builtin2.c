@@ -1,24 +1,32 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtin2.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/22 15:54:03 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/23 15:30:22 by wcapt            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../../../include/exec.h"
 
 int builtin_unset(char **arg, t_exec *exec)
 {
-    (void)arg;
-    (void)exec;
-    ft_printf("unset\n");
+    int i;
+    int place;
+    
+    i = 0;
+    if (exec->nbr_arg == 1)
+        return (1);
+    else 
+    {
+        while (arg[i])
+        {
+            place = find_sth_in_env(arg[i], exec->env);
+            if (place != -1)
+                unset_var(place, exec);
+            i++;
+        }
+    }
     return (1);
 }
+
+// unset sans arguments ne fais rien
+// unset avec une variable fausse ne fait rien
+// unset une variable existante efface la variable de l'env
+// unset avec plusieurs arguments appliquera unset sur chaque argument individuellement
+    // regarder en plus les cas précédent pour les applications individuelle 
 
 int builtin_env(char **arg, t_exec *exec)
 {
@@ -31,14 +39,35 @@ int builtin_env(char **arg, t_exec *exec)
     {
         ft_printf("env: ‘%d’: No such file or directory\n", arg[1]);
     }
-    ft_printf("env\n");
     return (1);
 }
 
 int builtin_exit(char **arg, t_exec *exec)
 {
-    (void)arg;
-    free_all(exec);
     ft_printf("exit\n");
+    if (exec->nbr_arg == 1)
+        exec->out = 0;
+    else if (exec->nbr_arg == 2 && ft_is_a_number(arg[1]))
+        exec->out = ft_atoi(arg[1]);
+    else if (exec->nbr_arg == 2 && !ft_is_a_number(arg[1]))
+    {
+        ft_printf("bash: exit: %s: numeric argument required\n", arg[1]);
+        exec->out = 2;
+    }
+    else if (exec->nbr_arg > 2 && ft_is_a_number(arg[1]))
+    {
+        exec->out = 1;
+        ft_printf("bash: exit: too many arguments");
+        return (1);
+    }
+    else if (exec->nbr_arg > 2 && !ft_is_a_number(arg[1]))
+    {
+        ft_printf("bash: exit: %s: numeric argument required\n", arg[1]);
+        exec->out = 2;
+    }
+    free_all(exec);
+    exit(exec->out);
     return (1);
 }
+
+// regarde toujour le deuxieme argument 

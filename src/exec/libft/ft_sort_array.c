@@ -6,45 +6,41 @@
 /*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:25:40 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/14 20:00:08 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/24 12:11:12 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/libft.h"
 
+static void	ft_swap(char **sorted, int i, int j)
+{
+	char *buf;
+	
+	buf = sorted[i];
+	sorted[i] = sorted[j];
+	sorted[j] = buf;
+}
+
+//hello break point
 char **ft_sort_array(char **array)
 {
-	char	*buf;
-	char	**sorted;
 	int		i;
+	int		j;
     int		len;
 
 	i = 0;
     len = ft_arraylen(array);
-	sorted = malloc(sizeof(char *) * (len + 1));
-	if (!sorted)
-        return (NULL);
-	while (i < len)
+	i = 0;
+	while (i < len - 1)
 	{
-		sorted[i] = ft_strdup(array[i]);
+		j = i + 1;
+		while (j < len - 1)
+		{
+			if (ft_strcmp(array[i], array[j]) > 0)
+				ft_swap(array, i, j);
+			j++;
+		}
 		i++;
 	}
-	sorted[i] = NULL;
-	i = 1;
-	while (i < len)
-	{
-		while (i < len - 1)
-		{
-			if (ft_strcmp(sorted[i], sorted[i + 1]) > 0)
-			{
-				buf = sorted[i + 1];
-				sorted[i + 1] = sorted[i];
-				sorted[i] = buf;
-			}
-			i++;
-		}
-		i = 1;
-		len--;
-	}
-	return (sorted);
+	return (array);
 }

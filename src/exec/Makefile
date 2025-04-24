@@ -6,7 +6,7 @@
 #    By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 11:49:11 by wcapt             #+#    #+#              #
-#    Updated: 2025/04/10 00:01:55 by wcapt            ###   ########.fr        #
+#    Updated: 2025/04/24 15:16:43 by wcapt            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ LIBFT = $(LIBFT_DIR)/libft.a
 SRC = 	$(SRC_DIR)/main.c $(SRC_DIR)/path.c $(SRC_DIR)/copy_env.c \
 		$(SRC_DIR)/utils.c $(SRC_DIR)/identification.c $(SRC_DIR)/builtin1.c \
 		$(SRC_DIR)/builtin2.c $(SRC_DIR)/free.c $(SRC_DIR)/len.c \
-		$(SRC_DIR)/manage_env.c $(SRC_DIR)/get.c
+		$(SRC_DIR)/new_var.c $(SRC_DIR)/unset.c $(SRC_DIR)/get.c
 
 # Fichiers objets
 OBJ = $(SRC:.c=.o)
