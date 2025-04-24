@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:49:18 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/23 15:32:39 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/24 15:55:04 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ typedef struct s_exec
 	int				nbr_arg;
 	int				nbr_var_env;
 	int				fd_in;
-	int				fd_out;
+	int				out;
 	int				is_pipe;
 	struct s_exec	*next;
 }	t_exec;
@@ -43,6 +43,7 @@ typedef struct s_builtin
 int		copy_env1(char **envp, t_exec *exec);
 char	**split_var_env(char *env_var);
 int		print_env(char ***env);
+int		print_env_sorted(char ***env);
 int		copy_env_sorted(t_exec *exec);
 
 // path.c
@@ -86,10 +87,15 @@ char	*find_value_in_env(char *variable, t_exec *exec);
 int		find_var_place(char *new_variable, t_exec *exec);
 int		get_var_in_order(int index, t_exec *exec);
 
-// manage_env.c
+// new_var.c
 int		new_var(char *new_value, char *new_variable, t_exec *exec);
 int		new_var_env(char *new_value, char *new_variable, t_exec *exec);
 int		new_var_env_sorted(char *new_value, char *new_variable, t_exec *exec);
 int		replace_value_var(char *new_value, int i, char ***env);
+
+// unset.c
+int		unset_var(int index, t_exec *exec);
+int		unset_var_env(int index, t_exec *exec);
+int		unset_var_env_sorted(int index, t_exec *exec);
 
 #endif
