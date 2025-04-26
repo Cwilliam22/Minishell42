@@ -40,6 +40,10 @@ int	main(int argc, char **argv, char **envp)
 	// security
 	if (!exec.env_sorted)
 		return (1);
+	// Test 1
+	find_sth_in_env("HOME", exec.env_sorted);
+	// Test 1
+	print_env_sorted(exec.env_sorted);
 	// get the cmd 
 	exec.cmd = ft_strdup(tab_arg[0]);
 	// get the number of argument after cmd
@@ -50,6 +54,14 @@ int	main(int argc, char **argv, char **envp)
 	// Look at the command
 	if (!identification(tab_arg, &exec))
 		return (ft_printf("Not a command valid\n"), 1);
+	// Test 1
+	ft_printf("\n");
+	ft_printf("----------------------------------------");
+	ft_printf("\n");
+	ft_printf("\n");
+	// Test 1	
+	print_env_sorted(exec.env_sorted);
+	find_sth_in_env("HOME", exec.env_sorted);
 	//apply_path(exec.env, exec.cmd);
 	free_all(&exec);
 	return (0);

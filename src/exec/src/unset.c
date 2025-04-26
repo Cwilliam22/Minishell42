@@ -1,13 +1,13 @@
 
 #include "../../../include/exec.h"
 
-int	unset_var(int index, t_exec *exec)
+int	unset_var(int index1, int index2, t_exec *exec)
 {
-	if (!unset_var_env(index, exec))
+	if (!unset_var_env(index1, exec))
 	{
         return (0);
 	}
-    if (!unset_var_env_sorted(index, exec))
+    if (!unset_var_env_sorted(index2, exec))
     {    
 		return (0);
 	}

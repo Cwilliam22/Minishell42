@@ -4,7 +4,8 @@
 int builtin_unset(char **arg, t_exec *exec)
 {
     int i;
-    int place;
+    int place1;
+    int place2;
     
     i = 0;
     if (exec->nbr_arg == 1)
@@ -13,9 +14,10 @@ int builtin_unset(char **arg, t_exec *exec)
     {
         while (arg[i])
         {
-            place = find_sth_in_env(arg[i], exec->env);
-            if (place != -1)
-                unset_var(place, exec);
+            place1 = find_sth_in_env(arg[i], exec->env);
+            place2 = find_sth_in_env(arg[i], exec->env_sorted);
+            if (place1 != -1)
+                unset_var(place1, place2, exec);
             i++;
         }
     }
