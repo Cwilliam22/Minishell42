@@ -6,7 +6,7 @@
 /*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:49:18 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/24 15:55:04 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/04/26 21:50:07 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int		new_var_env_sorted(char *new_value, char *new_variable, t_exec *exec);
 int		replace_value_var(char *new_value, int i, char ***env);
 
 // unset.c
-int		unset_var(int index, t_exec *exec);
+int		unset_var(int index1, int index2, t_exec *exec);
 int		unset_var_env(int index, t_exec *exec);
 int		unset_var_env_sorted(int index, t_exec *exec);
 
