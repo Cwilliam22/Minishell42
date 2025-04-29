@@ -99,3 +99,11 @@ Gestions des Builtins :
             ...
         else
             c_est_un_externe()
+
+
+Main MINISHELL
+
+- Boucle infini comme un vrai shell ne s'arrete jamais a moins de exit
+- Programme attend une CMD pour reagir
+- Une fois la commande envoyee il la passe dans le Parse puis a exec
+- Puis il ajoute la commande a l'hystorique des commandes 
