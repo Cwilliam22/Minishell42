@@ -10,7 +10,6 @@ int main(void)
         if (!input)
             break;
         add_history(input);
-        printf("You entered: %s\n", input);
         free(input);
     }
 }
