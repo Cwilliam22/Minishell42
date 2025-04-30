@@ -8,3 +8,29 @@ EXTERNE :
 
 
 Lorsqu’un utilisateur entre une commande, on doit d’abord déterminer si elle est exécutable directement.
+
+Les processus fonctionnent comme un arbre avec des branches.
+getpid() pour obtenir l'ID du process
+getppid() pour obtenir l'ID du process parent
+
+Chaque appele du process donnera un pid different, car il sagit d'un nouveau process.
+
+CMD [ps] affiche les processus en cours d'execution sur le systeme.
+
+Tuer un processus en cours d'execution CMD [kill] (SIGTERM == signal envoye pour terminer le process)
+
+Deux facons de créer un process
+
+    1. Utiliser system
+
+    2. Utiliser fork et exec
+        - fork()
+            -> Produit un process fils qui est l'execte copie de son processus parent.
+            -> Le process parent continue d'executer le programme a partir de l'endroit ou fork est appele.
+            -> Le process enfant fait la meme chose au meme endroit 
+https://mtodorovic.developpez.com/linux/programmation-avancee/?page=page_3
+
+
+
+        - exec()
+            -> Fait en sorte qu'un process cesse d'etre une instance d'un certain programme et devient une instance d'un autre.
