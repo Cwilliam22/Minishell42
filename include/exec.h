@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:49:18 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/26 21:50:07 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/05/01 15:37:54 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ typedef struct s_exec
 	int				fd_in;
 	int				out;
 	int				is_pipe;
-	struct s_exec	*next;
 }	t_exec;
 
 typedef struct s_builtin
@@ -38,6 +37,9 @@ typedef struct s_builtin
 	char	*builtin;
 	int		(*fonction)(char **args, t_exec *exec);
 }	t_builtin;
+
+// main.c
+int		ft_exec(char **tab_arg, t_exec *exec);
 
 // copy_env.c
 int		copy_env1(char **envp, t_exec *exec);
@@ -79,7 +81,8 @@ int		ft_tablen(char **tab_arg);
 // free.c
 int		free_env(char ***env);
 int		free_array(char **array);
-int		free_all(t_exec *exec);
+int		free_var(t_exec *exec);
+int		free_all_env(t_exec *exec);
 
 // get.c
 int		find_sth_in_env(char *variable, char ***env);

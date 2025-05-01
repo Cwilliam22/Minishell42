@@ -34,3 +34,24 @@ https://mtodorovic.developpez.com/linux/programmation-avancee/?page=page_3
 
         - exec()
             -> Fait en sorte qu'un process cesse d'etre une instance d'un certain programme et devient une instance d'un autre.
+
+Comment executer les CMD externes ?
+
+Contrairement aux builtins les CMD externes seront lancees directement avec leur vrai binaire depuis le shell.
+Nous avons donc une ligne de commande splitter en argument grace au parsing.
+    Exemple : 
+        (1) ls -l /home
+        (2) tab_arg = ["ls", "-l", "/home", NULL]
+
+Dans cette exemple l'utilisateur tape ls 
+
+fork()
+    -> Cree un nouveau processus appele processus enfant (child)
+    -> Le processus original est appele processus parent
+    -> #include <unistd.h>
+    -> Fork() est appele 1x mais retourne 2x 
+    -> Return 
+        - Return (0) dans le processus fils.
+        - Return le PID du fils dans le processus parent.
+        - Return (-1) en cas d'erreur (échec de création du processus).
+
