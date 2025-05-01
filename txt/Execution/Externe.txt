@@ -55,3 +55,8 @@ fork()
         - Return le PID du fils dans le processus parent.
         - Return (-1) en cas d'erreur (échec de création du processus).
 
+execve()
+    ->
+    ->
+    ->
+
