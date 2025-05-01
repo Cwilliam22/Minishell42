@@ -1,6 +1,19 @@
 
 #include "../../../include/exec.h"
 
+void	init_all(t_exec *exec)
+{
+	exec->args = NULL;
+	exec->cmd = NULL;
+	exec->cmd_path = NULL;
+	exec->path = NULL;
+	exec->fd_in = 0;
+	exec->nbr_arg = 0;
+	exec->nbr_var_env = 0;
+	exec->out = 0;
+	exec->is_pipe = 0;
+}
+
 ft_exec(char **tab_arg, t_exec *exec)
 {
 	// init all variable of the struct

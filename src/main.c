@@ -1,20 +1,5 @@
 #include "../include/minishell.h"
 
-void	init_all(t_exec *exec)
-{
-	exec->args = NULL;
-	exec->env_sorted = NULL;
-	exec->env = NULL;
-	exec->cmd = NULL;
-	exec->cmd_path = NULL;
-	exec->path = NULL;
-	exec->fd_in = 0;
-	exec->nbr_arg = 0;
-	exec->nbr_var_env = 0;
-	exec->out = 0;
-	exec->is_pipe = 0;
-}
-
 int ft_env(char **envp, t_exec *exec)
 {
     if (!copy_env1(envp, exec))
@@ -37,6 +22,8 @@ int main(int argc, char **argv, char **envp)
 
     (void)argc;
     (void)argv;
+    exec.env_sorted = NULL;
+	exec.env = NULL;
     if (!ft_env(envp, &exec))
         return (1);
     while (1)
