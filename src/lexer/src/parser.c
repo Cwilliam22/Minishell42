@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:49:16 by alexis            #+#    #+#             */
-/*   Updated: 2025/04/09 12:55:08 by alexis           ###   ########.fr       */
+/*   Updated: 2025/05/01 14:49:43 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,11 @@ static void process_redirection(t_command *cmd, t_token **tokens)
 	*tokens = curr;
 }
 
-static t_command	*parse_simple_command(t_token **tokens, t_env *env, int last_exit_code)
+static t_command	*parse_simple_command(t_token **tokens, int last_exit_code)
 {
 	t_command	*cmd;
 	t_token		*curr;
 	int			arg_count;
-	(void)env;
 	(void)last_exit_code;
 
 	curr = *tokens;
@@ -51,7 +50,7 @@ static t_command	*parse_simple_command(t_token **tokens, t_env *env, int last_ex
 	*tokens = curr;
 	return (cmd);
 }
-t_command	*parse(t_token *tokens, t_env *env, int last_exit_code)
+t_command	*parse(t_token *tokens, int last_exit_code)
 {
 	t_command	*head;
 	t_command	*curr;
@@ -63,7 +62,7 @@ t_command	*parse(t_token *tokens, t_env *env, int last_exit_code)
 	current_token = tokens;
 	while (current_token && current_token->type != TOKEN_EOF)
 	{
-		new_cmd = parse_simple_command(&current_token, env, last_exit_code);
+		new_cmd = parse_simple_command(&current_token, last_exit_code);
 		if (new_cmd)
 		{
 			if (!head)
