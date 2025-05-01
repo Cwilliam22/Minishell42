@@ -2,7 +2,7 @@
 # define MINISHELL_H
 
 # include "exec.h"
-//# include "lexer.h"
+# include "lexer.h"
 
 # include <stdlib.h>
 # include <stdio.h>

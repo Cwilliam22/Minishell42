@@ -6,7 +6,7 @@
 /*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:11:44 by alfavre           #+#    #+#             */
-/*   Updated: 2025/04/23 13:35:07 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/05/01 10:22:16 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <signal.h>
-# include "../libft/include/libft.h"
+# include "../src/lexer/libft/include/libft.h"
 
 typedef enum e_token_type
 {
