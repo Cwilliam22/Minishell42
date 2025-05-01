@@ -17,15 +17,11 @@ void	init_all(t_exec *exec)
 
 int ft_env(char **envp, t_exec *exec)
 {
-    // copy env in a variable env
     if (!copy_env1(envp, exec))
 		return (0);
-    // security
     if (!exec.env)
 		return (0);
-    // count the number of variable in env
     exec.nbr_var_env = ft_envlen(exec.env);
-    // make env_sorted
     if (!copy_env_sorted(exec))
 		return (0);
     // security
@@ -41,7 +37,7 @@ int main(int argc, char **argv, char **envp)
 
     (void)argc;
     (void)argv;
-    if (!ft_env(envp, exec))
+    if (!ft_env(envp, &exec))
         return (1);
     while (1)
     {
@@ -52,5 +48,5 @@ int main(int argc, char **argv, char **envp)
         free(input);
     }
     // free all the variable of the struct (env, env_sorted)
-    free_all_env(exec);
+    free_all_env(&exec);
 }
