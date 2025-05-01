@@ -9,7 +9,6 @@ int ft_env(char **envp, t_exec *exec)
     exec.nbr_var_env = ft_envlen(exec.env);
     if (!copy_env_sorted(exec))
 		return (0);
-    // security
     if (!exec.env_sorted)
 		return (0);
     return (1);
