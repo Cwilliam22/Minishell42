@@ -34,19 +34,19 @@ char	*read_in_path(char ***env, int place)
 	return (path);
 }
 
-int	apply_path(char ***env, char *command)
+int	apply_path(t_exec *exec)
 {
 	char	*path;
 	char	*pathname;
 	char	*temp;
 
-	path = read_in_path(env, find_var_path(env));
+	path = read_in_path(exec->env, find_var_path(exec->env));
 	if (!path)
 		return (0);
 	while (*path)
 	{
 		pathname = ft_strfchr(path, ':');
-		pathname = ft_strjoin(pathname, command);
+		pathname = ft_strjoin(pathname, exec->cmd);
 		temp = ft_strchr(path, ':');
 		if (temp)
 			path = ft_strdup(temp + 1);
@@ -55,7 +55,10 @@ int	apply_path(char ***env, char *command)
 		if (access(pathname, F_OK) == 0)
 		{
 			if (access(pathname, X_OK) == 0)
+			{
+				exec->cmd_path = ft_strdup(pathname);
 				return (free(pathname), free(path), 1);
+			}
 		}
 		free(pathname);
 	}

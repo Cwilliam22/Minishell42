@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:49:18 by wcapt             #+#    #+#             */
-/*   Updated: 2025/05/01 15:37:54 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/05/02 21:25:55 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,12 @@ int		copy_env_sorted(t_exec *exec);
 // path.c
 int		find_var_path(char ***env);
 char	*read_in_path(char ***env, int place);
-int		apply_path(char ***env, char *command);
+int		apply_path(t_exec *exec);
 
 // Identification.c
 int		identification(char **arg, t_exec *exec);
 int		its_a_builtin(char **arg, t_exec *exec);
-int		execute_externe(char **arg, char ***env);
+int		execute_externe(char **args, char ***env, t_exec *exec);
 
 // builtin1.;
 int		builtin_echo(char **arg, t_exec *exec);

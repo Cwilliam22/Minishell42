@@ -35,6 +35,8 @@ https://mtodorovic.developpez.com/linux/programmation-avancee/?page=page_3
         - exec()
             -> Fait en sorte qu'un process cesse d'etre une instance d'un certain programme et devient une instance d'un autre.
 
+
+
 Comment executer les CMD externes ?
 
 Contrairement aux builtins les CMD externes seront lancees directement avec leur vrai binaire depuis le shell.
@@ -43,10 +45,20 @@ Nous avons donc une ligne de commande splitter en argument grace au parsing.
         (1) ls -l /home
         (2) tab_arg = ["ls", "-l", "/home", NULL]
 
-Dans cette exemple l'utilisateur tape ls 
+Dans cette exemple l'utilisateur tape ls mais ne donne pas le chemin dans le binaire.
+Pour pouvoir récupérer le programme demander pas l'utilisateur (ici ls) nous allons devoir créer un doublons.
+Ce doublons sera la pour conserver être remplacé par le programme de la CMD voulu.
+De cette facon en continue à exécuter notre code tout en exécutant le programme associer à la CMD.
+Si on de créeait pas de doublons le p    e PID même après execve(), car c’est le même processus, juste transformé.
+
+    Le child ne "renvoie" rien lui-même : c’est le noyau qui informe le parent à la fin du processus via waitpid().
+
+Tu veux maintenant que je t’explique comment lire la variable $PATH pour retrouver le bon chemin binaire (ex : /bin/ls) à passer à execve() ? 🔍rogramme de la commande s'exécuterait et se terminerait directement après.
+Pour créer notre doublons nous allons faire appele à la fonction fork().
 
 fork()
-    -> Cree un nouveau processus appele processus enfant (child)
+    -> pid_t fork(void)
+    -> Crée un nouveau processus appele processus enfant (child)
     -> Le processus original est appele processus parent
     -> #include <unistd.h>
     -> Fork() est appele 1x mais retourne 2x 
@@ -55,8 +67,38 @@ fork()
         - Return le PID du fils dans le processus parent.
         - Return (-1) en cas d'erreur (échec de création du processus).
 
+Une fois le child process prêt nous allons chercher dans la variable $PATH le chemin vers la CMD si cette dernière existe belle et bien.
+Une fois que le bon chemin est trouvé on le passe à la fonction execve().
+Execve() va nous permettre de remplacer le child process par le programme de la commande que nous avons cherché précédemment (ici ls).
+Une fois le child remplacé le programme de la CMD s'exécutera normalement.
+
 execve()
-    ->
-    ->
-    ->
+    -> int execve(const char *pathname, char *const argv[], char *const envp[]);
+    -> Remplace le processus courant par un nouveau programme.
+    -> Arguments : 
+        - const char *pathname : Chemin absolu du programme à exécuter
+        - char *const argv[] : tableau de chaînes représentant la commande et ses arguments
+        - char *const envp[] : tableau des variables d’environnement (généralement celui de ton shell)
+    -> Le code du processus courant est écrasé par le programme cible.
+    -> Le PID ne change pas.
+    -> Return (-1) en cas d'échec.
+
+Pendant ce temps le process parent sera en attente de la fin de la CMD.
+On retrouvera dans le process parent la fonction waitpid() ayant comme argument le PID du child.
+
+waitpid()
+    -> pid_t waitpid(pid_t pid, int *status, int options);
+    -> Arguments
+        - pid_t pid : Le PID du processus qu’on veut attendre.
+            -> (>0) attendre ce PID précis.
+            -> (-1) attendre n’importe quel fils.
+        - int *status : Pointeur vers un int où sera stocké le code de retour du fils.
+        - int options : Options (souvent 0, mais tu peux mettre WNOHANG, etc).
+    -> Return le PID du processus qui s’est terminé.
+    -> Return (-1) en cas d’erreur.
+    -> Le shell se bloque et attend que le processus pid termine.
+    -> Une fois que ce processus s’est terminé, waitpid() :
+        - Return son PID + remplit status avec des informations sur la fin du processus.
+
+
 

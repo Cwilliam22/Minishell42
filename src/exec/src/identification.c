@@ -17,7 +17,7 @@ int    identification(char **arg, t_exec *exec)
 		return (1);
 	else
 	{
-		execute_externe(arg, exec->env);
+		execute_externe(arg, exec->env, exec);
 		return (1);
 	}
 	return (0);
@@ -37,10 +37,28 @@ int	its_a_builtin(char **arg, t_exec *exec)
 		return (0);
 }
 
-int	execute_externe(char **arg, char ***env)
+int	execute_externe(char **args, char ***env, t_exec *exec)
 {
-	(void)env;
-	(void)arg;
-	ft_printf("execute_externe\n");
+	pid_t	pid;
+	char	*path;
+	int		status;
+	char	**env_temp;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		env_temp = set_my_fucking_error(exec->env);
+		if (!apply_path(exec))
+			return (0);
+		execve(path, arg, );
+		
+	}
+	else if (pid > 0)
+		waitpid(pid, &status, 0);
+	else
+		return (ft_printf("Erreur in Execution of externes CMDs\n"), 0);
 	return (1);
 }
+
+// creat a new function to set the error of char ***
+// need env in the form char ** not ***  (next step)

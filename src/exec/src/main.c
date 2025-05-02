@@ -19,17 +19,14 @@ ft_exec(char **tab_arg, t_exec *exec)
 	// init all variable of the struct
 	init_all(exec);
 	// get the cmd 
-	exec.cmd = ft_strdup(tab_arg[0]);
+	exec->cmd = ft_strdup(tab_arg[0]);
 	// get the number of argument after cmd
-	exec.nbr_arg = ft_tablen(tab_arg);
+	exec->nbr_arg = ft_tablen(tab_arg);
 	// Test path
-	exec.path = ft_strdup(exec.env[find_var_path(exec.env)][1]);
-	//ft_printf("PATH: %s\n", exec.path);
-	// Look at the command
+	exec->path = ft_strdup(exec->env[find_var_path(exec->env)][1]);
+	//ft_printf("PATH: %s\n", exec->path);
 	if (!identification(tab_arg, exec))
 		return (ft_printf("Not a command valid\n"), 0);
-	//apply_path(exec.env, exec.cmd);
-	// Make another function to not free env and env_sorted 
 	free_var(exec);
 	return (1);
 }
@@ -97,7 +94,7 @@ int	main(int argc, char **argv, char **envp)
 	// Test 1	
 	print_env_sorted(exec.env_sorted);
 	find_sth_in_env("HOME", exec.env_sorted);
-	//apply_path(exec.env, exec.cmd);
+	//apply_path(exec);
 	free_var(&exec);
 	free_all_env(&exec);
 	return (0);
