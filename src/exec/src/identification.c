@@ -47,10 +47,10 @@ int	execute_externe(char **args, char ***env, t_exec *exec)
 	pid = fork();
 	if (pid == 0)
 	{
-		env_temp = set_my_fucking_error(exec->env);
+		env_temp = set_my_fucking_error(exec->env, exec);
 		if (!apply_path(exec))
 			return (0);
-		execve(path, arg, );
+		execve(path, args, env);
 		
 	}
 	else if (pid > 0)
@@ -60,5 +60,20 @@ int	execute_externe(char **args, char ***env, t_exec *exec)
 	return (1);
 }
 
+char **set_my_fucking_error(char ***env, t_exec *exec)
+{
+	char **new_env;
+	int	i;
+
+	i = 0;
+	new_env = malloc(sizeof(char *) * (exec->nbr_var_env + 1));
+	while (exec->env[i])
+	{
+		exec->env[i][0] = ft_strjoin(exec->env[i][0], "=");
+		new_env[i] = ft_strjoin(exec->env[i][0], exec->env[i][1]);
+		i++;
+	}
+	return (new_env);
+}
 // creat a new function to set the error of char ***
 // need env in the form char ** not ***  (next step)
