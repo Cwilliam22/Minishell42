@@ -5,16 +5,32 @@ NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
+# Librairies
+EXEC = exec/exec.a
+LEXER = lexer/lexer.a
+
 # Dossiers
-SRC_DIR	= src
+SRC_DIR	= src/
+OBJ_DIR = obj/
 
 # Fichiers sources
-SRC = 	$(SRC_DIR)/main.c
+SRC_FILES = main \
+			execution_interface \
 
-OBJ = $(SRC:.c=.o)
+SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
+OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
+
+OBJF = .cache_exists
 
 # Dépendances
-all: $(NAME)
+all: $(OBJF) $(NAME)
+
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF)
+	@echo "Compiling $<"
+	$(CC) $(FLAGS) -c $< -o $@ $(INC)
+
+$(OBJF):
+	mkdir -p $(OBJ_DIR)
 
 $(NAME): $(OBJ)
 	@$(CC) $(CFLAGS) $(OBJ) -lreadline -o $(NAME)

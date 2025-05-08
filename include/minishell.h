@@ -26,7 +26,6 @@ typedef struct s_shell
 	int			last_exit_code;
 }	t_shell;
 
-// main.c
-
+int	execute_commands(t_command *cmd_list, t_env *env);
 
 #endif

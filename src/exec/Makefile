@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+         #
+#    By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 11:49:11 by wcapt             #+#    #+#              #
-#    Updated: 2025/04/24 15:16:43 by wcapt            ###   ########.fr        #
+#    Updated: 2025/05/08 13:45:19 by alfavre          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Nom des exécutables
-NAME = exec
+NAME = exec.a
 
 # Compilateur et flags
 CC = cc
@@ -23,7 +23,7 @@ LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 # Fichiers sources
-SRC = 	$(SRC_DIR)/main.c $(SRC_DIR)/path.c $(SRC_DIR)/copy_env.c \
+SRC = 	$(SRC_DIR)/exec.c $(SRC_DIR)/path.c $(SRC_DIR)/copy_env.c \
 		$(SRC_DIR)/utils.c $(SRC_DIR)/identification.c $(SRC_DIR)/builtin1.c \
 		$(SRC_DIR)/builtin2.c $(SRC_DIR)/free.c $(SRC_DIR)/len.c \
 		$(SRC_DIR)/new_var.c $(SRC_DIR)/unset.c $(SRC_DIR)/get.c
