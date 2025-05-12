@@ -4,8 +4,7 @@
 int builtin_unset(char **arg, t_exec *exec)
 {
     int i;
-    int place1;
-    int place2;
+    int place;
     
     i = 0;
     if (exec->nbr_arg == 1)
@@ -14,10 +13,9 @@ int builtin_unset(char **arg, t_exec *exec)
     {
         while (arg[i])
         {
-            place1 = find_sth_in_env(arg[i], exec->env);
-            place2 = find_sth_in_env(arg[i], exec->env_sorted);
-            if (place1 != -1)
-                unset_var(place1, place2, exec);
+            place = find_sth_in_env(arg[i], exec->env);
+            if (place != -1)
+                unset_var(place, exec);
             i++;
         }
     }
@@ -67,7 +65,7 @@ int builtin_exit(char **arg, t_exec *exec)
         ft_printf("bash: exit: %s: numeric argument required\n", arg[1]);
         exec->out = 2;
     }
-    free_all(exec);
+    free_all_env(exec);
     exit(exec->out);
     return (1);
 }

@@ -18,7 +18,6 @@ int builtin_echo(char **arg, t_exec *exec)
         if (!ft_printf_arg(arg, i, 0))
             return (0);
     }
-    ft_printf("echo\n");
     return (1);
 }
 
@@ -66,7 +65,6 @@ int builtin_pwd(char **arg, t_exec *exec)
 int builtin_export(char **arg, t_exec *exec)
 {
     int i;
-    int j;
     char    *new_value;
     char    *new_variable;
     
@@ -79,30 +77,24 @@ int builtin_export(char **arg, t_exec *exec)
     }
     if (exec->nbr_arg == 1)
     {
-        if (!print_env_sorted(exec->env_sorted))
+        if (!print_env_sorted(exec))
             return (0);
     }
     else if (exec->nbr_arg == 4)
     {
         i = find_sth_in_env(arg[1], exec->env);
-        j = find_sth_in_env(arg[1], exec->env_sorted);
         if (i == -1)
         {
             if (!new_var(new_value, new_variable, exec))
                 return (0);
         }
-        else
-        {
-            if (!replace_value_var(new_value, i, exec->env) || 
-                !replace_value_var(new_value, j, exec->env_sorted))
+        else if (!replace_value_var(new_value, i, exec->env))
                 return (0);
-        }
     }
     if (new_value != NULL || new_variable != NULL)
     {
         free(new_value);
         free(new_variable);
     }
-    ft_printf("export\n");
     return (1);
 }

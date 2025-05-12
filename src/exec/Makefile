@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+         #
+#    By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 11:49:11 by wcapt             #+#    #+#              #
-#    Updated: 2025/05/08 13:45:19 by alfavre          ###   ########.fr        #
+#    Updated: 2025/05/12 19:35:19 by wcapt            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Nom des exécutables
-NAME = exec.a
+NAME = exec
 
 # Compilateur et flags
 CC = cc

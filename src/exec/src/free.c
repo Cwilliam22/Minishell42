@@ -44,7 +44,9 @@ int free_array(char **array)
 int free_var(t_exec *exec)
 {
     if (!exec->path || !exec->cmd)
+    {
         return (0);
+    }
 	free(exec->path);
 	free(exec->cmd);
     return (1);

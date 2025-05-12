@@ -40,18 +40,17 @@ int	its_a_builtin(char **arg, t_exec *exec)
 int	execute_externe(char **args, char ***env, t_exec *exec)
 {
 	pid_t	pid;
-	char	*path;
 	int		status;
 	char	**env_temp;
 
+	(void)env;
 	pid = fork();
 	if (pid == 0)
 	{
-		env_temp = set_my_fucking_error(exec->env, exec);
+		env_temp = set_my_fucking_error(exec);
 		if (!apply_path(exec))
 			return (0);
-		execve(path, args, env);
-		
+		execve(exec->path, args, env_temp);	
 	}
 	else if (pid > 0)
 		waitpid(pid, &status, 0);
@@ -60,7 +59,7 @@ int	execute_externe(char **args, char ***env, t_exec *exec)
 	return (1);
 }
 
-char **set_my_fucking_error(char ***env, t_exec *exec)
+char **set_my_fucking_error(t_exec *exec)
 {
 	char **new_env;
 	int	i;

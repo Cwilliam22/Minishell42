@@ -62,53 +62,56 @@ int	print_env(char ***env)
 	return (1);
 }
 
-int	print_env_sorted(char ***env)
+char	**copy_env_sorted(t_exec *exec)
 {
-	int	i;
+	int i;
+	int count;
+	char **dest;
 
 	i = 0;
-	while (env[i])
+	count = 0;
+	while (exec->env[count])
+		count++;
+	dest = malloc(sizeof(char *) * (count + 1));
+	if (!dest)
+		return (NULL);
+	while (i < count)
 	{
-		ft_printf("declare -x ");
-		if (env[i][1])
-			ft_printf("%s=%s\n", env[i][0], env[i][1]);
-		else
-		    ft_printf("%s=NULL\n", env[i][0]);
+		dest[i] = ft_strdup(exec->env[i][0]);
 		i++;
 	}
-	return (1);
+	dest[i] = NULL;
+	ft_sort_array(dest);
+	return (dest);
 }
 
-int	copy_env_sorted(t_exec *exec)
+
+int	print_env_sorted(t_exec *exec)
 {
 	int	i;
-	int	j;
-	int place;
-	
+	int j;
+	char **temp;
+
 	i = 0;
-	if (exec->env_sorted)
-		free_env(exec->env_sorted);
-	exec->env_sorted = malloc((exec->nbr_var_env + 1) * sizeof(char **));
-	if (!exec->env_sorted)
-		return (0);
-	while (i < exec->nbr_var_env)
+	temp = copy_env_sorted(exec);
+	while (temp[i])
 	{
 		j = 0;
-		place = get_var_in_order(i, exec);
-		exec->env_sorted[i] = malloc(3 * sizeof(char *));
-		if (!exec->env_sorted[i])
-			return (0);
-		while (exec->env[place][j])
+		while (exec->env[j])
 		{
-			exec->env_sorted[i][j] = ft_strdup(exec->env[place][j]);
+			if (ft_strcmp(temp[i], exec->env[j][0]) == 0)
+			{
+				ft_printf("declare -x %s=\"%s\"\n", exec->env[j][0], exec->env[j][1]);
+				break;
+			}
 			j++;
 		}
-		exec->env_sorted[i][j] = NULL;
 		i++;
 	}
-	exec->env_sorted[i] = NULL;
+	free_array(temp);
 	return (1);
 }
+
 
 /*
 int main(int argc, char **argv, char **envp)
