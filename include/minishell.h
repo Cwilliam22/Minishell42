@@ -6,8 +6,8 @@
 
 # include <stdlib.h>
 # include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 extern int	g_exit_status;
 

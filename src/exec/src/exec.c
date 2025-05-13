@@ -1,7 +1,7 @@
 
 #include "../../../include/exec.h"
 
-/*
+
 void	init_all(t_exec *exec)
 {
 	exec->args = NULL;
@@ -31,9 +31,9 @@ ft_exec(char **tab_arg, t_exec *exec)
 	free_var(exec);
 	return (1);
 }
-*/
 
 
+/*
 char *tab_arg[] = {"export", NULL}; 
 
 void	init_all(t_exec *exec)
@@ -83,7 +83,7 @@ int	main(int argc, char **argv, char **envp)
 	free_all_env(&exec);
 	return (0);
 }
-
+*/
 
 
 

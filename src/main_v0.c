@@ -2,16 +2,12 @@
 
 int ft_env(char **envp, t_exec *exec)
 {
-    if (!copy_env1(envp, exec))
+  if (!copy_env1(envp, exec))
 		return (0);
-    if (!exec.env)
+  if (!exec->env)
 		return (0);
-    exec.nbr_var_env = ft_envlen(exec.env);
-    if (!copy_env_sorted(exec))
-		return (0);
-    if (!exec.env_sorted)
-		return (0);
-    return (1);
+  exec->nbr_var_env = ft_envlen(exec->env);
+  return (1);
 }
 
 int main(int argc, char **argv, char **envp)
@@ -21,8 +17,7 @@ int main(int argc, char **argv, char **envp)
 
     (void)argc;
     (void)argv;
-    exec.env_sorted = NULL;
-	exec.env = NULL;
+	  exec.env = NULL;
     if (!ft_env(envp, &exec))
         return (1);
     while (1)

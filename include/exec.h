@@ -6,16 +6,20 @@
 /*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:49:18 by wcapt             #+#    #+#             */
-/*   Updated: 2025/05/05 14:56:18 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/05/12 19:26:49 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXEC_H
 # define EXEC_H
 
-# include <stdio.h>
-# include <unistd.h>
-# include "../src/exec/libft/includes/libft.h"
+#include <stdio.h>
+#include <unistd.h>
+
+// To use the function waitpid()
+#include <sys/wait.h>
+
+#include "../src/exec/libft/includes/libft.h"
 
 typedef struct s_exec
 {
@@ -38,15 +42,15 @@ typedef struct s_builtin
 	int		(*fonction)(char **args, t_exec *exec);
 }	t_builtin;
 
-// main.c
+// exec.c
 int		ft_exec(char **tab_arg, t_exec *exec);
 
 // copy_env.c
 int		copy_env1(char **envp, t_exec *exec);
 char	**split_var_env(char *env_var);
 int		print_env(char ***env);
-int		print_env_sorted(char ***env);
-int		copy_env_sorted(t_exec *exec);
+int		print_env_sorted(t_exec *exec);
+char	**copy_env_sorted(t_exec *exec);
 
 // path.c
 int		find_var_path(char ***env);
@@ -57,7 +61,7 @@ int		apply_path(t_exec *exec);
 int		identification(char **arg, t_exec *exec);
 int		its_a_builtin(char **arg, t_exec *exec);
 int		execute_externe(char **args, char ***env, t_exec *exec);
-char	**set_my_fucking_error(char ***env, t_exec *exec);
+char	**set_my_fucking_error(t_exec *exec);
 
 // builtin1.;
 int		builtin_echo(char **arg, t_exec *exec);
@@ -93,13 +97,9 @@ int		get_var_in_order(int index, t_exec *exec);
 
 // new_var.c
 int		new_var(char *new_value, char *new_variable, t_exec *exec);
-int		new_var_env(char *new_value, char *new_variable, t_exec *exec);
-int		new_var_env_sorted(char *new_value, char *new_variable, t_exec *exec);
 int		replace_value_var(char *new_value, int i, char ***env);
 
 // unset.c
-int		unset_var(int index1, int index2, t_exec *exec);
-int		unset_var_env(int index, t_exec *exec);
-int		unset_var_env_sorted(int index, t_exec *exec);
+int		unset_var(int index, t_exec *exec);
 
 #endif

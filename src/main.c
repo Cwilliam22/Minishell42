@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/01 14:30:39 by alfavre           #+#    #+#             */
-/*   Updated: 2025/05/08 14:23:07 by alfavre          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "../include/minishell.h"
 
@@ -27,13 +16,9 @@ int ft_env(char **envp, t_exec *exec)
 {
     if (!copy_env1(envp, exec))
 		return (0);
-    if (!exec.env)
+    if (!exec->env)
 		return (0);
-    exec.nbr_var_env = ft_envlen(exec.env);
-    if (!copy_env_sorted(exec))
-		return (0);
-    if (!exec.env_sorted)
-		return (0);
+    exec->nbr_var_env = ft_envlen(exec->env);
     return (1);
 }
 
