@@ -74,5 +74,3 @@ char **set_my_fucking_error(t_exec *exec)
 	}
 	return (new_env);
 }
-// creat a new function to set the error of char ***
-// need env in the form char ** not ***  (next step)

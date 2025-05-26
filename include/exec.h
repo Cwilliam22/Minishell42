@@ -6,7 +6,7 @@
 /*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:49:18 by wcapt             #+#    #+#             */
-/*   Updated: 2025/05/12 19:26:49 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/05/21 17:45:50 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct s_exec
 	char			*cmd;
 	char			*cmd_path;
 	char			*path;
-	int				nbr_arg;
+	int				nbr_process;
 	int				nbr_var_env;
 	int				fd_in;
 	int				out;
@@ -81,7 +81,8 @@ int		copy_env2(char ***dest, char ***src, t_exec *exec);
 
 // len.c
 int		ft_envlen(char ***env);
-int		ft_tablen(char **tab_arg);
+int		ft_tablen_3d(char **tab_arg);
+int		ft_tablen_2d(char **tab_arg);
 
 // free.c
 int		free_env(char ***env);

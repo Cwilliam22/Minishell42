@@ -170,8 +170,45 @@ FONCTIONS :
 #/////////////////////////////////////////////////////////////////////////////#
 
     - dup(int oldfd)
+        -> int dup(int oldfd)
+        -> int oldfd : ancien descripteur de fichier 
+        -> Cette fonction crées un nouveau descripteur de fichier qui pointe 
+            vers la même destination.
+        -> Deux descripteurs distincts seront disponible après la fonction. 
+        -> On peut modifier ou fermer l’un sans affecter directement l’autre.
+        -> Les deux (oldfd et newfd) pointent vers la même ressource 
+            (même fichier ou pipe, même position, même droits d'accès).
+        -> Utiliseée pour :
+            - Sauvegarder temporairement un descripteur avant redirection.
+            - Revenir à l’état initial en restaurant le descripteur sauvegardé 
+                après la commande.
+        -> Autres :
+            - Lire ou écrire avec newfd affecte la même chose que oldfd.
+            - Si on avance dans le fichier avec un des deux, l’autre est aussi affecté.
+
     - dup2(int oldfd, int newfd)
+        -> int dup2(int oldfd, int newfd);
+        -> int oldfd : descripteur de fichier source
+        -> int newfd : descripteur de fichier destination
+        -> Rediriger un descripteur standard vers une autre ressource.
+        -> Cette fonction duplique le descripteur oldfd dans la valeur newfd. 
+        -> Si newfd est déjà ouvert, il est fermé automatiquement.
+        -> Utilisée pour principalement pour faire des redirections d'entrée et de sortie.
+
     - pipe(int pipefd[2])
+        -> int pipe(int pipefd[2]);
+        -> int pipefd[2] : 
+        -> Cette fonction créer un pipe anonyme.
+            -> C'est quoi un pipe anonyme ???
+                -> Un pipe anonyme
+        -> Remplit le tableau pipefd avec deux descripteurs de fichiers :
+            pipefd[0] -> extrémité de lecture du pipe
+            pipefd[1] -> extrémité d’écriture du pipe
+            -> Pourquoi 2 descripteurs ???
+                -> Car dans un pipe unidirectionnel il y a deux extrémités, 
+                    une pour écrire et une pour lire.
+        -> Retourne 0 en cas de succès.
+        -> Retourne -1 en cas d’erreur.
 
 #/////////////////////////////////////////////////////////////////////////////#
 #		6. Gestion de l’environnement et du terminal                          #
