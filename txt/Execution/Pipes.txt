@@ -1,0 +1,109 @@
+Pipes : 
+
+    Exemples : ls -l | grep ".c" | wc -l
+
+    Une commande avec un ou plusieurs pipe comme ci-dessus est appelé pipeline.
+
+    Un pipe (ou tube) est un mécanisme permettant de transmettre des informations 
+    d’un processus ou d’une commande à une autre. Contrairement à d'autres formes 
+    de communication inter-processus (IPC), un pipe établit une communication 
+    unidirectionnelle : un processus écrit, l’autre lit.
+
+    Principe : la sortie standard (stdout) d’un programme devient l’entrée standard
+    (stdin) d’un autre. Cela permet de chaîner plusieurs commandes pour effectuer 
+    des traitements complexes de manière efficace.
+    
+    Types de pipes sous Linux :
+        - Pipes anonymes (Unnamed Pipes)
+            -> Utilisés pour la communication entre processus apparentés, souvent au 
+                sein d’un même programme.
+    
+        - Pipes nommés (Named Pipes ou FIFOs)
+            -> Permettent également la communication entre processus non apparentés 
+                et peuvent être bidirectionnels.
+
+    En général, les pipes anonymes sont unidirectionnels. Pour une communication 
+    bidirectionnelle, il faut créer deux pipes : un pour chaque sens de communication.
+
+    Le pipe est représenté par une barre verticale | :
+        -> commande1 | commande2 | ... | commandeN
+
+    Chaque commande lit l’entrée fournie par la commande précédente et écrit dans la 
+    suivante. Ce mécanisme est souvent utilisé pour filtrer, trier ou transformer des 
+    données.
+
+    Pour Minishell :
+
+    Chaque process de la commande saisie par l'utilisateur sera séparer pour être 
+    exécuté séparément. La première commande sera exécuter la première commande. Sa 
+    sortie sera redirigé vers un pipe. Puis ce pipe sera utilisé comme entrée pour 
+    la commande suivante.
+    (Répéter l’opération jusqu’à la dernière commande.)
+
+    Ainsi, le tableau des commandes dans Minishell doit refléter cette séparation, 
+    chaque pipe indiquant un nouvel enchaînement logique à gérer/ une nouvelle ligne 
+    de commande dans notre tableau (char ***) crée lors du parsing.
+
+    Exemples : 
+    
+    1. Pour la pipeline suivante : ls -la | grep src | wc -l
+    
+    cmd[0] = ["ls", "-la", NULL];
+    cmd[1] = ["grep", "src", NULL];
+    cmd[2] = ["wc", "-l", NULL];
+    cmd[3] = NULL;
+
+    Ici la cmd (pipeline) avec pipe a la forme suivante : cmd[n][n][n]
+
+    2. Pour la cmd suivante : ls -la
+
+     cmd[0] = ["ls", "-la", NULL];
+     cmd[1] = NULL;
+
+    Ici la cmd sans pipe a la forme suivante : cmd[0][n][n]
+
+    Passons maintenant à l'exécution de ce tableau de commandes.
+    Deux types de tableau se présente à nous :
+        (1) Le tableau à une ligne d'une simple commande possedant seulement un process (donc 0 pipe).
+        (2) Le tableau à n lignes possedant deux ou plusieurs process ([n - 1] pipes). -> pipeline
+
+    Cas 1 :
+    Le cas 1 est simple. Il y a un process à executer et pour se faire nous allos l'envoyer dans une
+    fonction qui va exécuter builtin si c'est un builtin ou externe si c'est une commande externes.
+    (voir partie identification)
+
+    Cas 2 :
+    Le cas 2 est beaucoup plus complexes car il faut prendre en compte l'exécution de plusieurs process
+    ainsi que leur lien via les pipes.
+    Nous allons commencer part ini
+
+    
+(Piste à suivre)
+    Exécution d'une saisie avec plusieurs pipes.
+    Exécuter les commandes n'ayant pas besoin d'entrée en premier 
+    dans l'ordre de lecture, puis exécuter dans l'ordre les commandes 
+    ayant besoin d'une entrée.
+
+    Cependant le shell devrait en toute logique exécuter la pipeline 
+    dans l'ordre et non avec une priorité des commande basé sur leur 
+    besoin de recevoir une entrée ou non.
+
+Autre :
+Voici le raisonnement que j'ai pu rédiger jusqu'à maintent sur l'implémentaation des pipe (pipelines).
+Lors du parsing nous allons créer un tableau 3d censé contenir notre ligne de commande.
+Il peut sagir d'une pipeline contenant plusieurs process ou d'une simple commandes.
+Trouver à l'aide d'une fonction s'il sagit de l'un ou de l'autre est ce important ?
+    Si OUI créer une fonction qui se chargera de compter le nombre de process dans la commande.
+        Si 1 process -> c'est une commande simple.
+        Si 2 process ou plus -> c'est une pipeline.
+    Si NON
+        -> Aucune idée pour le moment (need help).
+    Maintenant comment passer ces informations à la suite de l'execution ?
+    Une pipeline peut être composer de commandes externes et de commandes internes (builtins).
+    Comment exécuter tout ca ?
+    Dans le cas où il sagit d'une commande simple, on peut faire appele à une fonction qui vérifiera s'il sagit 
+    d'une commande externe ou interne (builtin), puis qui l'exécutera.
+    Dans le cas ou il sagit d'une pipeline il faudra 
+    (besoin d'explication quant à la manière de gérer ce nouveau problème)
+
+

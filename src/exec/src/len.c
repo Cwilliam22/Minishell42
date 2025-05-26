@@ -11,9 +11,19 @@ int ft_envlen(char ***env)
     return (i);
 }
 
-int ft_tablen(char **tab_arg)
+int ft_tablen_3d(char ***tab_arg)
 {
-	int	args;
+	int	process;
+
+	process = 0;
+	while (tab_arg[process])
+		process++;
+	return (process);
+}
+
+int ft_tablen_2d(char **tab_arg)
+{
+    int	args;
 
 	args = 0;
 	while (tab_arg[args])

@@ -1,7 +1,7 @@
 
 #include "../../../include/exec.h"
 
-
+/*
 void	init_all(t_exec *exec)
 {
 	exec->args = NULL;
@@ -31,10 +31,13 @@ int	ft_exec(char **tab_arg, t_exec *exec)
 	free_var(exec);
 	return (1);
 }
+*/
 
 
-/*
-char *tab_arg[] = {"export", NULL}; 
+char **tab_arg[] = {
+	{"cat", NULL}, 
+	{"cat", NULL}, 
+	{"ls", NULL}}; 
 
 void	init_all(t_exec *exec)
 {
@@ -45,7 +48,7 @@ void	init_all(t_exec *exec)
 	exec->cmd_path = NULL;
 	exec->path = NULL;
 	exec->fd_in = 0;
-	exec->nbr_arg = 0;
+	exec->nbr_process = 0;
 	exec->nbr_var_env = 0;
 	exec->out = 0;
 	exec->is_pipe = 0;
@@ -68,22 +71,24 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	// count the number of variable in env
 	exec.nbr_var_env = ft_envlen(exec.env);
-	// get the cmd
-	exec.cmd = ft_strdup(tab_arg[0]);
+		// get the cmd
+		//exec.cmd = ft_strdup(tab_arg[0]);
+		// --> useless bc we have a tab_arg *** (we don't know the exact number of cmds)
 	// get the number of argument after cmd
-	exec.nbr_arg = ft_tablen(tab_arg);
+	exec.nbr_process = ft_tablen_3d(tab_arg);
 	// Test path
 	exec.path = ft_strdup(exec.env[find_var_path(exec.env)][1]);
-	//ft_printf("PATH: %s\n", exec.path);
 	// Look at the command
 	if (!identification(tab_arg, &exec))
+		return (ft_printf("Not a command valid\n"), 1);
+	if (!pipeline(tab_arg, &exec))
 		return (ft_printf("Not a command valid\n"), 1);
 	//apply_path(exec);
 	free_var(&exec);
 	free_all_env(&exec);
 	return (0);
 }
-*/
+
 
 
 
