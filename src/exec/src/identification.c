@@ -11,15 +11,26 @@ t_builtin tab_link[] = {
 	{"exit", builtin_exit},
 	{NULL, NULL}};
 
-int    identification(char **arg, t_exec *exec)
+int    identification(char ***arg, t_exec *exec, int line)
 {
-	if (its_a_builtin(arg, exec))
+	char **cmd;
+	int i;
+
+	i = 0;
+	cmd = malloc(sizeof(char *) * (ft_tablen_2d(arg[line]) + 1));
+	while (arg[i])
+	{
+		cmd[i] = ft_strdup(arg[line][i]);
+		i++;
+	}
+	if (its_a_builtin(cmd, exec))
 		return (1);
 	else
 	{
-		execute_externe(arg, exec->env, exec);
+		execute_externe(cmd, exec->env, exec);
 		return (1);
 	}
+	// free la variable cmd 
 	return (0);
 }
 
@@ -50,7 +61,8 @@ int	execute_externe(char **args, char ***env, t_exec *exec)
 		env_temp = set_my_fucking_error(exec);
 		if (!apply_path(exec))
 			return (0);
-		execve(exec->path, args, env_temp);	
+		execve(exec->path, args, env_temp);
+		exit(0);
 	}
 	else if (pid > 0)
 		waitpid(pid, &status, 0);

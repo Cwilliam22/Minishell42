@@ -106,4 +106,24 @@ Trouver à l'aide d'une fonction s'il sagit de l'un ou de l'autre est ce importa
     Dans le cas ou il sagit d'une pipeline il faudra 
     (besoin d'explication quant à la manière de gérer ce nouveau problème)
 
+A mettre au propre :
+le pipe est un tableau de 2 entree 
+une pour la lecture et l'autre pour l ecriture
+exemple : int pipefd[2];  
+        pipefd[0] = lecture
+        pipefd[1] = écriture
+La fonction pipe() "demande" au noyau (kernel) de créer une file tampon en mémoire, qui servira de canal
+unidirectionnel entre deux processus (ou dans un même processus).
 
+Elle cree 2 descripteurs de fichiers, un pour lire et l'autre pour ecrire.
+pipefd[0] = lecture
+pipefd[1] = écriture
+
+Il faut fournir une ligne d'un tableau d'int a la fonction pour que cette dernière puisse cree un canal
+de communication entre process ou avec le meme process.
+
+Le canal de communication prend la forme de fd qui seront importes dans le tableau 
+grace a la fonction pipe().
+
+Il y a une entrée et une sortie ce qui veut dire que le tableau aura la forme suivante :
+    -> n lignes x 2
