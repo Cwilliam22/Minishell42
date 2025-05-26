@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "../../../include/lexer.h"
 
 void	free_redirection(t_redir *redirections)
 {

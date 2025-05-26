@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "../../../include/lexer.h"
 
 static void process_redirection(t_command *cmd, t_token **tokens)
 {

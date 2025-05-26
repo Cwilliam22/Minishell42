@@ -10,15 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "../../../include/lexer.h"
 
 void	test_line(char *input)
 {
 	t_token		*tokens;
 	t_command	*cmds;
-	t_env		*env;
 
-	env = NULL;
 	printf("\n\n> TEST: '%s'\n", input);
 	
 	//Tokenize
@@ -26,7 +24,7 @@ void	test_line(char *input)
 	print_all_tokens(tokens);
 	
 	//Parse
-	cmds = parse(tokens, env, 0);
+	cmds = parse(tokens, 0);
 	print_all_commands(cmds);
 
 	//Clean

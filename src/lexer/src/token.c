@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "../../../include/lexer.h"
 
 static t_token	*new_token(t_token_type type, char *value)
 {

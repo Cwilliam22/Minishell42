@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "../../../include/lexer.h"
 
 int	is_whitespace(char c)
 {

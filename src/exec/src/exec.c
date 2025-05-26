@@ -15,7 +15,7 @@ void	init_all(t_exec *exec)
 	exec->is_pipe = 0;
 }
 
-ft_exec(char **tab_arg, t_exec *exec)
+int	ft_exec(char **tab_arg, t_exec *exec)
 {
 	// init all variable of the struct
 	init_all(exec);
