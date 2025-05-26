@@ -14,12 +14,12 @@ static t_env	*init_shell_env(char **envp)
 
 int ft_env(char **envp, t_exec *exec)
 {
-    if (!copy_env1(envp, exec))
+	if (!copy_env1(envp, exec))
 		return (0);
-    if (!exec->env)
+	if (!exec->env)
 		return (0);
-    exec->nbr_var_env = ft_envlen(exec->env);
-    return (1);
+	exec->nbr_var_env = ft_envlen(exec->env);
+	return (1);
 }
 
 static char	*get_input(void)

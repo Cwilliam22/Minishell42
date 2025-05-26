@@ -92,7 +92,7 @@ static void	free_env_array(char ***env_array)
 
 /*
 ** Fonction d'interface pour exécuter une liste de commandes
-** avec votre fonction ft_exec
+** avec la fonction ft_exec
 */
 int	execute_commands(t_command *cmd_list, t_env *env)
 {
