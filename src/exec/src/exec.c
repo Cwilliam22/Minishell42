@@ -15,7 +15,7 @@ void	init_all(t_exec *exec)
 	exec->is_pipe = 0;
 }
 
-int	ft_exec(char **tab_arg, t_exec *exec)
+ft_exec(char **tab_arg, t_exec *exec)
 {
 	// init all variable of the struct
 	init_all(exec);
@@ -33,22 +33,26 @@ int	ft_exec(char **tab_arg, t_exec *exec)
 }
 */
 
-
-char **tab_arg[] = {
-	{"cat", NULL}, 
-	{"cat", NULL}, 
-	{"ls", NULL}}; 
+char ***tab_arg = (char **[]) {
+    (char *[]){"cat", NULL},
+    (char *[]){"cat", NULL},
+    (char *[]){"ls", NULL},
+    NULL
+};
 
 void	init_all(t_exec *exec)
 {
 	exec->args = NULL;
+	exec->line = 0;
 	exec->env_sorted = NULL;
 	exec->env = NULL;
 	exec->cmd = NULL;
 	exec->cmd_path = NULL;
 	exec->path = NULL;
 	exec->fd_in = 0;
+	exec->fd_out = 0;
 	exec->nbr_process = 0;
+	exec->nbr_pipes = 0;
 	exec->nbr_var_env = 0;
 	exec->out = 0;
 	exec->is_pipe = 0;
@@ -76,10 +80,12 @@ int	main(int argc, char **argv, char **envp)
 		// --> useless bc we have a tab_arg *** (we don't know the exact number of cmds)
 	// get the number of argument after cmd
 	exec.nbr_process = ft_tablen_3d(tab_arg);
+	exec.nbr_pipes = exec.nbr_process - 1;
 	// Test path
 	exec.path = ft_strdup(exec.env[find_var_path(exec.env)][1]);
+	exec.line = 0;
 	// Look at the command
-	if (!identification(tab_arg, &exec))
+	if (!identification(tab_arg, &exec, exec.line))
 		return (ft_printf("Not a command valid\n"), 1);
 	if (!pipeline(tab_arg, &exec))
 		return (ft_printf("Not a command valid\n"), 1);

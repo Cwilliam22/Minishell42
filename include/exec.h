@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:49:18 by wcapt             #+#    #+#             */
-/*   Updated: 2025/05/21 17:45:50 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/05/26 15:05:51 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,13 @@ typedef struct s_exec
 	char			*cmd_path;
 	char			*path;
 	int				nbr_process;
+	int				nbr_pipes;
 	int				nbr_var_env;
 	int				fd_in;
+	int				fd_out;
 	int				out;
 	int				is_pipe;
+	int				line;
 }	t_exec;
 
 typedef struct s_builtin
@@ -58,7 +61,7 @@ char	*read_in_path(char ***env, int place);
 int		apply_path(t_exec *exec);
 
 // Identification.c
-int		identification(char **arg, t_exec *exec);
+int		identification(char ***arg, t_exec *exec, int line);
 int		its_a_builtin(char **arg, t_exec *exec);
 int		execute_externe(char **args, char ***env, t_exec *exec);
 char	**set_my_fucking_error(t_exec *exec);
@@ -81,7 +84,7 @@ int		copy_env2(char ***dest, char ***src, t_exec *exec);
 
 // len.c
 int		ft_envlen(char ***env);
-int		ft_tablen_3d(char **tab_arg);
+int		ft_tablen_3d(char ***tab_arg);
 int		ft_tablen_2d(char **tab_arg);
 
 // free.c
@@ -102,5 +105,10 @@ int		replace_value_var(char *new_value, int i, char ***env);
 
 // unset.c
 int		unset_var(int index, t_exec *exec);
+
+// pipe.c
+int		pipeline(char ***tab_arg, t_exec *exec);
+int		execute_pipeline(char ***tab_arg, t_exec *exec, int **pipes);
+int		close_pipes(int **pipes, t_exec *exec);
 
 #endif
