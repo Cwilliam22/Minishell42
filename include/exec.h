@@ -6,7 +6,7 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:49:18 by wcapt             #+#    #+#             */
-/*   Updated: 2025/05/26 15:05:51 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/05/27 15:10:11 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,16 @@ typedef struct s_exec
 {
 	char			**args;
 	char			***env;
-	char			***env_sorted;
-	char			*cmd;
 	char			*cmd_path;
 	char			*path;
 	int				nbr_process;
 	int				nbr_pipes;
 	int				nbr_var_env;
+	int				nbr_arg;
 	int				fd_in;
 	int				fd_out;
 	int				out;
+	char			*cmd;
 	int				is_pipe;
 	int				line;
 }	t_exec;
@@ -46,7 +46,7 @@ typedef struct s_builtin
 }	t_builtin;
 
 // exec.c
-int		ft_exec(char **tab_arg, t_exec *exec);
+int		ft_exec(char ***tab_arg, t_exec *exec);
 
 // copy_env.c
 int		copy_env1(char **envp, t_exec *exec);

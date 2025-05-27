@@ -32,20 +32,6 @@ char	*find_value_in_env(char *variable, t_exec *exec)
 		return (NULL);
 }
 
-int find_var_place(char *new_variable, t_exec *exec)
-{
-    int i;
-
-    i = 0;
-    while (exec->env_sorted[i])
-    {
-        if (ft_strcmp(new_variable, exec->env_sorted[i][0]) < 0)
-            return (i);
-        i++;
-    }
-    return (-1);
-}
-
 // check here de segfault 
 int	get_var_in_order(int index, t_exec *exec)
 {

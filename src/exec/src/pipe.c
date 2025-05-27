@@ -6,8 +6,7 @@ int pipeline(char ***tab_arg, t_exec *exec)
     int i;
 
     i = 0;
-    pipes = malloc(sizeof(int *) * exec);
-
+    pipes = malloc(sizeof(int *) * exec->nbr_pipes);
     while (i < exec->nbr_pipes)
     {
         pipes[i] = malloc(sizeof(int) * 2);
@@ -45,8 +44,8 @@ int execute_pipeline(char ***tab_arg, t_exec *exec, int **pipes)
                 dup2(pipes[i - 1][0], STDIN_FILENO);
             if (!close_pipes(pipes, exec))
                 return (ft_printf("Error in close pipes\n"), 0);
-            if (!identification(tab_arg, exec))
-		        return (ft_printf("Not a command valid\n"), 1);
+            if (!identification(tab_arg, exec, i))
+		        return (1);
             exit(0);
         }
         i++;

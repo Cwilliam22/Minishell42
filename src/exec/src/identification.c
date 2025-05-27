@@ -18,11 +18,13 @@ int    identification(char ***arg, t_exec *exec, int line)
 
 	i = 0;
 	cmd = malloc(sizeof(char *) * (ft_tablen_2d(arg[line]) + 1));
-	while (arg[i])
+	exec->cmd = ft_strdup(arg[line][0]);
+	while (arg[line][i])
 	{
 		cmd[i] = ft_strdup(arg[line][i]);
 		i++;
 	}
+	cmd[i] = NULL;
 	if (its_a_builtin(cmd, exec))
 		return (1);
 	else
@@ -39,13 +41,14 @@ int	its_a_builtin(char **arg, t_exec *exec)
 	int	i;
 
 	i = 0;
-		while (tab_link[i].builtin != NULL) 
-		{
-			if (ft_strcmp(arg[0], tab_link[i].builtin) == 0)
-				return (tab_link[i].fonction(arg, exec));
-			i++;
-		}
-		return (0);
+	exec->nbr_arg = ft_tablen_2d(arg);
+	while (tab_link[i].builtin != NULL) 
+	{
+		if (ft_strcmp(arg[0], tab_link[i].builtin) == 0)
+			return (tab_link[i].fonction(arg, exec));
+		i++;
+	}
+	return (0);
 }
 
 int	execute_externe(char **args, char ***env, t_exec *exec)

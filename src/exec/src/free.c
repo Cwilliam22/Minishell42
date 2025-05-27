@@ -54,9 +54,8 @@ int free_var(t_exec *exec)
 
 int free_all_env(t_exec *exec)
 {
-    if (!exec->env || !exec->env_sorted)
+    if (!exec->env)
         return (0);
     free_env(exec->env);
-	free_env(exec->env_sorted);
     return (1);
 }
