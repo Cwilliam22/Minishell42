@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:11:44 by alfavre           #+#    #+#             */
-/*   Updated: 2025/05/01 14:50:00 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/05/27 08:02:23 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdbool.h>
 # include <string.h>
 # include <errno.h>
 # include <fcntl.h>
@@ -33,6 +34,15 @@ typedef enum e_token_type
 	TOKEN_HEREDOC,
 	TOKEN_EOF
 }	t_token_type;
+
+typedef enum	e_parse_result
+{
+	PARSE_OK,
+	PARSE_ERROR_SYNTAX,
+	PARSE_ERROR_QUOTE,
+	PARSE_ERROR_PIPE,
+	PARSE_ERROR_REDIRECTION
+}	t_parse_result;
 
 typedef struct s_token
 {
@@ -85,5 +95,8 @@ void		print_all_tokens(t_token *tokens);
 void		print_redirection(t_redir *redir);
 void		print_command(t_command *cmd);
 void		print_all_commands(t_command *cmd);
+
+/*Check error*/
+t_parse_result	validate_syntax(char *input);
 
 #endif

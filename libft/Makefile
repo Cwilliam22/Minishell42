@@ -3,104 +3,75 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alexis <alexis@student.42.fr>              +#+  +:+       +#+         #
+#    By: wcapt <wcapt@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/11/14 10:55:02 by alfavre           #+#    #+#              #
-#    Updated: 2025/04/03 12:34:58 by alexis           ###   ########.fr        #
+#    Created: 2024/12/14 00:18:04 by wcapt             #+#    #+#              #
+#    Updated: 2024/12/14 00:18:04 by wcapt            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-
-#############################################################################
-#								Variables									#
-#############################################################################
-
+# Variables
 NAME = libft.a
-SRCS_DIR = src/
-OBJS_DIR = obj/
-CFLAGS = -g -Wall -Wextra -Werror -I include
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror
 
-#############################################################################
-#									Sources									#
-#############################################################################
+# Fichiers sour#include "includes/libft.h"ce principaux
+SRC =	ft_itoa.c ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c \
+		ft_isprint.c ft_tolower.c ft_toupper.c ft_atoi.c ft_strlen.c \
+		ft_strdup.c ft_bzero.c ft_putnbr_fd.c ft_putstr_fd.c ft_putchar_fd.c \
+		ft_putendl_fd.c ft_split.c ft_strchr.c ft_strrchr.c ft_calloc.c \
+		ft_memset.c ft_memchr.c ft_strjoin.c ft_strtrim.c ft_strlcpy.c \
+		ft_memcpy.c ft_memmove.c ft_memcmp.c ft_striteri.c ft_strncmp.c \
+		ft_strlcat.c ft_strmapi.c ft_substr.c ft_strnstr.c ft_strcmp.c \
+		ft_strcat.c ft_arraylen.c ft_sort_array.c ft_is_a_number.c
 
-FTIS_DIR	=	ft_is/
-FTIS		=	ft_isalpha ft_isdigit ft_isalnum ft_isascii \
-				ft_isprint
+# Fichiers source bonus
+SRCBONUS =	ft_lstnew.c ft_lstsize.c ft_lstadd_front.c ft_lstlast.c \
+			ft_lstadd_back.c ft_lstdelone.c ft_lstiter.c ft_lstclear.c \
+			ft_lstmap.c
 
-FTMEM_DIR	=	ft_mem/
-FTMEM		=	ft_memset ft_memcpy ft_memmove ft_memchr \
-				ft_memcmp ft_bzero ft_calloc
+FT_PRINTF_SRC = ft_printf/ft_printf.c ft_printf/ft_adresse.c ft_printf/ft_hexa_conv.c \
+                ft_printf/ft_putchar.c ft_printf/ft_putnbr.c ft_printf/ft_putstr.c
 
-FTPUT_DIR	=	ft_put/
-FTPUT		=	ft_putchar_fd ft_putstr_fd ft_putendl_fd \
-				ft_putnbr_fd
+FT_PRINTF_OBJ = $(FT_PRINTF_SRC:.c=.o)
 
-FTTO_DIR	=	ft_to/
-FTTO		=	ft_toupper ft_tolower ft_itoa ft_atoi
+# Objets correspondants
+OBJ = $(SRC:.c=.o) $(FT_PRINTF_OBJ)
+OBJBONUS = $(SRCBONUS:.c=.o)
 
-FTSTR_DIR	=	ft_str/
-FTSTR		=	ft_strlen ft_strlcpy ft_strlcat ft_strchr \
-				ft_strrchr ft_strncmp ft_strnstr ft_strdup \
-				ft_substr ft_strjoin ft_strtrim ft_split \
-				ft_strmapi ft_striteri
+# Commande pour créer la bibliothèque
+AR = ar rcs
 
-FTLST_DIR	=	ft_lst/
-FTLST		=	ft_lstnew ft_lstadd_front \
-				ft_lstsize ft_lstlast \
-				ft_lstadd_back ft_lstdelone \
-				ft_lstclear ft_lstiter \
-				ft_lstmap
-
-FTGNL_DIR	=	get_next_line/
-FTGNL		=	get_next_line
-
-SRC_FILES += $(addprefix $(FTIS_DIR), $(FTIS))
-SRC_FILES += $(addprefix $(FTMEM_DIR), $(FTMEM))
-SRC_FILES += $(addprefix $(FTPUT_DIR), $(FTPUT))
-SRC_FILES += $(addprefix $(FTTO_DIR), $(FTTO))
-SRC_FILES += $(addprefix $(FTSTR_DIR), $(FTSTR))
-SRC_FILES += $(addprefix $(FTLST_DIR), $(FTLST))
-SRC_FILES += $(addprefix $(FTPRINTF_DIR), $(FTPRINTF))
-SRC_FILES += $(addprefix $(FTGNL_DIR), $(FTGNL))
-
-SRCS		=	$(addprefix $(SRCS_DIR), $(addsuffix .c, $(SRC_FILES)))
-OBJS		=	$(addprefix $(OBJS_DIR), $(addsuffix .o, $(SRC_FILES)))
-
-#############################################################################
-#									Rules									#
-#############################################################################
-
-OBJSF = .cache_exists
-
+# Règle par défaut
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	ar -rcs $(NAME) $(OBJS)
-	@echo "Libft compiled!"
+# Compilation de la bibliothèque normale
+$(NAME): $(OBJ)
+	$(AR) $(NAME) $(OBJ)
 
-$(OBJS_DIR)%.o: $(SRCS_DIR)%.c | $(OBJSF)
-	@echo "Compiling: $<"
-	cc $(CFLAGS) -c $< -o $@
+# Règle Bonus : ajouter les objets bonus
+bonus: $(OBJBONUS)
+	$(AR) $(NAME) $(OBJBONUS)
 
-$(OBJSF):
-	mkdir -p $(OBJS_DIR)
-	mkdir -p $(OBJS_DIR)$(FTIS_DIR)
-	mkdir -p $(OBJS_DIR)$(FTMEM_DIR)
-	mkdir -p $(OBJS_DIR)$(FTPUT_DIR)
-	mkdir -p $(OBJS_DIR)$(FTTO_DIR)
-	mkdir -p $(OBJS_DIR)$(FTSTR_DIR)
-	mkdir -p $(OBJS_DIR)$(FTLST_DIR)
-	mkdir -p $(OBJS_DIR)$(FTPRINTF_DIR)
-	mkdir -p $(OBJS_DIR)$(FTGNL_DIR)
+# Compilation spécifique des fichiers printf/
+$(FT_PRINTF_DIR)/%.o: $(FT_PRINTF_DIR)/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
+# Compilation des fichiers .o à partir des .c
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Nettoyage des fichiers objets
 clean:
-	rm -rf $(OBJS_DIR)
-	rm -f $(OBJSF)
+	rm -f $(OBJ) $(OBJBONUS) $(PRINTF_OBJ)
 
+# Nettoyage complet : fichiers objets + bibliothèque
 fclean: clean
 	rm -f $(NAME)
 
+# Reconstruction complète
 re: fclean all
 
-.PHONY: all clean fclean re
+# Evite les conflits si des fichiers ont le même nom que les règles
+.PHONY: all bonus clean fclean re
+

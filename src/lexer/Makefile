@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+         #
+#    By: root <root@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/16 14:07:31 by alfavre           #+#    #+#              #
-#    Updated: 2025/04/23 15:38:30 by alfavre          ###   ########.fr        #
+#    Updated: 2025/05/27 09:30:06 by root             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,8 @@ FLAGS = -g -Wall -Wextra -Werror
 #############################################################################
 SRC_FILES = debug test\
 			parser_free parser_utils parser \
-			token_utils token
+			token_utils token \
+			syntax_error
 
 SRC = $(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
 OBJ = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
