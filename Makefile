@@ -20,6 +20,7 @@ FILES_EXEC = exec path copy_env \
 			utils identification builtin1 \
 			builtin2 free len \
 			new_var unset get \
+			pipe
 
 SRC_LEXER = src/lexer/src/
 FILES_LEXER = 	debug test\
