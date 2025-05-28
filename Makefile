@@ -10,10 +10,6 @@ INC = -Ilibft
 LIBFT = ./libft/libft.a
 LIB = -Llibft -lft
 
-# Dossiers
-SRC_DIR	= src/
-OBJ_DIR = obj/
-
 # Fichiers sources
 SRC_EXEC = src/exec/src/
 FILES_EXEC = exec path copy_env \
@@ -23,17 +19,20 @@ FILES_EXEC = exec path copy_env \
 			pipe
 
 SRC_LEXER = src/lexer/src/
-FILES_LEXER = 	debug test\
-				parser_free parser_utils parser \
+FILES_LEXER = 	parser_free parser_utils parser \
 				token_utils token \
 
-FILES = 	main \
-			execution_interface \
+SRC_DIR	= src/
+FILES = 	main_v0 \
+			#execution_interface \
 
 SRC_FILES += $(addprefix $(SRC_EXEC), $(FILES_EXEC))
 SRC_FILES += $(addprefix $(SRC_LEXER), $(FILES_LEXER))
+SRC_FILES += $(addprefix $(SRC_DIR), $(FILES))
 
 SRCS = $(addsuffix .c, $(SRC_FILES))
+
+OBJ_DIR = obj/
 OBJS = $(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
 
 OBJF = .cache_exists
