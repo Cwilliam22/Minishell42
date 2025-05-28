@@ -1,6 +1,7 @@
 
 #include "../../../include/exec.h"
 
+/*
 void	init_all(t_exec *exec)
 {
 	exec->args = NULL;
@@ -36,12 +37,10 @@ int ft_exec(char ***tab_arg, t_exec *exec)
 	free_all_env(exec);
 	return (1);
 }
+*/
 
 
-/*
 char ***tab_arg = (char **[]) {
-    (char *[]){"ls", NULL},
-    (char *[]){"ls", NULL},
     (char *[]){"ls", NULL},
     NULL
 };
@@ -71,29 +70,35 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	init_all(&exec);
-	// copy env in a variable env
-	if (!copy_env1(envp, &exec))
+	init_all(&exec); // init variables
+	if (!copy_env1(envp, &exec)) // copy env in a variable env
 		return (1);
-	// security
-	if (!exec.env)
+	if (!exec.env) // security
 		return (1);
 	exec.nbr_var_env = ft_envlen(exec.env);
 	exec.nbr_process = ft_tablen_3d(tab_arg);
 	exec.nbr_pipes = exec.nbr_process - 1;
 	exec.path = ft_strdup(exec.env[find_var_path(exec.env)][1]);
+	printf("path : %s\n", exec.path);
 	exec.line = 0;
 	// Look at the command
-	if (!identification(tab_arg, &exec, exec.line))
-		return (ft_printf("Not a command valid\n"), 1);
-	if (!pipeline(tab_arg, &exec))
-		return (ft_printf("Not a command valid\n"), 1);
-	//apply_path(exec);
+	if (exec.nbr_process == 1) // if the cmd is not a pipeline
+	{
+		printf("I m a simple command !!!\n");
+		if (!identification(tab_arg, &exec, exec.line))
+			return (ft_printf("Not a command valid\n"), 1);
+	}
+	else if (exec.nbr_process > 1) // if the cmd is a pipeline
+	{
+		printf("I m a pipeline !!!\n");
+		if (!pipeline(tab_arg, &exec))
+			return (ft_printf("Not a command valid\n"), 1);
+	}
 	free_var(&exec);
 	free_all_env(&exec);
 	return (0);
 }
-*/
+
 
 
 

@@ -17,8 +17,10 @@ int    identification(char ***arg, t_exec *exec, int line)
 	int i;
 
 	i = 0;
+	printf("len : %d\n", ft_tablen_2d(arg[line]));
 	cmd = malloc(sizeof(char *) * (ft_tablen_2d(arg[line]) + 1));
 	exec->cmd = ft_strdup(arg[line][0]);
+	printf("cmd : %s\n", exec->cmd);
 	while (arg[line][i])
 	{
 		cmd[i] = ft_strdup(arg[line][i]);
@@ -29,6 +31,7 @@ int    identification(char ***arg, t_exec *exec, int line)
 		return (1);
 	else
 	{
+		printf("C'est une commande externe\n");
 		execute_externe(cmd, exec->env, exec);
 		return (1);
 	}
@@ -58,13 +61,17 @@ int	execute_externe(char **args, char ***env, t_exec *exec)
 	char	**env_temp;
 
 	(void)env;
+	printf("I m in execute externe !!!\n");
 	pid = fork();
 	if (pid == 0)
 	{
+		printf("Je suis dans le process fils !!!\n");
 		env_temp = set_my_fucking_error(exec);
 		if (!apply_path(exec))
 			return (0);
+		printf("Juste avant execve ...\n");
 		execve(exec->path, args, env_temp);
+		printf("Ne rentre pas dans execve !!!\n");
 		exit(0);
 	}
 	else if (pid > 0)

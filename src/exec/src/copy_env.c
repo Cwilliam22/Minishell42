@@ -1,6 +1,9 @@
 
 #include "../../../include/exec.h"
 
+
+// Revoir la fonction car elle ne split pas correctement les variables dans env
+// ce qui donne des erreurs dans la suite de l'exec !!!!!!!!!!
 char	**split_var_env(char *env_var)
 {
 	char	*sign;
@@ -10,6 +13,7 @@ char	**split_var_env(char *env_var)
 	if (!split)
 		return (NULL);
 	sign = ft_strchr(env_var, '=');
+	printf("%s\n", env_var);
 	if (!sign)
 	{
 		split[0] = ft_strdup(env_var);
