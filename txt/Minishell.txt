@@ -133,12 +133,14 @@ typedef struct s_redir
 
 Donc pour un exemple:
 
-minishell$ echo test | command < file2.txt | command > file.txt | command << file.txt | command >> file.txt 
+minishell$ echo test | command < file1.txt < file2.txt | command > file.txt | command << file.txt > file2.txt < file3.txt | command >> file.txt
 === TOKENS ===
 Type: WORD         Value: 'echo'
 Type: WORD         Value: 'test'
 Type: PIPE         Value: '|'
 Type: WORD         Value: 'command'
+Type: REDIR_IN     Value: '<'
+Type: WORD         Value: 'file1.txt'
 Type: REDIR_IN     Value: '<'
 Type: WORD         Value: 'file2.txt'
 Type: PIPE         Value: '|'
@@ -149,6 +151,10 @@ Type: PIPE         Value: '|'
 Type: WORD         Value: 'command'
 Type: HEREDOC      Value: '<<'
 Type: WORD         Value: 'file.txt'
+Type: REDIR_OUT    Value: '>'
+Type: WORD         Value: 'file2.txt'
+Type: REDIR_IN     Value: '<'
+Type: WORD         Value: 'file3.txt'
 Type: PIPE         Value: '|'
 Type: WORD         Value: 'command'
 Type: REDIR_APPEND Value: '>>'
@@ -161,19 +167,55 @@ Command 1:
 
 Command 2:
   Args: 'command' 
-  Has redirections
+=== REIDRECTIONS ===
+Redirection n° 1
+ Type: 3, 
+ File: file1.txt, 
+ Fd: -1
+Redirection n° 2
+ Type: 3, 
+ File: file2.txt, 
+ Fd: -1
+================
   -> PIPE TO NEXT COMMAND
 
 Command 3:
   Args: 'command' 
-  Has redirections
+=== REIDRECTIONS ===
+Redirection n° 1
+ Type: 4, 
+ File: file.txt, 
+ Fd: -1
+================
   -> PIPE TO NEXT COMMAND
 
 Command 4:
   Args: 'command' 
-  Has redirections
+=== REIDRECTIONS ===
+Redirection n° 1
+ Type: 6, 
+ File: file.txt, 
+ Fd: -1
+Redirection n° 2
+ Type: 4, 
+ File: file2.txt, 
+ Fd: -1
+Redirection n° 3
+ Type: 3, 
+ File: file3.txt, 
+ Fd: -1
+================
   -> PIPE TO NEXT COMMAND
 
 Command 5:
   Args: 'command' 
-  Has redirections
+=== REIDRECTIONS ===
+Redirection n° 1
+ Type: 5, 
+ File: file.txt, 
+ Fd: -1
+================
+
+================
+DEBUG: Would execute pipeline here
+DEBUG: First command: echo
