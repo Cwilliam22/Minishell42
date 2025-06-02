@@ -17,10 +17,8 @@ int    identification(char ***arg, t_exec *exec, int line)
 	int i;
 
 	i = 0;
-	printf("len : %d\n", ft_tablen_2d(arg[line]));
 	cmd = malloc(sizeof(char *) * (ft_tablen_2d(arg[line]) + 1));
 	exec->cmd = ft_strdup(arg[line][0]);
-	printf("cmd : %s\n", exec->cmd);
 	while (arg[line][i])
 	{
 		cmd[i] = ft_strdup(arg[line][i]);
@@ -54,6 +52,19 @@ int	its_a_builtin(char **arg, t_exec *exec)
 	return (0);
 }
 
+
+void	print_char_double(char **tab)
+{
+	int i = 0;
+
+	while (tab && tab[i])
+	{
+		printf("tab[%d] = %s\n", i, tab[i]);
+		i++;
+	}
+}
+
+
 int	execute_externe(char **args, char ***env, t_exec *exec)
 {
 	pid_t	pid;
@@ -61,17 +72,13 @@ int	execute_externe(char **args, char ***env, t_exec *exec)
 	char	**env_temp;
 
 	(void)env;
-	printf("I m in execute externe !!!\n");
 	pid = fork();
 	if (pid == 0)
 	{
-		printf("Je suis dans le process fils !!!\n");
 		env_temp = set_my_fucking_error(exec);
 		if (!apply_path(exec))
 			return (0);
-		printf("Juste avant execve ...\n");
-		execve(exec->path, args, env_temp);
-		printf("Ne rentre pas dans execve !!!\n");
+		execve(exec->cmd_path, args, env_temp);
 		exit(0);
 	}
 	else if (pid > 0)
@@ -88,11 +95,16 @@ char **set_my_fucking_error(t_exec *exec)
 
 	i = 0;
 	new_env = malloc(sizeof(char *) * (exec->nbr_var_env + 1));
+	if (!new_env)
+		return (NULL);
 	while (exec->env[i])
 	{
-		exec->env[i][0] = ft_strjoin(exec->env[i][0], "=");
-		new_env[i] = ft_strjoin(exec->env[i][0], exec->env[i][1]);
+		char *temp = ft_strjoin(exec->env[i][0], "=");
+		new_env[i] = ft_strjoin(temp, exec->env[i][1]);
+		free(temp);
 		i++;
 	}
+	new_env[i] = NULL;
 	return (new_env);
 }
+

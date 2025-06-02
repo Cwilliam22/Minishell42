@@ -42,6 +42,7 @@ int ft_exec(char ***tab_arg, t_exec *exec)
 
 char ***tab_arg = (char **[]) {
     (char *[]){"ls", NULL},
+	(char *[]){"wc", "-l", NULL},
     NULL
 };
 
@@ -79,7 +80,6 @@ int	main(int argc, char **argv, char **envp)
 	exec.nbr_process = ft_tablen_3d(tab_arg);
 	exec.nbr_pipes = exec.nbr_process - 1;
 	exec.path = ft_strdup(exec.env[find_var_path(exec.env)][1]);
-	printf("path : %s\n", exec.path);
 	exec.line = 0;
 	// Look at the command
 	if (exec.nbr_process == 1) // if the cmd is not a pipeline

@@ -13,7 +13,6 @@ char	**split_var_env(char *env_var)
 	if (!split)
 		return (NULL);
 	sign = ft_strchr(env_var, '=');
-	printf("%s\n", env_var);
 	if (!sign)
 	{
 		split[0] = ft_strdup(env_var);

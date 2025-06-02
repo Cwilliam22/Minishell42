@@ -47,24 +47,17 @@ int apply_path(t_exec *exec)
 	char *tmp;
     int i;
 
-	printf("Je suis dans apply_path !!!\n");
-	printf("place of path : %d\n", find_var_path(exec->env));
-	//print_env(exec->env);
     paths = ft_split(read_in_path(exec->env, find_var_path(exec->env)), ':');
-	printf("test 1\n");
     if (!paths)
 	{
         return (0);
 	}
-	printf("Je suis encore dans apply_path ... \n");
     i = 0;
-	printf("paths: %s\n", paths[0]);
     while (paths[i])
     {
         tmp = ft_strjoin(paths[i], "/");
 		test_path = ft_strjoin(tmp, exec->cmd);
 		free(tmp);
-		printf("Test path: %s\n", test_path);
         if (access(test_path, X_OK) == 0)
         {
             exec->cmd_path = test_path;
