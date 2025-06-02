@@ -6,11 +6,11 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/06/02 13:52:19 by root             ###   ########.fr       */
+/*   Updated: 2025/06/02 13:53:54 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "minishell_v1.h"
 
 /* Global variable for signal handling (only signal number allowed) */
 int	g_signal_received = 0;

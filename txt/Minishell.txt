@@ -110,3 +110,23 @@ Main MINISHELL
 
 
 Commentaires : 
+
+Paser : 
+Je retourne une liste de cmds:
+typedef struct s_cmd
+{
+	char			**args;
+	t_redir			*redirections;
+	int				pipe_fd[2];
+	pid_t			pid;
+	struct s_cmd	*next;
+}	t_cmd;
+
+et le liste de redirection si besoin : 
+typedef struct s_redir
+{
+	int				type;
+	char			*file;
+	int				fd;
+	struct s_redir	*next;
+}	t_redir;
