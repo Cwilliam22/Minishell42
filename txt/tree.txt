@@ -1,0 +1,29 @@
+minishell/
+├── Makefile
+├── includes/
+│   └── minishell.h
+├── src/
+│   ├── main.c
+│   ├── parser/
+│   │   ├── lexer.c
+│   │   ├── parser.c
+│   │   └── quotes.c
+│   ├── executor/
+│   │   ├── executor.c
+│   │   ├── redirections.c
+│   │   └── pipes.c
+│   ├── builtins/
+│   │   ├── echo.c
+│   │   ├── cd.c
+│   │   ├── pwd.c
+│   │   ├── export.c
+│   │   ├── unset.c
+│   │   ├── env.c
+│   │   └── exit.c
+│   ├── utils/
+│   │   ├── env_utils.c
+│   │   ├── path_utils.c
+│   │   └── error_utils.c
+│   └── signals/
+│       └── signals.c
+└── libft/
