@@ -130,3 +130,50 @@ typedef struct s_redir
 	int				fd;
 	struct s_redir	*next;
 }	t_redir;
+
+Donc pour un exemple:
+
+minishell$ echo test | command < file2.txt | command > file.txt | command << file.txt | command >> file.txt 
+=== TOKENS ===
+Type: WORD         Value: 'echo'
+Type: WORD         Value: 'test'
+Type: PIPE         Value: '|'
+Type: WORD         Value: 'command'
+Type: REDIR_IN     Value: '<'
+Type: WORD         Value: 'file2.txt'
+Type: PIPE         Value: '|'
+Type: WORD         Value: 'command'
+Type: REDIR_OUT    Value: '>'
+Type: WORD         Value: 'file.txt'
+Type: PIPE         Value: '|'
+Type: WORD         Value: 'command'
+Type: HEREDOC      Value: '<<'
+Type: WORD         Value: 'file.txt'
+Type: PIPE         Value: '|'
+Type: WORD         Value: 'command'
+Type: REDIR_APPEND Value: '>>'
+Type: WORD         Value: 'file.txt'
+==============
+=== COMMANDS ===
+Command 1:
+  Args: 'echo' 'test' 
+  -> PIPE TO NEXT COMMAND
+
+Command 2:
+  Args: 'command' 
+  Has redirections
+  -> PIPE TO NEXT COMMAND
+
+Command 3:
+  Args: 'command' 
+  Has redirections
+  -> PIPE TO NEXT COMMAND
+
+Command 4:
+  Args: 'command' 
+  Has redirections
+  -> PIPE TO NEXT COMMAND
+
+Command 5:
+  Args: 'command' 
+  Has redirections
