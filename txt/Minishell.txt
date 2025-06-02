@@ -107,3 +107,6 @@ Main MINISHELL
 - Programme attend une CMD pour reagir
 - Une fois la commande envoyee il la passe dans le Parse puis a exec
 - Puis il ajoute la commande a l'hystorique des commandes 
+
+
+Commentaires : 
