@@ -116,6 +116,7 @@ Je retourne une liste de cmds:
 typedef struct s_cmd
 {
 	char			**args;
+	t_assignment	*assignments;
 	t_redir			*redirections;
 	int				pipe_fd[2];
 	pid_t			pid;
@@ -215,6 +216,40 @@ Redirection n° 1
  File: file.txt, 
  Fd: -1
 ================
+
+================
+DEBUG: Would execute pipeline here
+DEBUG: First command: echo
+
+Gestion de la commande "export" avec la structure assignement:
+typedef struct s_assignment
+{
+	char					*key;
+	char					*value;
+	struct s_assignment		*next;
+}	t_assignment;
+
+minishell$ echo test | export VAR1=hello VAR2=world VAR3=test
+=== TOKENS ===
+Type: WORD         Value: 'echo'
+Type: WORD         Value: 'test'
+Type: PIPE         Value: '|'
+Type: WORD         Value: 'export'
+Type: WORD         Value: 'VAR1=hello'
+Type: WORD         Value: 'VAR2=world'
+Type: WORD         Value: 'VAR3=test'
+==============
+=== COMMANDS ===
+Command 1:
+  Args: 'echo' 'test' 
+  -> PIPE TO NEXT COMMAND
+
+Command 2:
+  Args: 'export' 'VAR1=hello' 'VAR2=world' 'VAR3=test' 
+  Assignments:
+    VAR1 = hello
+    VAR2 = world
+    VAR3 = test
 
 ================
 DEBUG: Would execute pipeline here
