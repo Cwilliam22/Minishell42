@@ -1,6 +1,6 @@
 #include "../../../include/exec.h"
 
-int pipeline(char ***tab_arg, t_exec *exec)
+int pipeline(t_command *cmd, t_exec *exec)
 {
     int **pipes;
     int i;
@@ -13,12 +13,12 @@ int pipeline(char ***tab_arg, t_exec *exec)
         pipe(pipes[i]);
         i++;
     }
-    if (!execute_pipeline(tab_arg, exec, pipes))
+    if (!execute_pipeline(cmd, exec, pipes))
         return (ft_printf("Error in execute pipeline\n"), 0);
     return (1);
 }
 
-int execute_pipeline(char ***tab_arg, t_exec *exec, int **pipes)
+int execute_pipeline(t_command *cmd, t_exec *exec, int **pipes)
 {
     pid_t   *pids;
     int    i;
@@ -34,17 +34,22 @@ int execute_pipeline(char ***tab_arg, t_exec *exec, int **pipes)
         if (pids[i] == 0)
         {
             if (i == 0)
+            {
                 dup2(pipes[i][1], STDOUT_FILENO);
-            if (i > 0 && i < exec->nbr_process - 1)
+            }
+            else if (i > 0 && i < exec->nbr_process - 1)
             {
                 dup2(pipes[i][1], STDOUT_FILENO);
                 dup2(pipes[i - 1][0], STDIN_FILENO);
             }
-            if (i == exec->nbr_process - 1)
+            else if (i == exec->nbr_process - 1)
                 dup2(pipes[i - 1][0], STDIN_FILENO);
             if (!close_pipes(pipes, exec))
-                return (ft_printf("Error in close pipes\n"), 0);
-            if (!identification(tab_arg, exec, i))
+            {
+                ft_printf("Error in close pipes\n");
+                exit(1);
+            }
+            if (!identification(cmd, exec, i))
 		        return (1);
             exit(0);
         }
@@ -61,7 +66,7 @@ int execute_pipeline(char ***tab_arg, t_exec *exec, int **pipes)
             return (ft_printf("Error in fork\n"), 0);
         i++;
     }
-    //free pids 
+    // free pids 
     // free pipes
     return (1);
 }
@@ -84,3 +89,4 @@ int close_pipes(int **pipes, t_exec *exec)
     // qu'il continue a executer le code dans le child 
 // i == 0 (pas de stdin)
 // i == nb_process - 1 (pas de stdout)
+

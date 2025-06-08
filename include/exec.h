@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*   By: wcapt <wcapt@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:49:18 by wcapt             #+#    #+#             */
-/*   Updated: 2025/05/27 15:10:11 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/06/07 20:06:45 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 #include <sys/wait.h>
 
 #include "../src/exec/libft/includes/libft.h"
+
+#include "lexer.h"
 
 typedef struct s_exec
 {
@@ -61,7 +63,7 @@ char	*read_in_path(char ***env, int place);
 int		apply_path(t_exec *exec);
 
 // Identification.c
-int		identification(char ***arg, t_exec *exec, int line);
+int		identification(t_command *cmd, t_exec *exec, int line);
 int		its_a_builtin(char **arg, t_exec *exec);
 int		execute_externe(char **args, char ***env, t_exec *exec);
 char	**set_my_fucking_error(t_exec *exec);
@@ -107,8 +109,13 @@ int		replace_value_var(char *new_value, int i, char ***env);
 int		unset_var(int index, t_exec *exec);
 
 // pipe.c
-int		pipeline(char ***tab_arg, t_exec *exec);
-int		execute_pipeline(char ***tab_arg, t_exec *exec, int **pipes);
+int		pipeline(t_command *cmd, t_exec *exec);
+int		execute_pipeline(t_command *cmd, t_exec *exec, int **pipes);
 int		close_pipes(int **pipes, t_exec *exec);
+
+// list.c
+int		ft_lstlen(t_command *cmd);
+char	**ft_lstcmd_copy(t_command *cmd, int index, t_exec *exec);
+
 
 #endif

@@ -11,26 +11,16 @@ t_builtin tab_link[] = {
 	{"exit", builtin_exit},
 	{NULL, NULL}};
 
-int    identification(char ***arg, t_exec *exec, int line)
+int    identification(t_command *cmd, t_exec *exec, int line)
 {
-	char **cmd;
-	int i;
+	char **process;
 
-	i = 0;
-	cmd = malloc(sizeof(char *) * (ft_tablen_2d(arg[line]) + 1));
-	exec->cmd = ft_strdup(arg[line][0]);
-	while (arg[line][i])
-	{
-		cmd[i] = ft_strdup(arg[line][i]);
-		i++;
-	}
-	cmd[i] = NULL;
-	if (its_a_builtin(cmd, exec))
+	process = ft_lstcmd_copy(cmd, line, exec);
+	if (its_a_builtin(process, exec))
 		return (1);
 	else
 	{
-		printf("C'est une commande externe\n");
-		execute_externe(cmd, exec->env, exec);
+		execute_externe(process, exec->env, exec);
 		return (1);
 	}
 	// free la variable cmd 
