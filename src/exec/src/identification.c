@@ -15,8 +15,8 @@ int    identification(t_command *current_cmd, t_exec *exec)
 {
 	char **process;
 
-	printf("Identification x1\n");
 	process = current_cmd->args;
+	exec->cmd = ft_strdup(current_cmd->name);
 	if (its_a_builtin(process, exec))
 	{
 		printf("identification(): je traite %s\n", current_cmd->args[0]);
@@ -24,7 +24,9 @@ int    identification(t_command *current_cmd, t_exec *exec)
 	}
 	else
 	{
-		execute_externe(process, exec->env, exec);
+		printf("path : %s\n", exec->path);
+		printf("cmd_path : %s\n", exec->cmd_path);
+		execute_externe(process, exec);
 		printf("identification(): je traite %s\n", current_cmd->args[0]);
 		return (1);
 	}
@@ -36,7 +38,6 @@ int	its_a_builtin(char **arg, t_exec *exec)
 	int	i;
 
 	i = 0;
-	printf("Builtin x1\n");
 	exec->nbr_arg = ft_tablen_2d(arg);
 	while (tab_link[i].builtin != NULL) 
 	{
@@ -47,38 +48,19 @@ int	its_a_builtin(char **arg, t_exec *exec)
 	return (0);
 }
 
-
-void	print_char_double(char **tab)
-{
-	int i = 0;
-
-	while (tab && tab[i])
-	{
-		printf("tab[%d] = %s\n", i, tab[i]);
-		i++;
-	}
-}
-
-
-int	execute_externe(char **args, char ***env, t_exec *exec)
+int	execute_externe(char **args, t_exec *exec)
 {
 	pid_t	pid;
 	int		status;
 	char	**env_temp;
 
-	(void)env;
-	printf("Externe x1\n");
 	pid = fork();
 	if (pid == 0)
 	{
 		env_temp = set_my_fucking_error(exec);
 		if (!apply_path(exec))
 			return (0);
-		dprintf(2, "[Child pid %d] exec_externe called for %s, cmd_path='%s'\n", getpid(), args[0], exec->cmd_path);
-		printf("Path : %s\n", exec->cmd_path);
-		printf("I found it !!!\n");
 		execve(exec->cmd_path, args, env_temp);
-		perror("execve failed");
 		exit(1);
 	}
 	else if (pid > 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_v1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/06/02 13:53:54 by root             ###   ########.fr       */
+/*   Updated: 2025/06/09 14:44:06 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ static int	process_input(t_shell *shell, char *input)
 	print_commands(shell->cmd_list);
 
 	/* Execute the command pipeline */
-	shell->exit_status = execute_pipeline(shell);
+	shell->exit_status = ft_exec(shell, exec); // Again 
 	
 	/* Check if we should exit */
 	if (shell->exit_status == -1)

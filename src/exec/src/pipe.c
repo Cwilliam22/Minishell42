@@ -36,25 +36,16 @@ int execute_pipeline(t_command *cmd, t_exec *exec, int **pipes)
         pids[i] = fork();
         if (pids[i] == 0)
         {
-            dprintf(2, "[Child pid %d] index %d — cmd '%s'\n", getpid(), i, current_cmd->args[0]);
             if (i == 0)
-            {
-                dprintf(2, " -> REDIRIGED: stdout to pipes[%d][1]\n", i);
                 dup2(pipes[i][1], STDOUT_FILENO);
-            }
             else if (i < exec->nbr_process - 1)
             {   
-                dprintf(2, " -> REDIRIGED: stdin pipes[%d][0], stdout pipes[%d][1]\n", i-1, i);
                 dup2(pipes[i - 1][0], STDIN_FILENO);
                 dup2(pipes[i][1], STDOUT_FILENO);
             }
             else
-            {
-                dprintf(2, " -> REDIRIGED: stdin pipes[%d][0]\n", i-1);
                 dup2(pipes[i - 1][0], STDIN_FILENO);
-            }
             close_pipes(pipes, exec);
-            dprintf(2, "[Child pid %d] about to call identification() for '%s'\n", getpid(), current_cmd->args[0]);
             if (!identification(current_cmd, exec))
 		        exit(1);
             exit(0);

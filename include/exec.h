@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt <wcapt@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:49:18 by wcapt             #+#    #+#             */
-/*   Updated: 2025/06/08 19:57:29 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/06/09 15:17:39 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int		apply_path(t_exec *exec);
 // Identification.c
 int		identification(t_command *cmd, t_exec *exec);
 int		its_a_builtin(char **arg, t_exec *exec);
-int		execute_externe(char **args, char ***env, t_exec *exec);
+int		execute_externe(char **args, t_exec *exec);
 char	**set_my_fucking_error(t_exec *exec);
 
 // builtin1.;
