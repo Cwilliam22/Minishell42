@@ -50,6 +50,7 @@ int	ft_printf_arg(char **tab_arg, int index, int option)
 			}
 			ft_printf("\n");
 	}
+	fflush(stdout);
 	return (1);
 }
 

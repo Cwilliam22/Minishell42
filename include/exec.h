@@ -6,7 +6,7 @@
 /*   By: wcapt <wcapt@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 11:49:18 by wcapt             #+#    #+#             */
-/*   Updated: 2025/06/07 20:06:45 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/06/08 19:57:29 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ typedef struct s_exec
 	int				out;
 	char			*cmd;
 	int				is_pipe;
-	int				line;
 }	t_exec;
 
 typedef struct s_builtin
@@ -63,7 +62,7 @@ char	*read_in_path(char ***env, int place);
 int		apply_path(t_exec *exec);
 
 // Identification.c
-int		identification(t_command *cmd, t_exec *exec, int line);
+int		identification(t_command *cmd, t_exec *exec);
 int		its_a_builtin(char **arg, t_exec *exec);
 int		execute_externe(char **args, char ***env, t_exec *exec);
 char	**set_my_fucking_error(t_exec *exec);
@@ -94,6 +93,7 @@ int		free_env(char ***env);
 int		free_array(char **array);
 int		free_var(t_exec *exec);
 int		free_all_env(t_exec *exec);
+int		free_pipes(int **pipes, t_exec *exec);
 
 // get.c
 int		find_sth_in_env(char *variable, char ***env);

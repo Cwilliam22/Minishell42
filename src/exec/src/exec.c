@@ -91,7 +91,6 @@ t_command	*create_test_command(void)
 void	init_all(t_exec *exec)
 {
 	exec->args = NULL;
-	exec->line = 0;
 	exec->env = NULL;
 	exec->cmd_path = NULL;
 	exec->path = NULL;
@@ -121,17 +120,16 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	exec.nbr_var_env = ft_envlen(exec.env);
 	exec.nbr_process = ft_lstlen(cmd_list);
-	printf("Nombre de process : %d\n", exec.nbr_process);
 	exec.nbr_pipes = exec.nbr_process - 1;
 	exec.path = ft_strdup(exec.env[find_var_path(exec.env)][1]);
-	exec.line = 0;
 	if (exec.nbr_process == 1) // if the cmd is not a pipeline
 	{
-		if (!identification(cmd_list, &exec, exec.line))
+		if (!identification(cmd_list, &exec))
 			return (ft_printf("Not a command valid\n"), 1);
 	}
 	else if (exec.nbr_process > 1) // if the cmd is a pipeline
 	{
+		printf("It's a pipeline !!\n");
 		if (!pipeline(cmd_list, &exec))
 			return (ft_printf("Not a command valid\n"), 1);
 	}

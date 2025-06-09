@@ -59,3 +59,16 @@ int free_all_env(t_exec *exec)
     free_env(exec->env);
     return (1);
 }
+
+int free_pipes(int **pipes, t_exec *exec)
+{
+    int i;
+
+    i = 0;
+    while (i < exec->nbr_pipes)
+    {
+        free(pipes[i]);
+        i++;
+    }
+    return (0);
+}
