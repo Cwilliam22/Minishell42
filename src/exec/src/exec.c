@@ -120,7 +120,10 @@ int ft_exec(t_shell *shell)
 	shell->exec->nbr_var_env = ft_envlen(shell->exec->env);
 	shell->exec->nbr_process = ft_lstlen(shell->cmd_list);
 	shell->exec->nbr_pipes = shell->exec->nbr_process - 1;
-	shell->exec->path = ft_strdup(shell->exec->env[find_var_path(shell->exec->env)][1]);
+	if (find_var_path(shell->exec->env) >= 0)
+		shell->exec->path = ft_strdup(shell->exec->env[find_var_path(shell->exec->env)][1]);
+	else
+		shell->exec->path = NULL;
 	if (shell->exec->nbr_process == 1)
 	{
 		if (!identification(shell))

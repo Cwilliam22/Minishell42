@@ -1,12 +1,16 @@
 
 #include "minishell.h"
 
-int builtin_unset(char **arg, t_exec *exec)
+int builtin_unset(t_shell *shell)
 {
     int i;
     int place;
+    char **arg;
+    t_exec *exec;
     
     i = 0;
+    arg = shell->cmd_list->args;
+    exec = shell->exec;
     if (exec->nbr_arg == 1)
         return (1);
     else 
@@ -23,8 +27,13 @@ int builtin_unset(char **arg, t_exec *exec)
 }
 
 
-int builtin_env(char **arg, t_exec *exec)
+int builtin_env(t_shell *shell)
 {
+    char **arg;
+    t_exec *exec;
+
+    arg = shell->cmd_list->args;
+    exec = shell->exec;
     if (exec->nbr_arg == 1)
     {
         if (!print_env(exec->env))
@@ -37,8 +46,13 @@ int builtin_env(char **arg, t_exec *exec)
     return (1);
 }
 
-int builtin_exit(char **arg, t_exec *exec)
+int builtin_exit(t_shell *shell)
 {
+    char **arg;
+    t_exec *exec;
+
+    arg = shell->cmd_list->args;
+    exec = shell->exec;
     ft_printf("exit\n");
     if (exec->nbr_arg == 1)
         exec->out = 0;

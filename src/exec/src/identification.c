@@ -17,7 +17,7 @@ int    identification(t_shell *shell)
 
 	process = shell->cmd_list->args;
 	shell->exec->cmd = ft_strdup( shell->cmd_list->args[0]);
-	if (its_a_builtin(process, shell->exec))
+	if (its_a_builtin(shell))
 	{
 		return (1);
 	}
@@ -29,16 +29,16 @@ int    identification(t_shell *shell)
 	return (0);
 }
 
-int	its_a_builtin(char **arg, t_exec *exec)
+int	its_a_builtin(t_shell *shell)
 {
 	int	i;
 
 	i = 0;
-	exec->nbr_arg = ft_tablen_2d(arg);
+	shell->exec->nbr_arg = ft_tablen_2d(shell->cmd_list->args);
 	while (tab_link[i].builtin != NULL) 
 	{
-		if (ft_strcmp(arg[0], tab_link[i].builtin) == 0)
-			return (tab_link[i].fonction(arg, exec));
+		if (ft_strcmp(shell->cmd_list->args[0], tab_link[i].builtin) == 0)
+			return (tab_link[i].fonction(shell));
 		i++;
 	}
 	return (0);

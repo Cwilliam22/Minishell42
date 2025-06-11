@@ -1,12 +1,13 @@
                            
 #include "minishell.h"
 
-int builtin_echo(char **arg, t_exec *exec)
+int builtin_echo(t_shell *shell)
 {
     int i;
-
+    char **arg;
+    
     i = 1;
-    (void)exec;
+    arg = shell->cmd_list->args;
     if (ft_strncmp("-n", arg[1], 2) == 0)
     {
         i = 2;
@@ -21,10 +22,14 @@ int builtin_echo(char **arg, t_exec *exec)
     return (1);
 }
 
-int builtin_cd(char **arg, t_exec *exec)
+int builtin_cd(t_shell *shell)
 {
     char    *path;
+    t_exec *exec;
+    char **arg;
 
+    exec = shell->exec;
+    arg = shell->cmd_list->args;
     if (exec->nbr_arg == 1)
     {
         path = find_value_in_env("HOME", exec);
@@ -46,11 +51,12 @@ int builtin_cd(char **arg, t_exec *exec)
     return (0);
 }
 
-int builtin_pwd(char **arg, t_exec *exec)
+int builtin_pwd(t_shell *shell)
 {
     char *path; 
-    
-    (void)exec;
+    char **arg;
+
+    arg = shell->cmd_list->args;
     if (arg[1] != NULL)
         return (ft_printf("pwd: too many arguments\n"), 0);
     path = getcwd(NULL, 0);
@@ -62,15 +68,19 @@ int builtin_pwd(char **arg, t_exec *exec)
     return (1);
 }
 
-int builtin_export(char **arg, t_exec *exec)
+int builtin_export(t_shell *shell)
 {
     int i;
     char    *new_value;
     char    *new_variable;
+    char    **arg;
+    t_exec *exec;
     
     new_value = NULL;
     new_variable = NULL;
-    if (exec->nbr_arg == 4)
+    exec = shell->exec;
+    arg = shell->cmd_list->args;
+    if (exec->nbr_arg >= 2)
     {
         new_value = ft_strdup(arg[3]);
         new_variable = ft_strdup(arg[1]);

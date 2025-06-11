@@ -1,0 +1,9 @@
+
+Problemes
+
+exit
+echo test | wc -l
+export PLANTE=vert
+unset tv ewwntjw
+command not found quand j appelle minishell dans minishell mais execute quand meme 
+

@@ -114,12 +114,6 @@ typedef struct s_exec
 	int				is_pipe;
 }	t_exec;
 
-typedef struct s_builtin
-{
-	char	*builtin;
-	int		(*fonction)(char **args, t_exec *exec);
-}	t_builtin;
-
 /* Environment variable structure */
 typedef struct s_env
 {
@@ -138,6 +132,12 @@ typedef struct s_shell
 	int				in_heredoc;
 	char			*input_line;
 }	t_shell;
+
+typedef struct s_builtin
+{
+	char	*builtin;
+	int		(*fonction)(t_shell *shell);
+}	t_builtin;
 
 /* ************************************************************************** */
 /*                            GLOBAL VARIABLE                                 */
@@ -182,7 +182,7 @@ char	*remove_quotes(char *str);
 int		ft_exec(t_shell *shell);
 void	init_all(t_exec *exec);
 int		identification(t_shell *shell);
-int		its_a_builtin(char **arg, t_exec *exec);
+int		its_a_builtin(t_shell *shell);
 int		execute_externe(char **args, t_exec *exec);
 char	**set_my_fucking_error(t_exec *exec);
 
@@ -202,15 +202,15 @@ int		close_pipes(int **pipes, t_exec *exec);
 
 /* ============================= BUILTINS ================================== */
 // builtin1.;
-int		builtin_echo(char **arg, t_exec *exec);
-int		builtin_cd(char **arg, t_exec *exec);
-int		builtin_pwd(char **arg, t_exec *exec);
-int		builtin_export(char **arg, t_exec *exec);
+int		builtin_echo(t_shell *shell);
+int		builtin_cd(t_shell *shell);
+int		builtin_pwd(t_shell *shell);
+int		builtin_export(t_shell *shell);
 
 // builtin2.c
-int		builtin_unset(char **arg, t_exec *exec);
-int		builtin_env(char **arg, t_exec *exec);
-int		builtin_exit(char **arg, t_exec *exec);
+int		builtin_unset(t_shell *shell);
+int		builtin_env(t_shell *shell);
+int		builtin_exit(t_shell *shell);
 
 /* ============================= ENVIRONMENT ============================== */
 char	**env_list_to_array(t_env *env_list);
