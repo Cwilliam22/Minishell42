@@ -4,7 +4,10 @@ NAME = minishell
 # Compilateur et flags
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
-INC = -Ilibft
+ifdef DEBUG
+    CFLAGS += -DDEBUG -fsanitize=address
+endif
+INC = -Ilibft/includes/ -Iinclude/
 
 # Librairies
 LIBFT = ./libft/libft.a
@@ -18,16 +21,22 @@ FILES_EXEC = exec path copy_env \
 			new_var unset get \
 			pipe
 
-SRC_LEXER = src/lexer/src/
-FILES_LEXER = 	parser_free parser_utils parser \
-				token_utils token \
+SRC_LEXER = src/lexer/src/new/
+FILES_LEXER = 	lexer parser quotes
+
+SRC_SIGNALS = src/signals/
+FILES_SIGNALS = signals
+
+SRC_UTILS = src/utils/
+FILES_UTILS = utils_missing stubs
 
 SRC_DIR	= src/
-FILES = 	main_v0 \
-			#execution_interface \
+FILES = 	main_v1 \
 
 SRC_FILES += $(addprefix $(SRC_EXEC), $(FILES_EXEC))
 SRC_FILES += $(addprefix $(SRC_LEXER), $(FILES_LEXER))
+SRC_FILES += $(addprefix $(SRC_SIGNALS), $(FILES_SIGNALS))
+SRC_FILES += $(addprefix $(SRC_UTILS), $(FILES_UTILS))
 SRC_FILES += $(addprefix $(SRC_DIR), $(FILES))
 
 SRCS = $(addsuffix .c, $(SRC_FILES))
@@ -60,7 +69,7 @@ $(NAME): $(OBJS)
 
 $(LIBFT):
 	@echo " [ .. ] | Compiling libft.."
-	make -C libft
+	make -C libft || (echo "Error compiling libft" && exit 1)
 	@echo " [ OK ] | Libft ready!"
 
 clean:

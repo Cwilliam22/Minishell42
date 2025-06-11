@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main_v1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/06/09 14:44:06 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/06/11 14:35:13 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell_v1.h"
+#include "minishell.h"
 
 /* Global variable for signal handling (only signal number allowed) */
 int	g_signal_received = 0;
@@ -130,7 +130,7 @@ static int	process_input(t_shell *shell, char *input)
 	print_commands(shell->cmd_list);
 
 	/* Execute the command pipeline */
-	shell->exit_status = ft_exec(shell, exec); // Again 
+	shell->exit_status = execute_pipeline(shell); // Again 
 	
 	/* Check if we should exit */
 	if (shell->exit_status == -1)
