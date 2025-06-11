@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_v1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/06/11 14:35:13 by root             ###   ########.fr       */
+/*   Updated: 2025/06/11 16:43:03 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,36 @@
 /* Global variable for signal handling (only signal number allowed) */
 int	g_signal_received = 0;
 
+int ft_env(char **envp, t_exec *exec)
+{
+  if (!copy_env1(envp, exec))
+		return (0);
+  if (!exec->env)
+		return (0);
+  exec->nbr_var_env = ft_envlen(exec->env);
+  return (1);
+}
+
 /**
  * Initialize the shell structure with environment variables
  * @param shell: Shell structure to initialize
  * @param envp: Environment variables from main
  */
-static void	init_shell(t_shell *shell, char **envp)
+static void	init_shell(t_shell *shell, char **envp, t_exec *exec)
 {
-	shell->env_list = NULL;
-	shell->env_array = NULL;
 	shell->cmd_list = NULL;
 	shell->token_list = NULL;
 	shell->exit_status = 0;
 	shell->in_heredoc = 0;
 	shell->input_line = NULL;
 	
+	/*Initialize exec struct*/
+	init_all(exec);
+	
 	/* Initialize environment variables */
-	init_env_list(shell, envp);
-	shell->env_array = env_list_to_array(shell->env_list);
+	exec->env = NULL;
+	ft_env(envp, exec);
+	shell->exec = exec;
 	
 	/* Set up signal handlers */
 	setup_signals();
@@ -58,16 +70,6 @@ static void	cleanup_shell(t_shell *shell)
 	{
 		free_commands(shell->cmd_list);
 		shell->cmd_list = NULL;
-	}
-	if (shell->env_list)
-	{
-		free_env_list(shell->env_list);
-		shell->env_list = NULL;
-	}
-	if (shell->env_array)
-	{
-		free_env_array(shell->env_array);
-		shell->env_array = NULL;
 	}
 }
 
@@ -103,7 +105,7 @@ static int	process_input(t_shell *shell, char *input)
 		return (1);
 	}
 
-	print_tokens(shell->token_list);
+	//print_tokens(shell->token_list);
 	
 	/* Check syntax errors */
 	if (!check_syntax(shell->token_list))
@@ -127,10 +129,10 @@ static int	process_input(t_shell *shell, char *input)
 		return (1);
 	}
 	
-	print_commands(shell->cmd_list);
+	//print_commands(shell->cmd_list);
 
 	/* Execute the command pipeline */
-	shell->exit_status = execute_pipeline(shell); // Again 
+	shell->exit_status = ft_exec(shell); // Again 
 	
 	/* Check if we should exit */
 	if (shell->exit_status == -1)
@@ -249,13 +251,14 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
 	int		exit_status;
+	t_exec	exec;
 
 	/* Handle command line arguments */
 	if (handle_arguments(argc, argv))
 		return (1);
 	
 	/* Initialize shell */
-	init_shell(&shell, envp);
+	init_shell(&shell, envp, &exec);
 	
 	/* Print welcome message only in interactive mode */
 	if (isatty(STDIN_FILENO))

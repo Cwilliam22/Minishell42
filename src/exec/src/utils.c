@@ -1,5 +1,5 @@
                                           
-#include "../../../include/exec.h"
+#include "minishell.h"
 
 char	*ft_strfchr(const char *s, int c)
 {

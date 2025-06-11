@@ -19,7 +19,7 @@ FILES_EXEC = exec path copy_env \
 			utils identification builtin1 \
 			builtin2 free len \
 			new_var unset get \
-			pipe
+			pipe list
 
 SRC_LEXER = src/lexer/src/new/
 FILES_LEXER = 	lexer parser quotes

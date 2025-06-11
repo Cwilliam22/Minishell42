@@ -1,5 +1,5 @@
 
-#include "../../../include/exec.h"
+#include "minishell.h"
 
 int	find_var_path(char ***env)
 {

@@ -1,5 +1,5 @@
 
-#include "../../../include/exec.h"
+#include "minishell.h"
 
 int	new_var(char *new_value, char *new_variable, t_exec *exec)
 {

@@ -1,12 +1,9 @@
 
-#include "../../../include/exec.h"
-#include "../../../include/lexer.h"
+#include "minishell.h"
 
-/*
+
 void	init_all(t_exec *exec)
 {
-	exec->args = NULL;
-	exec->line = 0;
 	exec->cmd_path = NULL;
 	exec->path = NULL;
 	exec->fd_in = 0;
@@ -19,35 +16,7 @@ void	init_all(t_exec *exec)
 	exec->out = 0;
 	exec->is_pipe = 0;
 }
-
-int ft_exec(, t_exec *exec)
-{
-	init_all(exec); // init variables
-	if (!copy_env1(envp, exec)) // copy env in a variable env
-		return (1);
-	if (!exec->env) // security
-		return (1);
-	exec->nbr_var_env = ft_envlen(exec.env);
-	exec->nbr_process = ft_lstlen(cmd_list);
-	exec->nbr_pipes = exec->nbr_process - 1;
-	exec->path = ft_strdup(exec->env[find_var_path(exec->env)][1]);
-	if (exec->nbr_process == 1) // if the cmd is not a pipeline
-	{
-		if (!identification(cmd_list, exec))
-			return (ft_printf("Not a command valid\n"), 1);
-	}
-	else if (exec->nbr_process > 1) // if the cmd is a pipeline
-	{
-		printf("It's a pipeline !!\n");
-		if (!pipeline(cmd_list, exec))
-			return (ft_printf("Not a command valid\n"), 1);
-	}
-	free_var(exec);
-	free_all_env(exec);
-	return (0);
-}
-*/
-
+/*
 
 t_command	*create_test_command(void)
 {
@@ -75,7 +44,7 @@ t_command	*create_test_command(void)
 	return cmd1;
 }
 
-/*
+
 t_command	*create_test_command(void)
 {
 	t_command	*cmd = malloc(sizeof(t_command));
@@ -94,7 +63,7 @@ t_command	*create_test_command(void)
 
 	return cmd;
 }
-*/
+
 
 void	init_all(t_exec *exec)
 {
@@ -141,6 +110,28 @@ int	main(int argc, char **argv, char **envp)
 	}
 	free_var(&exec);
 	free_all_env(&exec);
+	return (0);
+}
+*/
+
+int ft_exec(t_shell *shell)
+{
+	init_all(shell->exec);
+	shell->exec->nbr_var_env = ft_envlen(shell->exec->env);
+	shell->exec->nbr_process = ft_lstlen(shell->cmd_list);
+	shell->exec->nbr_pipes = shell->exec->nbr_process - 1;
+	shell->exec->path = ft_strdup(shell->exec->env[find_var_path(shell->exec->env)][1]);
+	if (shell->exec->nbr_process == 1)
+	{
+		if (!identification(shell))
+			return (ft_printf("Not a command valid\n"), 1);
+	}
+	else if (shell->exec->nbr_process > 1)
+	{
+		if (!pipeline(shell))
+			return (ft_printf("Not a command valid\n"), 1);
+	}
+	free_var(shell->exec);
 	return (0);
 }
 

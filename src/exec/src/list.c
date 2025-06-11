@@ -1,7 +1,7 @@
-#include "../../../include/exec.h"
-#include "../../../include/lexer.h"
+#include "minishell.h"
 
-int ft_lstlen(t_command *cmd)
+
+int ft_lstlen(t_cmd *cmd)
 {
     int i;
 
@@ -14,7 +14,7 @@ int ft_lstlen(t_command *cmd)
     return (i);    
 }
 
-int ft_lstcmdlen(t_command *cmd, int index)
+int ft_lstcmdlen(t_cmd *cmd, int index)
 {
     int i;
     int count;
@@ -34,7 +34,7 @@ int ft_lstcmdlen(t_command *cmd, int index)
     return (count);
 }
 
-char **ft_lstcmd_copy(t_command *cmd, int index, t_exec *exec)
+char **ft_lstcmd_copy(t_cmd *cmd, int index, t_exec *exec)
 {
     char **command;
     int i;

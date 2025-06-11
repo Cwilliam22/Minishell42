@@ -1,52 +1,52 @@
-#include "../../../include/exec.h"
+#include "minishell.h"
 
-int pipeline(t_command *cmd, t_exec *exec)
+int pipeline(t_shell *shell)
 {
     int **pipes;
     int i;
 
     i = 0;
-    pipes = malloc(sizeof(int *) * exec->nbr_pipes);
-    while (i < exec->nbr_pipes)
+    pipes = malloc(sizeof(int *) * shell->exec->nbr_pipes);
+    while (i < shell->exec->nbr_pipes)
     {
         pipes[i] = malloc(sizeof(int) * 2);
         pipe(pipes[i]);
         i++;
     }
-    if (!execute_pipeline(cmd, exec, pipes))
+    if (!execute_pipeline(shell, pipes))
         return (ft_printf("Error in execute pipeline\n"), 0);
     return (1);
 }
 
-int execute_pipeline(t_command *cmd, t_exec *exec, int **pipes)
+int execute_pipeline(t_shell *shell, int **pipes)
 {
     pid_t   *pids;
     int    i;
     int     status;
-    t_command *current_cmd;
+    t_cmd *current_cmd;
 
     
     i = 0;
-    current_cmd = cmd;
-    pids = malloc(sizeof(pid_t) * exec->nbr_process);
+    current_cmd = shell->cmd_list;
+    pids = malloc(sizeof(pid_t) * shell->exec->nbr_process);
     if (!pids)
         return (ft_printf("Error malloc pids\n"), 0);
-    while (i < exec->nbr_process && current_cmd)
+    while (i < shell->exec->nbr_process && current_cmd)
     {
         pids[i] = fork();
         if (pids[i] == 0)
         {
             if (i == 0)
                 dup2(pipes[i][1], STDOUT_FILENO);
-            else if (i < exec->nbr_process - 1)
+            else if (i < shell->exec->nbr_process - 1)
             {   
                 dup2(pipes[i - 1][0], STDIN_FILENO);
                 dup2(pipes[i][1], STDOUT_FILENO);
             }
             else
                 dup2(pipes[i - 1][0], STDIN_FILENO);
-            close_pipes(pipes, exec);
-            if (!identification(current_cmd, exec))
+            close_pipes(pipes, shell->exec);
+            if (!identification(shell))
 		        exit(1);
             exit(0);
         }
@@ -55,15 +55,15 @@ int execute_pipeline(t_command *cmd, t_exec *exec, int **pipes)
         current_cmd = current_cmd->next;
         i++;
     }
-    close_pipes(pipes, exec);
+    close_pipes(pipes, shell->exec);
     i = 0;
-    while (i < exec->nbr_process)
+    while (i < shell->exec->nbr_process)
     {
         if (pids[i] > 0)
             waitpid(pids[i], &status, 0);
         i++;
     }
-    free_pipes(pipes, exec);
+    free_pipes(pipes, shell->exec);
     free(pipes);
     free(pids); 
     return (1);

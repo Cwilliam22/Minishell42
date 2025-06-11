@@ -1,5 +1,5 @@
 
-#include "../../../include/exec.h"
+#include "minishell.h"
 
 int free_env(char ***env)
 {

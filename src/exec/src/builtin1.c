@@ -1,5 +1,5 @@
                            
-#include "../../../include/exec.h"
+#include "minishell.h"
 
 int builtin_echo(char **arg, t_exec *exec)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:37:05 by root              #+#    #+#             */
-/*   Updated: 2025/05/31 17:37:07 by root             ###   ########.fr       */
+/*   Updated: 2025/06/11 16:17:42 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
  */
 char	*get_env_value(char *key, t_shell *shell)
 {
-	t_env	*current;
+	t_exec	*current;
 
 	if (!key || !shell)
 		return (ft_strdup(""));
@@ -29,15 +29,11 @@ char	*get_env_value(char *key, t_shell *shell)
 	if (ft_strcmp(key, "?") == 0)
 		return (ft_itoa(shell->exit_status));
 	
-	current = shell->env_list;
-	while (current)
-	{
-		if (ft_strcmp(current->key, key) == 0)
-			return (ft_strdup(current->value));
-		current = current->next;
-	}
-	
-	return (ft_strdup(""));
+	current = shell->exec;
+	if (find_sth_in_env(key, current->env) >= 0)
+		return (find_value_in_env(key, current));
+	else
+		return (ft_strdup(""));
 }
 
 /**

@@ -106,7 +106,8 @@ FONCTIONS :
                 - Fin du répertoire atteinte (plus rien à lire)
                 - Erreur
             -> DIR *dirp : Pointeur vers le répertoire ouvert, obtenu grâce à opendir.
-
+path : (null)
+2
         - closedir(DIR *dirp)
             -> Permet de fermer proprement un répertoire ouvert avec opendir.
             -> Retourne 0 en cas de succès.

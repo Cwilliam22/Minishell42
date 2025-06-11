@@ -1,5 +1,5 @@
 
-#include "../../../include/exec.h"
+#include "minishell.h"
 
 t_builtin tab_link[] = {
 	{"cd", builtin_cd},
@@ -11,19 +11,19 @@ t_builtin tab_link[] = {
 	{"exit", builtin_exit},
 	{NULL, NULL}};
 
-int    identification(t_command *current_cmd, t_exec *exec)
+int    identification(t_shell *shell)
 {
 	char **process;
 
-	process = current_cmd->args;
-	exec->cmd = ft_strdup(current_cmd->name);
-	if (its_a_builtin(process, exec))
+	process = shell->cmd_list->args;
+	shell->exec->cmd = ft_strdup( shell->cmd_list->args[0]);
+	if (its_a_builtin(process, shell->exec))
 	{
 		return (1);
 	}
 	else
 	{
-		execute_externe(process, exec);
+		execute_externe(process, shell->exec);
 		return (1);
 	}
 	return (0);

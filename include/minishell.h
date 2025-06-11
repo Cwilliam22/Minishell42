@@ -22,14 +22,13 @@
 # include <sys/ioctl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-/*# include <exec.h>*/
 # include "libft.h"
 
 /* ************************************************************************** */
 /*                                 DEFINES                                    */
 /* ************************************************************************** */
 
-# define PROMPT "minishell$ "
+# define PROMPT "minishell$> "
 # define MAX_PATH 4096
 # define MAX_ARGS 1024
 
@@ -99,6 +98,28 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
+typedef struct s_exec
+{
+	char			***env;
+	char			*cmd_path;
+	char			*path;
+	int				nbr_process;
+	int				nbr_pipes;
+	int				nbr_var_env;
+	int				nbr_arg;
+	int				fd_in;
+	int				fd_out;
+	int				out;
+	char			*cmd;
+	int				is_pipe;
+}	t_exec;
+
+typedef struct s_builtin
+{
+	char	*builtin;
+	int		(*fonction)(char **args, t_exec *exec);
+}	t_builtin;
+
 /* Environment variable structure */
 typedef struct s_env
 {
@@ -110,8 +131,7 @@ typedef struct s_env
 /* Main shell structure */
 typedef struct s_shell
 {
-	t_env			*env_list;
-	char			**env_array;
+	t_exec			*exec;
 	t_cmd			*cmd_list;
 	t_token			*token_list;
 	int				exit_status;
@@ -158,43 +178,57 @@ int		count_quotes(char *str, char quote_type);
 char	*remove_quotes(char *str);
 
 /* ============================= EXECUTOR ================================== */
-int		execute_pipeline(t_shell *shell);
-int		execute_command(t_cmd *cmd, t_shell *shell);
-int		execute_builtin(t_cmd *cmd, t_shell *shell);
-int		execute_external(t_cmd *cmd, t_shell *shell);
-char	*find_executable(char *cmd, t_shell *shell);
+// exec.c
+int		ft_exec(t_shell *shell);
+void	init_all(t_exec *exec);
+int		identification(t_shell *shell);
+int		its_a_builtin(char **arg, t_exec *exec);
+int		execute_externe(char **args, t_exec *exec);
+char	**set_my_fucking_error(t_exec *exec);
+
+/* ============================= PATH ================================== */
+int		find_var_path(char ***env);
+char	*read_in_path(char ***env, int place);
+int		apply_path(t_exec *exec);
+
 
 /* ============================= PIPES ===================================== */
-int		setup_pipes(t_cmd *commands);
-int		setup_pipe_fds(t_cmd *cmd, t_cmd *next_cmd);
-void	close_pipe_fds(t_cmd *commands);
-int		wait_for_children(t_cmd *commands);
+int		pipeline(t_shell *shell);
+int		execute_pipeline(t_shell *shell, int **pipes);
+int		close_pipes(int **pipes, t_exec *exec);
 
 /* ============================= REDIRECTIONS ============================= */
-int		setup_redirections(t_cmd *cmd);
-int		handle_input_redir(t_redir *redir);
-int		handle_output_redir(t_redir *redir);
-int		handle_append_redir(t_redir *redir);
-int		handle_heredoc(t_redir *redir, t_shell *shell);
-t_redir	*create_redirection(int type, char *file);
-void	add_redirection(t_redir **head, t_redir *new_redir);
-void	free_redirections(t_redir *redirections);
+
 
 /* ============================= BUILTINS ================================== */
-int		is_builtin(char *cmd);
-int		builtin_echo(char **args);
-int		builtin_cd(char **args, t_shell *shell);
-int		builtin_pwd(void);
-int		builtin_export(char **args, t_shell *shell);
-int		builtin_unset(char **args, t_shell *shell);
-int		builtin_env(t_shell *shell);
-int		builtin_exit(char **args, t_shell *shell);
+// builtin1.;
+int		builtin_echo(char **arg, t_exec *exec);
+int		builtin_cd(char **arg, t_exec *exec);
+int		builtin_pwd(char **arg, t_exec *exec);
+int		builtin_export(char **arg, t_exec *exec);
+
+// builtin2.c
+int		builtin_unset(char **arg, t_exec *exec);
+int		builtin_env(char **arg, t_exec *exec);
+int		builtin_exit(char **arg, t_exec *exec);
 
 /* ============================= ENVIRONMENT ============================== */
 char	**env_list_to_array(t_env *env_list);
 void	free_env_list(t_env *env_list);
 void	free_env_array(char **env_array);
 void	init_env_list(t_shell *shell, char **envp);
+int		copy_env1(char **envp, t_exec *exec);
+char	**split_var_env(char *env_var);
+int		print_env(char ***env);
+int		print_env_sorted(t_exec *exec);
+char	**copy_env_sorted(t_exec *exec);
+
+// new_var.c
+int		new_var(char *new_value, char *new_variable, t_exec *exec);
+int		replace_value_var(char *new_value, int i, char ***env);
+
+// unset.c
+int		unset_var(int index, t_exec *exec);
 
 /* ============================= ERROR HANDLING ============================ */
 void	print_error(char *cmd, char *arg, char *msg);
@@ -208,12 +242,39 @@ void	free_shell(t_shell *shell);
 void	*safe_malloc(size_t size);
 char	*safe_strdup(const char *s);
 
+// free.c
+int		free_env(char ***env);
+int		free_array(char **array);
+int		free_var(t_exec *exec);
+int		free_all_env(t_exec *exec);
+int		free_pipes(int **pipes, t_exec *exec);
+
 /* ============================= UTILS ===================================== */
 int		ft_isalnum_underscore(int c);
 int		is_valid_identifier(char *str);
 void	print_sorted_env(t_env *env_list);
 char	*ft_itoa(int n);
 int		ft_atoi(const char *str);
+
+// utils.c
+char	*ft_strfchr(const char *s, int c);
+int		ft_printf_arg(char **tab_arg, int index, int option);
+int		copy_env2(char ***dest, char ***src, t_exec *exec);
+
+// len.c
+int		ft_envlen(char ***env);
+int		ft_tablen_3d(char ***tab_arg);
+int		ft_tablen_2d(char **tab_arg);
+
+// get.c
+int		find_sth_in_env(char *variable, char ***env);
+char	*find_value_in_env(char *variable, t_exec *exec);
+int		find_var_place(char *new_variable, t_exec *exec);
+int		get_var_in_order(int index, t_exec *exec);
+
+// list.c
+int		ft_lstlen(t_cmd *cmd);
+char	**ft_lstcmd_copy(t_cmd *cmd, int index, t_exec *exec);
 
 /* ============================= MISSING FUNCTIONS ======================== */
 
