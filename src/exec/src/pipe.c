@@ -82,7 +82,7 @@ int close_pipes(int **pipes, t_exec *exec)
     }
     return (1);
 }
-// free pids tab
+
 // exit(0) au cas ou il ne trouve pas la commande,
     // qu'il continue a executer le code dans le child 
 // i == 0 (pas de stdin)

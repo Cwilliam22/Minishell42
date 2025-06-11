@@ -19,15 +19,11 @@ int    identification(t_command *current_cmd, t_exec *exec)
 	exec->cmd = ft_strdup(current_cmd->name);
 	if (its_a_builtin(process, exec))
 	{
-		printf("identification(): je traite %s\n", current_cmd->args[0]);
 		return (1);
 	}
 	else
 	{
-		printf("path : %s\n", exec->path);
-		printf("cmd_path : %s\n", exec->cmd_path);
 		execute_externe(process, exec);
-		printf("identification(): je traite %s\n", current_cmd->args[0]);
 		return (1);
 	}
 	return (0);
@@ -69,6 +65,8 @@ int	execute_externe(char **args, t_exec *exec)
 		return (ft_printf("Erreur in Execution of externes CMDs\n"), 0);
 	return (1);
 }
+
+// Pas free env_temp 
 
 char **set_my_fucking_error(t_exec *exec)
 {

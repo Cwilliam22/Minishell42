@@ -47,35 +47,25 @@ int apply_path(t_exec *exec)
 	char *tmp;
     int i;
 
-	printf("Test 1\n");
     paths = ft_split(read_in_path(exec->env, find_var_path(exec->env)), ':');
     if (!paths)
 	{
         return (0);
 	}
     i = 0;
-	printf("Test 2\n");
     while (paths[i])
     {
-		printf("Test 3\n");
         tmp = ft_strjoin(paths[i], "/");
-		printf("tmp: %s\n", tmp);
-		printf("exec->cmd: %s\n", exec->cmd);
 		test_path = ft_strjoin(tmp, exec->cmd);
-		printf("test_path: %s\n", test_path);
 		free(tmp);
-		printf("Trying path: %s\n", test_path);
         if (access(test_path, X_OK) == 0)
         {
-			printf("Test 4\n");
-			printf("cmd_path : %s\n", exec->cmd_path);
             exec->cmd_path = test_path;
             free_array(paths);
             return (1);
         }
         free(test_path);
         i++;
-		printf("Test 5\n");
     }
     free_array(paths);
     return (ft_printf("Command not found!\n"), 0);

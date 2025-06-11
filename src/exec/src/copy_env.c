@@ -1,9 +1,6 @@
 
 #include "../../../include/exec.h"
 
-
-// Revoir la fonction car elle ne split pas correctement les variables dans env
-// ce qui donne des erreurs dans la suite de l'exec !!!!!!!!!!
 char	**split_var_env(char *env_var)
 {
 	char	*sign;
@@ -115,18 +112,3 @@ int	print_env_sorted(t_exec *exec)
 	return (1);
 }
 
-
-/*
-int main(int argc, char **argv, char **envp)
-{
-	(void)argc;
-	(void)argv;
-	char ***env;
-
-	env = copy_env(envp);
-	if (!env) 
-		return (1);
-	print_env(env);
-	return (0);
-}
-*/

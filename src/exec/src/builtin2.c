@@ -22,11 +22,6 @@ int builtin_unset(char **arg, t_exec *exec)
     return (1);
 }
 
-// unset sans arguments ne fais rien
-// unset avec une variable fausse ne fait rien
-// unset une variable existante efface la variable de l'env
-// unset avec plusieurs arguments appliquera unset sur chaque argument individuellement
-    // regarder en plus les cas précédent pour les applications individuelle 
 
 int builtin_env(char **arg, t_exec *exec)
 {

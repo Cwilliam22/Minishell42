@@ -98,19 +98,18 @@ t_command	*create_test_command(void)
 
 void	init_all(t_exec *exec)
 {
-	exec->args = NULL; //
-	exec->env = NULL; // 1
-	exec->cmd_path = NULL; // 0
-	exec->path = NULL; // 1
-	exec->fd_in = 0; //
-	exec->fd_out = 0; //
-	exec->nbr_process = 0; // 1
-	exec->nbr_pipes = 0; // 1
-	exec->nbr_var_env = 0; // 1
-	exec->nbr_arg = 0; // 1
-	exec->cmd = NULL; //
-	exec->out = 0; //
-	exec->is_pipe = 0; //
+	exec->env = NULL;
+	exec->cmd_path = NULL;
+	exec->path = NULL;
+	exec->fd_in = 0;
+	exec->fd_out = 0;
+	exec->nbr_process = 0;
+	exec->nbr_pipes = 0;
+	exec->nbr_var_env = 0;
+	exec->nbr_arg = 0;
+	exec->cmd = NULL;
+	exec->out = 0;
+	exec->is_pipe = 0;
 }
 
 
@@ -137,7 +136,6 @@ int	main(int argc, char **argv, char **envp)
 	}
 	else if (exec.nbr_process > 1)
 	{
-		printf("It's a pipeline !!\n");
 		if (!pipeline(cmd_list, &exec))
 			return (ft_printf("Not a command valid\n"), 1);
 	}
