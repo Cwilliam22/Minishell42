@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_v1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/06/11 17:30:26 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/06/12 16:36:43 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ static int	process_input(t_shell *shell, char *input)
 		return (1);
 	}
 
-	print_tokens(shell->token_list);
+	//print_tokens(shell->token_list);
 	
 	/* Check syntax errors */
 	if (!check_syntax(shell->token_list))
@@ -129,7 +129,7 @@ static int	process_input(t_shell *shell, char *input)
 		return (1);
 	}
 	
-	print_commands(shell->cmd_list);
+	//print_commands(shell->cmd_list);
 
 	/* Execute the command pipeline */
 	shell->exit_status = ft_exec(shell); // Again 
