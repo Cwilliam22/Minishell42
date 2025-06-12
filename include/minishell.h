@@ -107,11 +107,10 @@ typedef struct s_exec
 	int				nbr_pipes;
 	int				nbr_var_env;
 	int				nbr_arg;
-	int				fd_in;
-	int				fd_out;
 	int				out;
 	char			*cmd;
-	int				is_pipe;
+	char			*oldpwd;
+	char			*pwd;
 }	t_exec;
 
 /* Environment variable structure */
@@ -260,6 +259,7 @@ int		ft_atoi(const char *str);
 char	*ft_strfchr(const char *s, int c);
 int		ft_printf_arg(char **tab_arg, int index, int option);
 int		copy_env2(char ***dest, char ***src, t_exec *exec);
+void	change_oldpwd_or_pwd(t_exec *exec, int option);
 
 // len.c
 int		ft_envlen(char ***env);

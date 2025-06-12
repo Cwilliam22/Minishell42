@@ -1,9 +1,31 @@
 
-Problemes
+Problemes :
 
-exit
-echo test | wc -l
-export PLANTE=vert
-unset tv ewwntjw
-command not found quand j appelle minishell dans minishell mais execute quand meme 
+1.  exit
+2.  echo test | wc -l
+3.  export PLANTE=vert
+4.  unset tv ewwntjw
+5.  command not found quand j appelle minishell dans minishell mais execute quand meme 
+6.  unset PWD + changement de repertoire + export -> OLDPWD = RIEN !!!
+    changement de repertoire -> OLDPWD = QQCH !!!
+        ---> Solution OLDPWD en fonction de PWD
+            Si PWD est unset alors variable de pwd dans la struct est 
+            mise a NULL.
+            Si PWD NULL OLDPWD se met a jour avec getcwd()
+            Variable qui servira de booleen sera utilise afin de savoir
+            si la variable vient d'etre unset ou si elle l'a deja ete
+            depuis un moment
+            Cette variable sera utile pour l'exception quand on utilise export
+            juste apres un changement de repertoire.
 
+            (export) 
+            ...
+            declare -x OLDPWD 
+            ...
+            -> Si c'etait une variable simplement unset ca serait 
+            declare -x OLDPWD=''
+
+            (env)
+            ...
+            OLDPWD=
+            ...

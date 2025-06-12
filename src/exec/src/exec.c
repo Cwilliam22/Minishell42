@@ -6,15 +6,14 @@ void	init_all(t_exec *exec)
 {
 	exec->cmd_path = NULL;
 	exec->path = NULL;
-	exec->fd_in = 0;
-	exec->fd_out = 0;
 	exec->nbr_process = 0;
 	exec->nbr_pipes = 0;
 	exec->nbr_var_env = 0;
 	exec->nbr_arg = 0;
 	exec->cmd = NULL;
 	exec->out = 0;
-	exec->is_pipe = 0;
+	exec->oldpwd = NULL;
+	exec->pwd = NULL;
 }
 /*
 
@@ -117,6 +116,9 @@ int	main(int argc, char **argv, char **envp)
 int ft_exec(t_shell *shell)
 {
 	init_all(shell->exec);
+	// Faire une fonction init exec !!!
+	shell->exec->oldpwd = ft_strdup(getcwd(NULL, 0));
+	shell->exec->pwd = ft_strdup(getcwd(NULL, 0));
 	shell->exec->nbr_var_env = ft_envlen(shell->exec->env);
 	shell->exec->nbr_process = ft_lstlen(shell->cmd_list);
 	shell->exec->nbr_pipes = shell->exec->nbr_process - 1;

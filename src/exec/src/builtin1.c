@@ -8,7 +8,12 @@ int builtin_echo(t_shell *shell)
     
     i = 1;
     arg = shell->cmd_list->args;
-    if (ft_strncmp("-n", arg[1], 2) == 0)
+    if (arg[1] == NULL)
+    {
+        ft_printf("\n");
+        return (1);
+    }
+    else if (ft_strncmp("-n", arg[1], 2) == 0)
     {
         i = 2;
         if (!ft_printf_arg(arg, i, 1))
@@ -28,43 +33,42 @@ int builtin_cd(t_shell *shell)
     t_exec *exec;
     char **arg;
 
+
     exec = shell->exec;
     arg = shell->cmd_list->args;
     if (exec->nbr_arg == 1)
     {
+        if (!find_sth_in_env("HOME", exec->env))
+            return (ft_printf("bash: cd: HOME not set\n"), 1);
         path = find_value_in_env("HOME", exec);
+        change_oldpwd_or_pwd(exec, 1);
         if (!chdir(path))
-            return (free(path), 1);
+            return (change_oldpwd_or_pwd(exec, 0), free(path), 1);
     }
     if (exec->nbr_arg == 2)
     {
         path = ft_strdup(arg[1]);
+        change_oldpwd_or_pwd(exec, 1);
         if (!chdir(path))
-            return (free(path), 1);
-        ft_printf("cd: no such file or directory: %s\n", path);
+            return (change_oldpwd_or_pwd(exec, 0), free(path), 1);
+        ft_printf("bash: cd: no such file or directory: %s\n", path);
     }
-    else if (exec->nbr_arg == 3)
-        return (ft_printf("cd: string not in pwd: %s\n", arg[1]), 1);
-    else if (exec->nbr_arg >= 4)
-        return(ft_printf("cd: too many arguments\n"), 1);
-    ft_printf("cd\n");
+    else if (exec->nbr_arg >= 3)
+        return(ft_printf("bash: cd: too many arguments\n"), 1);
     return (0);
 }
 
 int builtin_pwd(t_shell *shell)
 {
     char *path; 
-    char **arg;
 
-    arg = shell->cmd_list->args;
-    if (arg[1] != NULL)
-        return (ft_printf("pwd: too many arguments\n"), 0);
     path = getcwd(NULL, 0);
     if (!path)
         return (0);
     printf("%s\n", path);
+    free(shell->exec->oldpwd);
+    shell->exec->oldpwd = ft_strdup("Hello");
     free(path);
-    // change the old pwd in the env !!!
     return (1);
 }
 

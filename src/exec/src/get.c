@@ -9,10 +9,10 @@ int	find_sth_in_env(char *variable, char ***env)
 	while (env[i])
 	{
 		if (ft_strcmp(env[i][0], variable) == 0)
-			return (printf("place of variable : %d\n", i), i);
+			return (i);
 		i++;
 	}
-	return (printf("variable not found : -1\n"), -1);
+	return (-1);
 }
 
 char	*find_value_in_env(char *variable, t_exec *exec)

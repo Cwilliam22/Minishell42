@@ -77,3 +77,30 @@ int copy_env2(char ***dest, char ***src, t_exec *exec)
     return (1);
 }
 
+void	change_oldpwd_or_pwd(t_exec *exec, int option)
+{
+	int index;
+
+	if (option == 1)
+	{
+		index = find_sth_in_env("OLDPWD", exec->env);
+		if (index == -1)
+			new_var(exec->oldpwd, "OLDPWD", exec);
+		else
+		{
+			exec->oldpwd = ft_strdup(getcwd(NULL, 0));
+			free(exec->env[index][1]);
+			exec->env[index][1] = ft_strdup(exec->oldpwd);
+		}
+	}
+	else if (option == 0)
+	{
+		index = find_sth_in_env("PWD", exec->env);
+		if (index == -1)
+			return ;
+		exec->pwd = ft_strdup(getcwd(NULL, 0));
+		free(exec->env[index][1]);
+		exec->env[index][1] = ft_strdup(exec->pwd);
+	}
+}
+
