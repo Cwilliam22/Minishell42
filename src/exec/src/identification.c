@@ -1,15 +1,7 @@
 
 #include "minishell.h"
 
-t_builtin tab_link[] = {
-	{"cd", builtin_cd},
-	{"echo", builtin_echo},
-	{"pwd", builtin_pwd},
-	{"export", builtin_export},
-	{"unset", builtin_unset},
-	{"env", builtin_env},
-	{"exit", builtin_exit},
-	{NULL, NULL}};
+
 
 int    identification(t_shell *shell)
 {
@@ -29,9 +21,20 @@ int    identification(t_shell *shell)
 	return (0);
 }
 
+
+
 int	its_a_builtin(t_shell *shell)
 {
 	int	i;
+	t_builtin tab_link[] = {
+	{"cd", builtin_cd},
+	{"echo", builtin_echo},
+	{"pwd", builtin_pwd},
+	{"export", builtin_export},
+	{"unset", builtin_unset},
+	{"env", builtin_env},
+	{"exit", builtin_exit},
+	{NULL, NULL}};
 
 	i = 0;
 	shell->exec->nbr_arg = ft_tablen_2d(shell->cmd_list->args);

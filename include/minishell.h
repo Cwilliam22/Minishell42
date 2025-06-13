@@ -28,7 +28,7 @@
 /*                                 DEFINES                                    */
 /* ************************************************************************** */
 
-# define PROMPT "minishell$> "
+# define PROMPT "\033[32m minishell$> \033[0m"
 # define MAX_PATH 4096
 # define MAX_ARGS 1024
 
@@ -111,6 +111,7 @@ typedef struct s_exec
 	char			*cmd;
 	char			*oldpwd;
 	char			*pwd;
+	int				is_pipe;
 }	t_exec;
 
 /* Environment variable structure */

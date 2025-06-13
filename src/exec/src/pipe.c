@@ -23,15 +23,12 @@ int execute_pipeline(t_shell *shell, int **pipes)
     pid_t   *pids;
     int    i;
     int     status;
-    t_cmd *current_cmd;
-
     
     i = 0;
-    current_cmd = shell->cmd_list;
     pids = malloc(sizeof(pid_t) * shell->exec->nbr_process);
     if (!pids)
         return (ft_printf("Error malloc pids\n"), 0);
-    while (i < shell->exec->nbr_process && current_cmd)
+    while (i < shell->exec->nbr_process && shell->cmd_list)
     {
         pids[i] = fork();
         if (pids[i] == 0)
@@ -52,7 +49,7 @@ int execute_pipeline(t_shell *shell, int **pipes)
         }
         else if (pids[i] < 0)
             return (ft_printf("Error in fork\n"), 0);
-        current_cmd = current_cmd->next;
+        shell->cmd_list = shell->cmd_list->next;
         i++;
     }
     close_pipes(pipes, shell->exec);
