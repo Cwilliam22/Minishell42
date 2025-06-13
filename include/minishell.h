@@ -261,6 +261,7 @@ char	*ft_strfchr(const char *s, int c);
 int		ft_printf_arg(char **tab_arg, int index, int option);
 int		copy_env2(char ***dest, char ***src, t_exec *exec);
 void	change_oldpwd_or_pwd(t_exec *exec, int option);
+int		exit_codes(t_shell *shell, int out);
 
 // len.c
 int		ft_envlen(char ***env);

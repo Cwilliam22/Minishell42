@@ -104,3 +104,9 @@ void	change_oldpwd_or_pwd(t_exec *exec, int option)
 	}
 }
 
+
+int exit_codes(t_shell *shell, int out)
+{
+	shell->exec->out = out;
+	return (1);
+}
