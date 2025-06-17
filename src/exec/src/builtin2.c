@@ -56,13 +56,17 @@ int builtin_exit(t_shell *shell)
     ft_printf("exit\n");
     if (exec->nbr_arg == 1)
         exec->out = 0;
-    else if (exec->nbr_arg == 2 && ft_is_a_number(arg[1]))
-        exec->out = ft_atoi(arg[1]);
-    else if (exec->nbr_arg == 2 && !ft_is_a_number(arg[1]))
-    {
-        ft_printf("bash: exit: %s: numeric argument required\n", arg[1]);
-        exec->out = 2;
-    }
+    else if (exec->nbr_arg == 2)
+	{
+		int	number = ft_is_a_number(arg[1]);
+		if (number)
+			exec->out = ft_atoi(arg[1]);
+		else
+		{
+			ft_printf("bash: exit: %s: numeric argument required\n", arg[1]);
+			exec->out = 2;
+		}
+	}
     else if (exec->nbr_arg > 2 && ft_is_a_number(arg[1]))
     {
         exec->out = 1;

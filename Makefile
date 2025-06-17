@@ -78,6 +78,7 @@ clean:
 	@echo "\033[33m Object files and directories removed!\033[0m"
 
 fclean: clean
+	make $@ -C libft
 	@rm -f $(NAME)
 	@echo "\033[31m  Executable removed!\033[0m"
 

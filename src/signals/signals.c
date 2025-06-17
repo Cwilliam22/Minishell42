@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 17:59:42 by root              #+#    #+#             */
-/*   Updated: 2025/06/11 14:19:42 by root             ###   ########.fr       */
+/*   Updated: 2025/06/17 12:46:11 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static void	handle_sigquit(int sig)
 /**
  * Configuration des signaux pour le mode interactif
  */
-static void	setup_interactive_signals(void)
+void	setup_interactive_signals(void)
 {
 	struct sigaction	sa_int;
 	struct sigaction	sa_quit;

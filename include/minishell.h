@@ -157,6 +157,8 @@ int		main(int argc, char **argv, char **envp);
 void	setup_signals(void);
 void	setup_heredoc_signals(void);
 void	setup_exec_signals(void);
+void	setup_interactive_signals(void);
+int		check_and_handle_signal(void);
 
 /* ============================= LEXER ===================================== */
 t_token	*tokenize(char *input);

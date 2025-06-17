@@ -6,6 +6,8 @@ int ft_is_a_number(char *arg)
     int i;
 
     i = 0;
+    if (!arg || !*arg)
+        return (0);
     while (arg[i])
     {
         if (!ft_isdigit((int)arg[i]))

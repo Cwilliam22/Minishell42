@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_v1.c                                          :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/06/12 16:36:43 by root             ###   ########.fr       */
+/*   Updated: 2025/06/17 12:57:07 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,9 @@ static void	cleanup_shell(t_shell *shell)
  */
 static int	process_input(t_shell *shell, char *input)
 {
+	int	exec_result;
+	int	signal_exit_code;
+
 	/* Skip empty lines */
 	if (!input || !*input || ft_strlen(input) == 0)
 		return (1);
@@ -132,10 +135,15 @@ static int	process_input(t_shell *shell, char *input)
 	//print_commands(shell->cmd_list);
 
 	/* Execute the command pipeline */
-	shell->exit_status = ft_exec(shell); // Again 
+	exec_result = ft_exec(shell); // Again 
 	
 	/* Check if we should exit */
-	if (shell->exit_status == -1)
+	signal_exit_code = check_and_handle_signal();
+	if (signal_exit_code != 0)
+		shell->exit_status = signal_exit_code;
+	else
+		shell->exit_status = exec_result;
+	if (exec_result == -1)
 	{
 		/* Clean up for next iteration */
 		free_commands(shell->cmd_list);
@@ -166,12 +174,17 @@ static void	shell_loop(t_shell *shell)
 {
 	char	*input;
 	int		continue_loop;
+	int		signal_exit_code;
 
 	continue_loop = 1;
+	setup_interactive_signals();
 	while (continue_loop)
 	{
 		/* Reset signal flag */
 		g_signal_received = 0;
+
+		/*Be sure to be in interactif mode*/
+		setup_interactive_signals();
 		
 		/* Read input from user */
 		input = readline(PROMPT);
@@ -184,9 +197,10 @@ static void	shell_loop(t_shell *shell)
 		}
 		
 		/* Handle signal interruption */
-		if (g_signal_received == SIGINT)
+		signal_exit_code = check_and_handle_signal();
+		if (signal_exit_code != 0)
 		{
-			shell->exit_status = 130;
+			shell->exit_status = signal_exit_code;
 			free(input);
 			continue;
 		}
