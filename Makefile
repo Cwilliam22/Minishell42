@@ -21,7 +21,7 @@ FILES_EXEC = exec path copy_env \
 			new_var unset get \
 			pipe list
 
-SRC_LEXER = src/lexer/src/new/
+SRC_LEXER = src/lexer/src/
 FILES_LEXER = 	lexer parser quotes
 
 SRC_SIGNALS = src/signals/
