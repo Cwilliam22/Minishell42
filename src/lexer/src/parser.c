@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:31:41 by root              #+#    #+#             */
-/*   Updated: 2025/06/02 16:03:23 by root             ###   ########.fr       */
+/*   Updated: 2025/06/17 11:02:34 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	free_commands(t_cmd *commands)
 /**
  * Check syntax errors in token list
  * @param tokens: Head of token list
- * @return: 1 if syntax is valid, 0 otherwise
+ * @return: 1 if syntax is valid, the value of the synthax error otherwise
  */
 int	check_syntax(t_token *tokens)
 {
@@ -111,9 +111,8 @@ int	check_syntax(t_token *tokens)
 	if (current->type == TOKEN_PIPE)
 	{
 		print_syntax_error("|");
-		return (0);
+		return (2);
 	}
-	
 	while (current)
 	{
 		if (current->type == TOKEN_PIPE)
@@ -122,7 +121,7 @@ int	check_syntax(t_token *tokens)
 			if (!current->next || current->next->type == TOKEN_PIPE)
 			{
 				print_syntax_error("|");
-				return (0);
+				return (2);
 			}
 		}
 		else if (current->type >= TOKEN_REDIR_IN && current->type <= TOKEN_HEREDOC)
@@ -134,13 +133,11 @@ int	check_syntax(t_token *tokens)
 					print_syntax_error(current->next->value);
 				else
 					print_syntax_error("newline");
-				return (0);
+				return (2);
 			}
 		}
-		
 		current = current->next;
 	}
-	
 	return (1);
 }
 

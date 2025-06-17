@@ -94,11 +94,20 @@ test_command() {
     timeout "$timeout_duration" echo "$cmd" | ./minishell > "$minishell_output" 2>&1
     local minishell_exit_code=$?
     
-    # Filtrer le prompt du minishell et nettoyer la sortie
-    # 1. Enlever toutes les lignes qui commencent par le prompt
-    # 2. Enlever les lignes vides
-    # 3. Pour les commandes vides, s'assurer qu'on a une sortie vide
-    sed '/^minishell\$>/d' "$minishell_output" | sed '/^$/d' > "${minishell_output}.clean"
+    # Filtrer le prompt du minishell en gérant les codes de couleur ANSI
+    # Votre minishell utilise des codes couleur : ^[[32m minishell$> ^[[0m
+    # On doit d'abord supprimer les codes ANSI, puis filtrer
+    
+    # Étape 1 : Supprimer tous les codes de couleur ANSI
+    sed 's/\x1b\[[0-9;]*m//g' "$minishell_output" > "${minishell_output}.no_colors"
+    
+    # Étape 2 : Filtrer les lignes contenant minishell$>
+    grep -v "minishell\$>" "${minishell_output}.no_colors" > "${minishell_output}.clean"
+    
+    # Si le fichier est vide après filtrage, créer un fichier vide propre
+    if [ ! -s "${minishell_output}.clean" ]; then
+        touch "${minishell_output}.clean"
+    fi
     
     # Pour les commandes comme "", '', etc., bash ne produit rien
     # Si notre commande est une chaîne vide ou des guillemets, on s'attend à une sortie vide
@@ -147,7 +156,7 @@ test_command() {
     fi
     
     # Nettoyer
-    rm -f "$minishell_output" "$minishell_output.clean" "$bash_output"
+    rm -f "$minishell_output" "$minishell_output.clean" "$minishell_output.no_colors" "$bash_output"
 }
 
 # Fonction pour tester les erreurs de syntaxe (compare les codes de retour)

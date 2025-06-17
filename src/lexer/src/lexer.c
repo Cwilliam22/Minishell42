@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:15:11 by root              #+#    #+#             */
-/*   Updated: 2025/06/02 15:33:53 by root             ###   ########.fr       */
+/*   Updated: 2025/06/17 10:56:36 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,6 @@ static char	*extract_word(char *input, int start, int *end)
 	i = start;
 	in_single_quote = 0;
 	in_double_quote = 0;
-	
 	while (input[i])
 	{
 		if (input[i] == '\'' && !in_double_quote)
@@ -164,7 +163,6 @@ static char	*extract_word(char *input, int start, int *end)
 		}
 		i++;
 	}
-	
 	*end = i;
 	word = malloc(i - start + 1);
 	if (!word)
@@ -223,16 +221,13 @@ t_token	*tokenize(char *input)
 
 	if (!input)
 		return (NULL);
-	
 	head = NULL;
 	i = 0;
-	
 	while (input[i])
 	{
 		i = skip_whitespace(input, i);
 		if (!input[i])
 			break ;
-		
 		if (is_operator(input[i]))
 		{
 			token_value = extract_operator(input, i, &end);
@@ -255,17 +250,14 @@ t_token	*tokenize(char *input)
 			new_token = create_token(token_value, TOKEN_WORD);
 			free(token_value);
 		}
-		
 		if (!new_token)
 		{
 			free_tokens(head);
 			return (NULL);
 		}
-		
 		add_token(&head, new_token);
 		i = end;
 	}
-	
 	return (head);
 }
 
