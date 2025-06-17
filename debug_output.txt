@@ -1,3 +1,0 @@
-[32m minishell$> [0mecho $42
-$42
-[32m minishell$> [0mexit
