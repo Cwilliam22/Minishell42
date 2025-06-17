@@ -31,7 +31,7 @@ SRC_UTILS = src/utils/
 FILES_UTILS = utils_missing stubs
 
 SRC_DIR	= src/
-FILES = 	main_v1 \
+FILES = 	main \
 
 SRC_FILES += $(addprefix $(SRC_EXEC), $(FILES_EXEC))
 SRC_FILES += $(addprefix $(SRC_LEXER), $(FILES_LEXER))
