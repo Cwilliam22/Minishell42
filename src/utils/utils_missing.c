@@ -112,57 +112,7 @@ int	split_assignment(char *assignment, char **key, char **value)
 	return (1);
 }
 
-/* Redirection utilities */
-t_redir	*create_redirection(int type, char *file)
-{
-	t_redir *redir;
-	
-	redir = malloc(sizeof(t_redir));
-	if (!redir)
-		return NULL;
-	redir->type = type;
-	redir->file = ft_strdup(file);
-	if (!redir->file)
-	{
-		free(redir);
-		return NULL;
-	}
-	redir->fd = -1;
-	redir->next = NULL;
-	return redir;
-}
 
-void	add_redirection(t_redir **head, t_redir *new_redir)
-{
-	t_redir *current;
-	
-	if (!head || !new_redir)
-		return;
-	if (!*head)
-	{
-		*head = new_redir;
-		return;
-	}
-	current = *head;
-	while (current->next)
-		current = current->next;
-	current->next = new_redir;
-}
-
-void	free_redirections(t_redir *redirections)
-{
-	t_redir *current, *next;
-	
-	current = redirections;
-	while (current)
-	{
-		next = current->next;
-		if (current->file)
-			free(current->file);
-		free(current);
-		current = next;
-	}
-}
 
 /* Error utilities */
 void	print_syntax_error(char *token)

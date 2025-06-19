@@ -33,6 +33,10 @@ int execute_pipeline(t_shell *shell, int **pipes)
         pids[i] = fork();
         if (pids[i] == 0)
         {
+            if (apply_redirections(shell->cmd_list->redirections) == EXIT_SIGINT)
+                exit(EXIT_SIGINT);
+            if (apply_redirections(shell->cmd_list->redirections) < 0)
+                exit(GENERAL_ERROR);
             if (i == 0)
                 dup2(pipes[i][1], STDOUT_FILENO);
             else if (i < shell->exec->nbr_process - 1)

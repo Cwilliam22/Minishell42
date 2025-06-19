@@ -21,7 +21,10 @@ FILES_EXEC = exec path copy_env \
 			new_var unset get \
 			pipe list
 
-SRC_LEXER = src/lexer/src/
+SRC_REDIR = src/exec/redir/
+FILES_REDIR = redir redir_utils
+
+SRC_LEXER = src/lexer/
 FILES_LEXER = 	lexer parser quotes
 
 SRC_SIGNALS = src/signals/
@@ -34,6 +37,7 @@ SRC_DIR	= src/
 FILES = 	main \
 
 SRC_FILES += $(addprefix $(SRC_EXEC), $(FILES_EXEC))
+SRC_FILES += $(addprefix $(SRC_REDIR), $(FILES_REDIR))
 SRC_FILES += $(addprefix $(SRC_LEXER), $(FILES_LEXER))
 SRC_FILES += $(addprefix $(SRC_SIGNALS), $(FILES_SIGNALS))
 SRC_FILES += $(addprefix $(SRC_UTILS), $(FILES_UTILS))

@@ -38,6 +38,8 @@
 # define MISUSE_BUILTIN 2
 # define COMMAND_NOT_FOUND 127
 # define COMMAND_NOT_EXECUTABLE 126
+# define EXIT_SIGINT 130
+# define EXIT_SIGQUIT 131
 
 /* Token types */
 # define TOKEN_WORD 1
@@ -52,11 +54,6 @@
 # define STDIN 0
 # define STDOUT 1
 # define STDERR 2
-
-/* Signal states */
-# define SIGNAL_INTERACTIVE 1
-# define SIGNAL_EXECUTING   2
-# define SIGNAL_HEREDOC     3
 
 /* ************************************************************************** */
 /*                                STRUCTURES                                  */
@@ -154,11 +151,21 @@ extern int	g_signal_received;
 int		main(int argc, char **argv, char **envp);
 
 /* ============================= SIGNALS ================================== */
+/* Fonctions de configuration */
 void	setup_signals(void);
-void	setup_heredoc_signals(void);
-void	setup_exec_signals(void);
 void	setup_interactive_signals(void);
+void	setup_execution_signals(void);
+void	setup_heredoc_signals(void);
+void	restore_default_signals(void);
+
+/* Fonctions de vérification */
 int		check_and_handle_signal(void);
+int		signal_received(void);
+void	reset_signal(void);
+int		get_signal_number(void);
+
+/* Fonctions utilitaires pour processus enfants */
+int		wait_child_with_signals(pid_t pid);
 
 /* ============================= LEXER ===================================== */
 t_token	*tokenize(char *input);
@@ -200,7 +207,13 @@ int		execute_pipeline(t_shell *shell, int **pipes);
 int		close_pipes(int **pipes, t_exec *exec);
 
 /* ============================= REDIRECTIONS ============================= */
+int		apply_redirections(t_redir *redirs);
+int		create_heredoc_pipe(const char *delimiter);
 
+/* Redirection utilities */
+t_redir	*create_redirection(int type, char *file);
+void	add_redirection(t_redir **head, t_redir *new_redir);
+void	free_redirections(t_redir *redirections);
 
 /* ============================= BUILTINS ================================== */
 // builtin1.;
@@ -282,10 +295,7 @@ char	**ft_lstcmd_copy(t_cmd *cmd, int index, t_exec *exec);
 
 /* ============================= MISSING FUNCTIONS ======================== */
 
-/* Redirection utilities */
-t_redir	*create_redirection(int type, char *file);
-void	add_redirection(t_redir **head, t_redir *new_redir);
-void	free_redirections(t_redir *redirections);
+
 
 /* Quote utilities */
 int		check_quotes(char *str);
