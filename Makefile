@@ -25,13 +25,11 @@ SRC_REDIR = src/exec/redir/
 FILES_REDIR = redir redir_utils
 
 SRC_LEXER = src/lexer/
-FILES_LEXER = 	lexer parser quotes
+FILES_LEXER = 	lexer parser quotes assignment error \
 
 SRC_SIGNALS = src/signals/
 FILES_SIGNALS = signals
 
-SRC_UTILS = src/utils/
-FILES_UTILS = utils_missing stubs
 
 SRC_DIR	= src/
 FILES = 	main \

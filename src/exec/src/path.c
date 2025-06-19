@@ -48,9 +48,11 @@ int apply_path(t_exec *exec)
     int i;
 
     paths = ft_split(read_in_path(exec->env, find_var_path(exec->env)), ':');
-    if (!paths)
+    if (!paths || !paths[0])
 	{
-        return (0);
+		free_array(paths);
+		exec->cmd_path = NULL;
+		return (ft_printf("No PATH variable found!\n"), 0);
 	}
     i = 0;
     while (paths[i])

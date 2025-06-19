@@ -187,12 +187,11 @@ int		count_quotes(char *str, char quote_type);
 char	*remove_quotes(char *str);
 
 /* ============================= EXECUTOR ================================== */
-// exec.c
 int		ft_exec(t_shell *shell);
 void	init_all(t_exec *exec);
 int		identification(t_shell *shell);
 int		its_a_builtin(t_shell *shell);
-int		execute_externe(char **args, t_exec *exec);
+int		execute_externe(char **args, t_shell *shell);
 char	**set_my_fucking_error(t_exec *exec);
 
 /* ============================= PATH ================================== */
@@ -250,7 +249,7 @@ void	print_error(char *cmd, char *arg, char *msg);
 void	print_syntax_error(char *token);
 void	print_export_error(char *arg);
 void	perror_exit(char *msg);
-int		check_syntax(t_token *tokens);
+int		check_token_syntax(t_token *tokens);
 
 /* ============================= MEMORY MANAGEMENT ========================= */
 void	free_shell(t_shell *shell);

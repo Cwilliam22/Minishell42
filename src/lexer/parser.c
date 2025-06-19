@@ -6,7 +6,7 @@
 /*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:31:41 by root              #+#    #+#             */
-/*   Updated: 2025/06/17 11:02:34 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/06/19 16:09:57 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,15 +98,13 @@ void	free_commands(t_cmd *commands)
  * @param tokens: Head of token list
  * @return: 1 if syntax is valid, the value of the synthax error otherwise
  */
-int	check_syntax(t_token *tokens)
+int	check_token_syntax(t_token *tokens)
 {
 	t_token	*current;
 
 	if (!tokens)
 		return (1);
-	
 	current = tokens;
-	
 	/* Check for pipe at the beginning */
 	if (current->type == TOKEN_PIPE)
 	{
@@ -379,11 +377,8 @@ static t_token	**split_by_pipes(t_token *tokens)
 			current = current->next;
 		}
 		else
-		{
 			current = current->next;
-		}
 	}
-	
 	commands[i + 1] = NULL;
 	return (commands);
 }
@@ -424,7 +419,6 @@ t_cmd	*parse_tokens(t_token *tokens, t_shell *shell)
 			free(cmd_tokens);
 			return (NULL);
 		}
-		
 		add_command(&head, cmd);
 		i++;
 	}
@@ -452,11 +446,9 @@ void	print_commands(t_cmd *commands)
 	current = commands;
 	cmd_num = 1;
 	printf("=== COMMANDS ===\n");
-	
 	while (current)
 	{
 		printf("Command %d:\n", cmd_num);
-		
 		if (current->args)
 		{
 			printf("  Args: ");
@@ -469,10 +461,7 @@ void	print_commands(t_cmd *commands)
 			printf("\n");
 		}
 		else
-		{
 			printf("  No args\n");
-		}
-		
 		if (current->assignments)
 		{
 			printf("  Assignments:\n");
@@ -483,7 +472,6 @@ void	print_commands(t_cmd *commands)
 				assign = assign->next;
 			}
 		}
-		
 		if (current->redirections)
 		{
 			printf("  Redirections:\n");
@@ -497,14 +485,11 @@ void	print_commands(t_cmd *commands)
 				redir = redir->next;
 			}
 		}
-		
 		if (current->next)
 			printf("  -> PIPE TO NEXT COMMAND\n");
-		
 		printf("\n");
 		current = current->next;
 		cmd_num++;
 	}
-	
 	printf("================\n");
 }

@@ -1,23 +1,50 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   identification.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/19 15:26:56 by alfavre           #+#    #+#             */
+/*   Updated: 2025/06/19 15:44:46 by alfavre          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
-
-
-int    identification(t_shell *shell)
+static void	clear_std(int saved_stdout, int saved_stdin)
 {
-	char **process;
+	dup2(saved_stdout, STDOUT_FILENO);
+	dup2(saved_stdin, STDIN_FILENO);
+	close(saved_stdout);
+	close(saved_stdin);
+}
 
+int	identification(t_shell *shell)
+{
+	char	**process;
+	int		apply_redir_result;
+	int		saved_stdout;
+	int		saved_stdin;
+
+	if (!shell || !shell->cmd_list || !shell->exec)
+		return (ft_printf("Error: Shell or command list is NULL\n"), 0);
+	saved_stdout = dup(STDOUT_FILENO);
+	saved_stdin = dup(STDIN_FILENO);
 	process = shell->cmd_list->args;
-	shell->exec->cmd = ft_strdup( shell->cmd_list->args[0]);
+	apply_redir_result = apply_redirections(shell->cmd_list->redirections);
+	shell->exec->cmd = ft_strdup(shell->cmd_list->args[0]);
+	if (!shell->exec->cmd)
+		return (clear_std(saved_stdout, saved_stdin), 0);
+	if (apply_redir_result == EXIT_SIGINT
+		|| apply_redir_result == GENERAL_ERROR)
+		return (clear_std(saved_stdout, saved_stdin), apply_redir_result);
 	if (its_a_builtin(shell))
-	{
-		return (1);
-	}
+		return (clear_std(saved_stdout, saved_stdin), 1);
 	else
-	{
-		execute_externe(process, shell->exec);
-		return (1);
-	}
+		return (execute_externe(process, shell),
+			clear_std(saved_stdout, saved_stdin), 1);
+	clear_std(saved_stdout, saved_stdin);
 	return (0);
 }
 
@@ -47,12 +74,14 @@ int	its_a_builtin(t_shell *shell)
 	return (0);
 }
 
-int	execute_externe(char **args, t_exec *exec)
+int	execute_externe(char **args, t_shell *shell)
 {
 	pid_t	pid;
 	int		status;
+	t_exec	*exec;
 	char	**env_temp;
 
+	exec = shell->exec;
 	pid = fork();
 	if (pid == 0)
 	{
@@ -71,7 +100,7 @@ int	execute_externe(char **args, t_exec *exec)
 
 // Pas free env_temp 
 
-char **set_my_fucking_error(t_exec *exec)
+char	**set_my_fucking_error(t_exec *exec)
 {
 	char **new_env;
 	int	i;

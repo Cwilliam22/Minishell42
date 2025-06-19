@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:36:58 by root              #+#    #+#             */
-/*   Updated: 2025/06/19 12:29:31 by root             ###   ########.fr       */
+/*   Updated: 2025/06/19 14:09:37 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@ int	create_heredoc_pipe(const char *delimiter)
 
 	if (pipe(pipefd) < 0)
 		return (perror("pipe"), -1);
-	
 	setup_heredoc_signals();
-
 	while (1)
 	{
 		if (g_signal_received == SIGINT)
@@ -35,7 +33,7 @@ int	create_heredoc_pipe(const char *delimiter)
 		if (!line || ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
-			break;
+			break ;
 		}
 		write(pipefd[1], line, ft_strlen(line));
 		write(pipefd[1], "\n", 1);
@@ -79,13 +77,13 @@ int	apply_redirections(t_redir *redirs)
 		}
 		else if (curr->type == TOKEN_HEREDOC)
 		{
-			int heredoc_fd = create_heredoc_pipe(curr->file);
-			if (heredoc_fd == -2)
+			fd = create_heredoc_pipe(curr->file);
+			if (fd == -2)
 				return (EXIT_SIGINT);
-			if (heredoc_fd < 0)
+			if (fd < 0)
 				return (perror("heredoc"), -1);
-			dup2(heredoc_fd, STDIN_FILENO);
-			close(heredoc_fd);
+			dup2(fd, STDIN_FILENO);
+			close(fd);
 		}
 		curr = curr->next;
 	}

@@ -1,22 +1,30 @@
-/* Fonctions utilitaires manquantes pour compiler le parser */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   assignment.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/19 15:41:26 by alfavre           #+#    #+#             */
+/*   Updated: 2025/06/19 15:42:07 by alfavre          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-/* Assignment utilities */
 t_assignment	*create_assignment(char *key, char *value)
 {
 	t_assignment	*assign;
-	
+
 	assign = malloc(sizeof(t_assignment));
 	if (!assign)
 		return (NULL);
-	
 	assign->key = ft_strdup(key);
 	if (!assign->key)
 	{
 		free(assign);
 		return (NULL);
 	}
-	
 	assign->value = ft_strdup(value);
 	if (!assign->value)
 	{
@@ -24,7 +32,6 @@ t_assignment	*create_assignment(char *key, char *value)
 		free(assign);
 		return (NULL);
 	}
-	
 	assign->next = NULL;
 	return (assign);
 }
@@ -32,16 +39,14 @@ t_assignment	*create_assignment(char *key, char *value)
 void	add_assignment(t_assignment **head, t_assignment *new_assign)
 {
 	t_assignment	*current;
-	
+
 	if (!head || !new_assign)
-		return;
-	
+		return ;
 	if (!*head)
 	{
 		*head = new_assign;
-		return;
+		return ;
 	}
-	
 	current = *head;
 	while (current->next)
 		current = current->next;
@@ -52,7 +57,7 @@ void	free_assignments(t_assignment *assignments)
 {
 	t_assignment	*current;
 	t_assignment	*next;
-	
+
 	current = assignments;
 	while (current)
 	{
@@ -69,10 +74,9 @@ void	free_assignments(t_assignment *assignments)
 int	is_assignment_word(char *str)
 {
 	int	i;
-	
+
 	if (!str || (!ft_isalpha(str[0]) && str[0] != '_'))
 		return (0);
-	
 	i = 0;
 	while (str[i] && str[i] != '=')
 	{
@@ -80,7 +84,6 @@ int	is_assignment_word(char *str)
 			return (0);
 		i++;
 	}
-	
 	return (str[i] == '=' && i > 0);
 }
 
@@ -88,19 +91,16 @@ int	split_assignment(char *assignment, char **key, char **value)
 {
 	char	*equal_pos;
 	size_t	key_len;
-	
+
 	if (!assignment || !key || !value)
 		return (0);
-	
 	equal_pos = ft_strchr(assignment, '=');
 	if (!equal_pos)
 		return (0);
-	
 	key_len = equal_pos - assignment;
 	*key = ft_substr(assignment, 0, key_len);
 	if (!*key)
 		return (0);
-	
 	*value = ft_strdup(equal_pos + 1);
 	if (!*value)
 	{
@@ -108,26 +108,5 @@ int	split_assignment(char *assignment, char **key, char **value)
 		*key = NULL;
 		return (0);
 	}
-	
 	return (1);
-}
-
-
-
-/* Error utilities */
-void	print_syntax_error(char *token)
-{
-	printf("minishell: syntax error near unexpected token `%s'\n", token);
-}
-
-void	print_error(char *cmd, char *arg, char *msg)
-{
-	printf("minishell: ");
-	if (cmd)
-		printf("%s: ", cmd);
-	if (arg)
-		printf("%s: ", arg);
-	if (msg)
-		printf("%s", msg);
-	printf("\n");
 }

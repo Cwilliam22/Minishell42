@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/06/19 11:26:04 by root             ###   ########.fr       */
+/*   Updated: 2025/06/19 16:08:36 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ static int	process_input(t_shell *shell, char *input)
 	//print_tokens(shell->token_list);
 	
 	/* Check syntax errors */
-	if (!check_syntax(shell->token_list))
+	if (!check_token_syntax(shell->token_list))
 	{
 		shell->exit_status = 2;
 		free_tokens(shell->token_list);
