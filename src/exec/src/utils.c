@@ -104,6 +104,38 @@ void	change_oldpwd_or_pwd(t_exec *exec, int option)
 	}
 }
 
+int is_a_valid_identifier(char *arg)
+{
+	int i;
+
+	i = 0;
+	if (!ft_isalpha((int)arg[i]))
+			return (0);
+	while (arg[i])
+	{
+		if (!ft_isalpha((int)arg[i]) || 
+		!ft_isdigit((int)arg[i]) || arg[i] != '-')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	look_at_identifier(t_shell *shell)
+{
+	int i;
+	char **args;
+
+	i = 0;
+	args = shell->cmd_list->args;
+	while (args[i])
+	{
+		if (!is_a_valid_identifier(args[i]))
+			return(exit_codes(shell, GENERAL_ERROR), 0);
+		i++;
+	}
+	return (exit_codes(shell, SUCCESS), 1);
+}
 
 int exit_codes(t_shell *shell, int out)
 {

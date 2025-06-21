@@ -31,32 +31,30 @@ int builtin_echo(t_shell *shell)
 int builtin_cd(t_shell *shell)
 {
     char    *path;
-    t_exec *exec;
     char **arg;
 
-
-    exec = shell->exec;
     arg = shell->cmd_list->args;
-    if (exec->nbr_arg == 1)
+    if (shell->exec->nbr_arg == 1)
     {
-        if (!find_sth_in_env("HOME", exec->env))
-            return (ft_printf("bash: cd: HOME not set\n"), 1);
-        path = find_value_in_env("HOME", exec);
-        change_oldpwd_or_pwd(exec, 1);
+        if (!find_sth_in_env("HOME", shell->exec->env))
+            return (ft_printf("bash: cd: HOME not set\n"), 
+                exit_codes(shell, GENERAL_ERROR), 0);
+        path = find_value_in_env("HOME", shell->exec);
+        change_oldpwd_or_pwd(shell->exec, 1);
         if (!chdir(path))
-            return (change_oldpwd_or_pwd(exec, 0), free(path), 1);
+            return (change_oldpwd_or_pwd(shell->exec, 0), free(path), 
+                exit_codes(shell, SUCCESS), 1);
     }
-    if (exec->nbr_arg == 2)
+    else if (shell->exec->nbr_arg >= 2)
     {
         path = ft_strdup(arg[1]);
-        change_oldpwd_or_pwd(exec, 1);
+        change_oldpwd_or_pwd(shell->exec, 1);
         if (!chdir(path))
-            return (change_oldpwd_or_pwd(exec, 0), free(path), 1);
+            return (change_oldpwd_or_pwd(shell->exec, 0), free(path), 
+                exit_codes(shell, SUCCESS), 1);
         ft_printf("bash: cd: no such file or directory: %s\n", path);
     }
-    else if (exec->nbr_arg >= 3)
-        return(ft_printf("bash: cd: too many arguments\n"), 1);
-    return (0);
+    return (exit_codes(shell, GENERAL_ERROR), 0);
 }
 
 int builtin_pwd(t_shell *shell)
@@ -68,9 +66,8 @@ int builtin_pwd(t_shell *shell)
         return (0);
     printf("%s\n", path);
     free(shell->exec->oldpwd);
-    shell->exec->oldpwd = ft_strdup("Hello");
     free(path);
-    return (1);
+    return (exit_codes(shell, SUCCESS), 1);
 }
 
 int builtin_export(t_shell *shell)
