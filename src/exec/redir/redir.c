@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:36:58 by root              #+#    #+#             */
-/*   Updated: 2025/06/19 14:09:37 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/06/21 12:18:32 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,46 +44,79 @@ int	create_heredoc_pipe(const char *delimiter)
 	return (pipefd[0]);
 }
 
+static int	open_and_dup(const char *file, int flags, int stdfd)
+{
+	int	fd;
+
+	fd = open(file, flags, 0644);
+	if (fd < 0)
+		return (perror(file), 1);
+	if (dup2(fd, stdfd) < 0)
+	{
+		close(fd);
+		return (perror("dup2"), 1);
+	}
+	close(fd);
+	return (0);
+}
+
+static int	dup_and_close(int fd, int stdfd, const char *err)
+{
+	if (dup2(fd, stdfd) < 0)
+	{
+		close(fd);
+		perror(err);
+		return (1);
+	}
+	close(fd);
+	return (0);
+}
+
+static int	handle_heredoc(const char *delimiter)
+{
+	int	fd;
+	
+	fd = create_heredoc_pipe(delimiter);
+	if (fd == -2)
+		return (EXIT_SIGINT);
+	if (fd < 0)
+	{
+		perror("heredoc");
+		return (1);
+	}
+	if (dup_and_close(fd, STDIN_FILENO, "dup2"))
+		return (1);
+	return (0);
+}
+
 int	apply_redirections(t_redir *redirs)
 {
-	int		fd;
-	t_redir	*curr = redirs;
+	t_redir	*curr;
+	int		ret;
 
+	curr = redirs;
 	while (curr)
 	{
 		if (curr->type == TOKEN_REDIR_IN)
 		{
-			fd = open(curr->file, O_RDONLY);
-			if (fd < 0)
-				return (perror(curr->file), -1);
-			dup2(fd, STDIN_FILENO);
-			close(fd);
+			if (open_and_dup(curr->file, O_RDONLY, STDIN_FILENO))
+				return (1);
 		}
 		else if (curr->type == TOKEN_REDIR_OUT)
 		{
-			fd = open(curr->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (fd < 0)
-				return (perror(curr->file), -1);
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
+			if (open_and_dup(curr->file, O_WRONLY | O_CREAT | O_TRUNC, STDOUT_FILENO))
+				return (1);
 		}
 		else if (curr->type == TOKEN_REDIR_APPEND)
 		{
-			fd = open(curr->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-			if (fd < 0)
-				return (perror(curr->file), -1);
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
+			if (open_and_dup(curr->file, O_WRONLY | O_CREAT | O_APPEND, STDOUT_FILENO))
+				return (1);
 		}
 		else if (curr->type == TOKEN_HEREDOC)
 		{
-			fd = create_heredoc_pipe(curr->file);
-			if (fd == -2)
-				return (EXIT_SIGINT);
-			if (fd < 0)
-				return (perror("heredoc"), -1);
-			dup2(fd, STDIN_FILENO);
-			close(fd);
+			ret = handle_heredoc(curr->file);
+			if (ret)
+				return (ret);
 		}
 		curr = curr->next;
 	}

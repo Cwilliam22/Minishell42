@@ -191,7 +191,7 @@ int		ft_exec(t_shell *shell);
 void	init_all(t_exec *exec);
 int		identification(t_shell *shell);
 int		its_a_builtin(t_shell *shell);
-int		execute_externe(char **args, t_shell *shell);
+int		execute_externe(char **args, t_exec *exec);
 char	**set_my_fucking_error(t_exec *exec);
 
 /* ============================= PATH ================================== */
@@ -250,6 +250,7 @@ void	print_syntax_error(char *token);
 void	print_export_error(char *arg);
 void	perror_exit(char *msg);
 int		check_token_syntax(t_token *tokens);
+int		is_all_spaces(const char *s);
 
 /* ============================= MEMORY MANAGEMENT ========================= */
 void	free_shell(t_shell *shell);

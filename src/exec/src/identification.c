@@ -1,54 +1,37 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   identification.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/19 15:26:56 by alfavre           #+#    #+#             */
-/*   Updated: 2025/06/19 15:44:46 by alfavre          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	clear_std(int saved_stdout, int saved_stdin)
-{
-	dup2(saved_stdout, STDOUT_FILENO);
-	dup2(saved_stdin, STDIN_FILENO);
-	close(saved_stdout);
-	close(saved_stdin);
-}
-
 int	identification(t_shell *shell)
 {
-	char	**process;
-	int		apply_redir_result;
-	int		saved_stdout;
-	int		saved_stdin;
+	char **process;
 
-	if (!shell || !shell->cmd_list || !shell->exec)
-		return (ft_printf("Error: Shell or command list is NULL\n"), 0);
-	saved_stdout = dup(STDOUT_FILENO);
-	saved_stdin = dup(STDIN_FILENO);
 	process = shell->cmd_list->args;
-	apply_redir_result = apply_redirections(shell->cmd_list->redirections);
-	shell->exec->cmd = ft_strdup(shell->cmd_list->args[0]);
+	if (!process || !process[0] || process[0][0] == '\0'
+		|| is_all_spaces(process[0]))
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		if (process && process[0])
+			ft_putstr_fd(process[0], STDERR_FILENO);
+		ft_putstr_fd(": command not found\n", STDERR_FILENO);
+		exit(127);
+	}
+	shell->exec->cmd = ft_strdup( shell->cmd_list->args[0]);
 	if (!shell->exec->cmd)
-		return (clear_std(saved_stdout, saved_stdin), 0);
-	if (apply_redir_result == EXIT_SIGINT
-		|| apply_redir_result == GENERAL_ERROR)
-		return (clear_std(saved_stdout, saved_stdin), apply_redir_result);
+	{
+		ft_putstr_fd("minishell: malloc error\n", STDERR_FILENO);
+		exit(1);
+	}
 	if (its_a_builtin(shell))
-		return (clear_std(saved_stdout, saved_stdin), 1);
+	{
+		return (1);
+	}
 	else
-		return (execute_externe(process, shell),
-			clear_std(saved_stdout, saved_stdin), 1);
-	clear_std(saved_stdout, saved_stdin);
+	{
+		execute_externe(process, shell->exec);
+		return (1);
+	}
 	return (0);
 }
-
-
 
 int	its_a_builtin(t_shell *shell)
 {
@@ -74,14 +57,12 @@ int	its_a_builtin(t_shell *shell)
 	return (0);
 }
 
-int	execute_externe(char **args, t_shell *shell)
+int	execute_externe(char **args, t_exec *exec)
 {
 	pid_t	pid;
 	int		status;
-	t_exec	*exec;
 	char	**env_temp;
 
-	exec = shell->exec;
 	pid = fork();
 	if (pid == 0)
 	{
@@ -100,7 +81,7 @@ int	execute_externe(char **args, t_shell *shell)
 
 // Pas free env_temp 
 
-char	**set_my_fucking_error(t_exec *exec)
+char **set_my_fucking_error(t_exec *exec)
 {
 	char **new_env;
 	int	i;
