@@ -191,7 +191,7 @@ int		ft_exec(t_shell *shell);
 void	init_all(t_exec *exec);
 int		identification(t_shell *shell);
 int		its_a_builtin(t_shell *shell);
-int		execute_externe(char **args, t_exec *exec);
+int		execute_externe(char **args, t_shell *shell);
 char	**set_my_fucking_error(t_exec *exec);
 
 /* ============================= PATH ================================== */

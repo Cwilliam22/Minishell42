@@ -1,11 +1,28 @@
 
 #include "minishell.h"
 
+static void	clear_std(int saved_stdout, int saved_stdin)
+{
+	dup2(saved_stdout, STDOUT_FILENO);
+	dup2(saved_stdin, STDIN_FILENO);
+	close(saved_stdout);
+	close(saved_stdin);
+}
+
 int	identification(t_shell *shell)
 {
-	char **process;
+	char	**process;
+	int		apply_redir_result;
+	int		saved_stdout;
+	int		saved_stdin;
 
+	if (!shell || !shell->cmd_list || !shell->exec)
+		return (ft_printf("Error: Shell or command list is NULL\n"), 0);
+	saved_stdout = dup(STDOUT_FILENO);
+	saved_stdin = dup(STDIN_FILENO);
 	process = shell->cmd_list->args;
+	apply_redir_result = apply_redirections(shell->cmd_list->redirections);
+	shell->exec->cmd = ft_strdup(shell->cmd_list->args[0]);
 	if (!process || !process[0] || process[0][0] == '\0'
 		|| is_all_spaces(process[0]))
 	{
@@ -17,19 +34,16 @@ int	identification(t_shell *shell)
 	}
 	shell->exec->cmd = ft_strdup( shell->cmd_list->args[0]);
 	if (!shell->exec->cmd)
-	{
-		ft_putstr_fd("minishell: malloc error\n", STDERR_FILENO);
-		exit(1);
-	}
+			return (clear_std(saved_stdout, saved_stdin), 0);
+	if (apply_redir_result == EXIT_SIGINT
+		|| apply_redir_result == GENERAL_ERROR)
+		return (clear_std(saved_stdout, saved_stdin), apply_redir_result);
 	if (its_a_builtin(shell))
-	{
-		return (1);
-	}
+		return (clear_std(saved_stdout, saved_stdin), 1);
 	else
-	{
-		execute_externe(process, shell->exec);
-		return (1);
-	}
+		return (execute_externe(process, shell),
+			clear_std(saved_stdout, saved_stdin), 1);
+	clear_std(saved_stdout, saved_stdin);
 	return (0);
 }
 
@@ -57,12 +71,14 @@ int	its_a_builtin(t_shell *shell)
 	return (0);
 }
 
-int	execute_externe(char **args, t_exec *exec)
+int	execute_externe(char **args, t_shell *shell)
 {
 	pid_t	pid;
 	int		status;
 	char	**env_temp;
+	t_exec *exec;
 
+	exec = shell->exec;
 	pid = fork();
 	if (pid == 0)
 	{
