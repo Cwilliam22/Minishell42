@@ -16,7 +16,12 @@ int builtin_echo(t_shell *shell)
 	}
 	else if (ft_strncmp("-n", arg[1], 2) == 0)
 	{
-		i = 2;
+        i = 2;
+        /*
+		i = skip_n(arg);
+        if (i == -1)
+            return (0);
+        */
 		if (!ft_printf_arg(arg, i, 1))
 			return (exit_codes(shell, SUCCESS), 0);
 	}

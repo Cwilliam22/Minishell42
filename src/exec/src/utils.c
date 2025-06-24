@@ -24,6 +24,21 @@ char	*ft_strfchr(const char *s, int c)
 	return (str);
 }
 
+/*
+int skip_n(char **arg)
+{
+	int i;
+
+	i = 1;
+	while(arg[i])
+	{
+		if (strncmp("-n", arg[i], 2) != 0)
+			return (i);
+	} 
+	return (-1);
+}
+*/
+
 int	ft_printf_arg(char **tab_arg, int index, int option)
 {
 	int	i;
