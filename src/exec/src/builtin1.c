@@ -12,23 +12,20 @@ int builtin_echo(t_shell *shell)
 	if (arg[1] == NULL)
 	{
 		ft_printf("\n");
-		return (exit_codes(shell, SUCCESS), 0);
+		return (exit_codes(shell, SUCCESS, ""), 0);
 	}
 	else if (ft_strncmp("-n", arg[1], 2) == 0)
 	{
-        i = 2;
-        /*
 		i = skip_n(arg);
         if (i == -1)
             return (0);
-        */
 		if (!ft_printf_arg(arg, i, 1))
-			return (exit_codes(shell, SUCCESS), 0);
+			return (exit_codes(shell, SUCCESS, ""), 0);
 	}
 	else
 	{
 		if (!ft_printf_arg(arg, i, 0))
-			return (exit_codes(shell, SUCCESS), 0);
+			return (exit_codes(shell, SUCCESS, ""), 0);
 	}
 	return (1);
 }
@@ -43,12 +40,12 @@ int builtin_cd(t_shell *shell)
     {
         if (!find_sth_in_env("HOME", shell->exec->env))
             return (ft_printf("bash: cd: HOME not set\n"), 
-                exit_codes(shell, GENERAL_ERROR), 0);
+                exit_codes(shell, GENERAL_ERROR, ""), 0);
         path = find_value_in_env("HOME", shell->exec);
         change_oldpwd_or_pwd(shell->exec, 1);
         if (!chdir(path))
             return (change_oldpwd_or_pwd(shell->exec, 0), free(path), 
-                exit_codes(shell, SUCCESS), 1);
+                exit_codes(shell, SUCCESS, ""), 1);
     }
     else if (shell->exec->nbr_arg >= 2)
     {
@@ -56,10 +53,10 @@ int builtin_cd(t_shell *shell)
         change_oldpwd_or_pwd(shell->exec, 1);
         if (!chdir(path))
             return (change_oldpwd_or_pwd(shell->exec, 0), free(path), 
-                exit_codes(shell, SUCCESS), 1);
+                exit_codes(shell, SUCCESS, ""), 1);
         ft_printf("bash: cd: no such file or directory: %s\n", path);
     }
-    return (exit_codes(shell, GENERAL_ERROR), 0);
+    return (exit_codes(shell, GENERAL_ERROR, ""), 0);
 }
 
 int builtin_pwd(t_shell *shell)
@@ -72,7 +69,7 @@ int builtin_pwd(t_shell *shell)
     printf("%s\n", path);
     free(shell->exec->oldpwd);
     free(path);
-    return (exit_codes(shell, SUCCESS), 1);
+    return (exit_codes(shell, SUCCESS, ""), 1);
 }
 
 int builtin_export(t_shell *shell)

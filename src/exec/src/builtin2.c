@@ -12,11 +12,11 @@ int builtin_unset(t_shell *shell)
     arg = shell->cmd_list->args;
     exec = shell->exec;
     if (exec->nbr_arg == 1)
-        return (exit_codes(shell, SUCCESS), 1);
+        return (exit_codes(shell, SUCCESS, ""), 1);
     else 
     {
         if (!look_at_identifier(shell))
-            return (exit_codes(shell, GENERAL_ERROR), 0);
+            return (exit_codes(shell, GENERAL_ERROR, ""), 0);
         while (arg[i])
         {
             place = find_sth_in_env(arg[i], exec->env);
@@ -25,7 +25,7 @@ int builtin_unset(t_shell *shell)
             i++;
         }
     }
-    return (exit_codes(shell, SUCCESS), 1);
+    return (exit_codes(shell, SUCCESS, ""), 1);
 }
 
 
@@ -44,9 +44,9 @@ int builtin_env(t_shell *shell)
     else if (exec->nbr_arg != 1)
     {
         return (ft_printf("env: ‘%d’: No such file or directory\n", arg[1]), 
-            exit_codes(shell, COMMAND_NOT_FOUND), 0);
+            exit_codes(shell, COMMAND_NOT_FOUND, ""), 0);
     }
-    return (exit_codes(shell, SUCCESS), 1);
+    return (exit_codes(shell, SUCCESS, ""), 1);
 }
 
 int builtin_exit(t_shell *shell)

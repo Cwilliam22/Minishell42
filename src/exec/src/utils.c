@@ -24,20 +24,23 @@ char	*ft_strfchr(const char *s, int c)
 	return (str);
 }
 
-/*
 int skip_n(char **arg)
 {
 	int i;
+	int j;
 
 	i = 1;
-	while(arg[i])
+	j = 1;
+	if (!arg)
+		return (-1);
+	while(arg[j])
 	{
-		if (strncmp("-n", arg[i], 2) != 0)
-			return (i);
+		if (strncmp("-n", arg[i], 2) == 0)
+			i++;
+		j++;
 	} 
-	return (-1);
+	return (i);
 }
-*/
 
 int	ft_printf_arg(char **tab_arg, int index, int option)
 {
@@ -146,15 +149,17 @@ int	look_at_identifier(t_shell *shell)
 	while (args[i])
 	{
 		if (!is_a_valid_identifier(args[i]))
-			return(exit_codes(shell, GENERAL_ERROR), 0);
+			return(exit_codes(shell, GENERAL_ERROR, ""), 0);
 		i++;
 	}
-	return (exit_codes(shell, SUCCESS), 1);
+	return (exit_codes(shell, SUCCESS, ""), 1);
 }
 
-int exit_codes(t_shell *shell, int out)
+int exit_codes(t_shell *shell, int out, char *str)
 {
 	shell->exec->out = out;
+	if (str)
+		printf("%s", str);
 	/*if (boolen == 1)
 	{
 		if (out == 127)
