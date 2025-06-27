@@ -167,3 +167,12 @@ int exit_codes(t_shell *shell, int out, char *str)
 	}*/
 	return (1);
 }
+
+int its_a_way(t_shell *shell)
+{
+	if (shell->cmd_list->args[0][0] == '/')
+		shell->exec->cmd_path = ft_strchr(shell->cmd_list->args[0], '/');
+	if (!shell->exec->cmd_path)
+			return (0);
+	return (1);
+}

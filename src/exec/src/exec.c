@@ -15,6 +15,7 @@ void	init_all(t_exec *exec)
 	exec->oldpwd = NULL;
 	exec->pwd = NULL;
 	exec->is_pipe = 0;
+	exec->path_ok = 0;
 }
 /*
 
@@ -129,6 +130,8 @@ int ft_exec(t_shell *shell)
 		shell->exec->path = NULL;
 	if (shell->exec->nbr_process == 1)
 	{
+		if (its_a_way(shell))
+			shell->exec->path_ok = 1;
 		shell->exec->is_pipe = 0;
 		if (!identification(shell))
 			return (ft_printf("Not a command valid\n"), 1);

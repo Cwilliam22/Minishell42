@@ -83,8 +83,11 @@ int	execute_externe(char **args, t_shell *shell)
 	if (pid == 0)
 	{
 		env_temp = set_my_fucking_error(exec);
-		if (!apply_path(exec))
-			return (0);
+		if (!shell->exec->path_ok)
+		{
+			if (!apply_path(exec))
+				return (0);
+		}
 		execve(exec->cmd_path, args, env_temp);
 		exit(1);
 	}
