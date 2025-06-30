@@ -109,7 +109,9 @@ typedef struct s_exec
 	char			*oldpwd;
 	char			*pwd;
 	int				is_pipe;
-	int				path_ok;
+	int				rel_path;
+	int				abs_path;
+	int				shlvl;
 }	t_exec;
 
 /* Environment variable structure */
@@ -281,7 +283,8 @@ int		exit_codes(t_shell *shell, int out, char *str);
 int		look_at_identifier(t_shell *shell);
 int 	is_a_valid_identifier(char *arg);
 int		skip_n(char **arg);
-int		its_a_way(t_shell *shell);
+int		its_absolute_path(t_shell *shell);
+int		its_relative_path(t_shell *shell);
 
 // len.c
 int		ft_envlen(char ***env);

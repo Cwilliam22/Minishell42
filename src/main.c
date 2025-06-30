@@ -3,20 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/06/19 16:08:36 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/06/30 19:46:34 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int ft_shlvl(t_exec *exec)
+{
+	int shlvl;
+	int place;
+	char *new_lvl;
+
+	place = find_sth_in_env("SHLVL", exec->env);
+	if (place == -1)
+		return(0);
+	shlvl = ft_atoi(find_value_in_env("SHLVL", exec));
+	shlvl++;
+	free(exec->env[place][1]);
+	new_lvl = ft_itoa(shlvl);
+	exec->env[place][1] = ft_strdup(new_lvl);
+	free(new_lvl);
+	return (1);
+}
+
 int ft_env(char **envp, t_exec *exec)
 {
-  if (!copy_env1(envp, exec))
+	if (!copy_env1(envp, exec))
 		return (0);
-  if (!exec->env)
+	if (!ft_shlvl(exec))
+		return (0);
+  	if (!exec->env)
 		return (0);
   exec->nbr_var_env = ft_envlen(exec->env);
   return (1);

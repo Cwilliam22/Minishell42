@@ -83,11 +83,12 @@ int	execute_externe(char **args, t_shell *shell)
 	if (pid == 0)
 	{
 		env_temp = set_my_fucking_error(exec);
-		if (!shell->exec->path_ok)
+		if (!shell->exec->abs_path && !shell->exec->rel_path)
 		{
 			if (!apply_path(exec))
 				return (0);
 		}
+		// free env_temp à la fin ??
 		execve(exec->cmd_path, args, env_temp);
 		exit(1);
 	}
@@ -104,9 +105,11 @@ char **set_my_fucking_error(t_exec *exec)
 {
 	char **new_env;
 	int	i;
+	int len;
 
 	i = 0;
-	new_env = malloc(sizeof(char *) * (exec->nbr_var_env + 1));
+	len = ft_envlen(exec->env);
+	new_env = malloc(sizeof(char *) * (len + 1));
 	if (!new_env)
 		return (NULL);
 	while (exec->env[i])
