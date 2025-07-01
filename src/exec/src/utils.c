@@ -42,32 +42,59 @@ int skip_n(char **arg)
 	return (i);
 }
 
-int	ft_printf_arg(char **tab_arg, int index, int option)
+int word_with_dollar(char *arg, t_shell *shell)
+{
+	size_t j;
+	char *var, *value;
+	int len;
+
+	j = 0;
+	while (arg[j])
+	{
+		if (arg[j] == '$')
+		{
+			j++;
+			if (arg[j] == '?')
+			{
+				ft_printf("%d", shell->exec->out);
+				j++;
+			}
+			else if (ft_isalpha(arg[j]))
+			{
+				var = ft_strdup_from_index(arg, j);
+				value = ft_strdup(find_value_in_env(var, shell->exec));
+				len = ft_strlen(var);
+				ft_printf("%s", value);
+				j += len;
+				free(var);
+				free(value);
+			}
+			else if (ft_isdigit(arg[j]))
+				j++;
+		}
+		ft_printf("%c", arg[j]);
+		j++;
+	}
+	return (1);
+}
+
+int	ft_printf_arg(char **tab_arg, int index, int option, t_shell *shell)
 {
 	int	i;
 
 	i = index;
-	if (option == 1)
+	while (tab_arg[i])
 	{
-		while (tab_arg[i])
-			{
-				ft_printf("%s", tab_arg[i]);
-				if (tab_arg[i + 1])
-					ft_printf(" ");
-				i++;
-			}
+		if (ft_search_char(tab_arg[i], '$'))
+			word_with_dollar(tab_arg[i], shell);
+		else
+			ft_printf("%s", tab_arg[i]);
+		if (tab_arg[i + 1])
+			ft_printf(" ");
+		i++;
 	}
-	else if (option == 0)
-	{
-		while (tab_arg[i])
-			{
-				ft_printf("%s", tab_arg[i]);
-				if (tab_arg[i + 1])
-					ft_printf(" ");
-				i++;
-			}
-			ft_printf("\n");
-	}
+	if (option == 0)
+		ft_printf("\n");
 	return (1);
 }
 

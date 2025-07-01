@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:22:51 by root              #+#    #+#             */
-/*   Updated: 2025/06/11 16:19:47 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/01 19:30:43 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,19 @@
 char	*ft_strncpy(char *dest, const char *src, size_t n)
 {
 	size_t i;
-	
+
 	if (!dest || !src)
 		return dest;
-	for (i = 0; i < n && src[i]; i++)
+	i = 0;
+	while (i < n && src[i])
+	{
 		dest[i] = src[i];
-	for (; i < n; i++)
+		i++;
+	}
+	while (i < n)
+	{
 		dest[i] = '\0';
-	return dest;
+		i++;
+	}
+	return (dest);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 00:18:24 by wcapt             #+#    #+#             */
-/*   Updated: 2025/06/11 14:14:15 by root             ###   ########.fr       */
+/*   Updated: 2025/07/01 21:15:06 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,7 @@ void	ft_lstclear(t_list **lst, void (del)(void *));
 void	ft_lstdelone(t_list *lst, void (*del)(void *));
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 int		ft_is_a_number(char *arg);
+char	*ft_strdup_from_index(const char *src, size_t n);
+int		ft_search_char(char *str, char c);
 
 #endif

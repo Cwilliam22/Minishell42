@@ -19,12 +19,12 @@ int builtin_echo(t_shell *shell)
 		i = skip_n(arg);
         if (i == -1)
             return (0);
-		if (!ft_printf_arg(arg, i, 1))
+		if (!ft_printf_arg(arg, i, 1, shell))
 			return (exit_codes(shell, SUCCESS, ""), 0);
 	}
 	else
 	{
-		if (!ft_printf_arg(arg, i, 0))
+		if (!ft_printf_arg(arg, i, 0, shell))
 			return (exit_codes(shell, SUCCESS, ""), 0);
 	}
 	return (1);
