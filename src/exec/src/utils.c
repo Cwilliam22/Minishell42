@@ -1,4 +1,3 @@
-                                          
 #include "minishell.h"
 
 char	*ft_strfchr(const char *s, int c)
@@ -24,29 +23,30 @@ char	*ft_strfchr(const char *s, int c)
 	return (str);
 }
 
-int skip_n(char **arg)
+int	skip_n(char **arg)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 1;
 	j = 1;
 	if (!arg)
 		return (-1);
-	while(arg[j])
+	while (arg[j])
 	{
 		if (strncmp("-n", arg[i], 2) == 0)
 			i++;
 		j++;
-	} 
+	}
 	return (i);
 }
 
-int word_with_dollar(char *arg, t_shell *shell)
+int	word_with_dollar(char *arg, t_shell *shell)
 {
-	size_t j;
-	char *var, *value;
-	int len;
+	size_t	j;
+	char	*var;
+	char	*value;
+	int		len;
 
 	j = 0;
 	printf("I'm the word_with_dollar function\n");
@@ -100,33 +100,33 @@ int	ft_printf_arg(char **tab_arg, int index, int option, t_shell *shell)
 	return (1);
 }
 
-int copy_env2(char ***dest, char ***src, t_exec *exec)
+int	copy_env2(char ***dest, char ***src, t_exec *exec)
 {
-    int i;
+	int	i;
 	int	j;
-	
+
 	i = exec->nbr_var_env;
-    dest = malloc(sizeof(char *) * (i + 1));
-    if (!dest)
-        return (0);
-    i = 0;
-    while (src[i])
-    {
+	dest = malloc(sizeof(char *) * (i + 1));
+	if (!dest)
+		return (0);
+	i = 0;
+	while (src[i])
+	{
 		j = 0;
-        while (src[i][j])
-        {
-            dest[i][j] = ft_strdup(src[i][j]);
-            j++;
-        }
-        i++;
-    }
-    dest[i] = NULL;
-    return (1);
+		while (src[i][j])
+		{
+			dest[i][j] = ft_strdup(src[i][j]);
+			j++;
+		}
+		i++;
+	}
+	dest[i] = NULL;
+	return (1);
 }
 
 void	change_oldpwd_or_pwd(t_exec *exec, int option)
 {
-	int index;
+	int	index;
 
 	if (option == 1)
 	{
@@ -151,17 +151,17 @@ void	change_oldpwd_or_pwd(t_exec *exec, int option)
 	}
 }
 
-int is_a_valid_identifier(char *arg)
+int	is_a_valid_identifier(char *arg)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!ft_isalpha((int)arg[i]))
-			return (0);
+		return (0);
 	while (arg[i])
 	{
-		if (!ft_isalpha((int)arg[i]) || 
-		!ft_isdigit((int)arg[i]) || arg[i] != '-')
+		if (!ft_isalpha((int)arg[i]) || !ft_isdigit((int)arg[i])
+			|| arg[i] != '-')
 			return (0);
 		i++;
 	}
@@ -170,47 +170,43 @@ int is_a_valid_identifier(char *arg)
 
 int	look_at_identifier(t_shell *shell)
 {
-	int i;
-	char **args;
+	int		i;
+	char	**args;
 
 	i = 0;
 	args = shell->cmd_list->args;
 	while (args[i])
 	{
 		if (!is_a_valid_identifier(args[i]))
-			return(exit_codes(shell, GENERAL_ERROR, ""), 0);
+			return (exit_codes(shell, GENERAL_ERROR, ""), 0);
 		i++;
 	}
 	return (exit_codes(shell, SUCCESS, ""), 1);
 }
 
-int exit_codes(t_shell *shell, int out, char *str)
+int	exit_codes(t_shell *shell, int out, char *str)
 {
 	shell->exec->out = out;
 	if (str)
 		printf("%s", str);
-	/*if (boolen == 1)
-	{
-		if (out == 127)int its_absolute_path(t_shell *shell)
-
-	}*/
 	return (1);
 }
 
-int its_absolute_path(t_shell *shell)
+int	its_absolute_path(t_shell *shell)
 {
 	if (shell->cmd_list->args[0][0] == '/')
 		shell->exec->cmd_path = ft_strdup(shell->cmd_list->args[0]);
 	if (!shell->exec->cmd_path)
-			return (0);
+		return (0);
 	return (1);
 }
 
 int	its_relative_path(t_shell *shell)
 {
-	if (shell->cmd_list->args[0][0] == '.' && shell->cmd_list->args[0][1] == '/')
+	if (shell->cmd_list->args[0][0] == '.'
+		&& shell->cmd_list->args[0][1] == '/')
 		shell->exec->cmd_path = ft_strdup(shell->cmd_list->args[0]);
 	if (!shell->exec->cmd_path)
-			return (0);
+		return (0);
 	return (1);
 }

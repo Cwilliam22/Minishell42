@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 static void	clear_std(int saved_stdout, int saved_stdin)
@@ -32,9 +31,9 @@ int	identification(t_shell *shell)
 		ft_putstr_fd(": command not found\n", STDERR_FILENO);
 		exit(127);
 	}
-	shell->exec->cmd = ft_strdup( shell->cmd_list->args[0]);
+	shell->exec->cmd = ft_strdup(shell->cmd_list->args[0]);
 	if (!shell->exec->cmd)
-			return (clear_std(saved_stdout, saved_stdin), 0);
+		return (clear_std(saved_stdout, saved_stdin), 0);
 	if (apply_redir_result == EXIT_SIGINT
 		|| apply_redir_result == GENERAL_ERROR)
 		return (clear_std(saved_stdout, saved_stdin), apply_redir_result);
@@ -49,8 +48,10 @@ int	identification(t_shell *shell)
 
 int	its_a_builtin(t_shell *shell)
 {
-	int	i;
-	t_builtin tab_link[] = {
+	int			i;
+	t_builtin	*tab_link;
+
+	tab_link[] = {
 	{"cd", builtin_cd},
 	{"echo", builtin_echo},
 	{"pwd", builtin_pwd},
@@ -59,10 +60,9 @@ int	its_a_builtin(t_shell *shell)
 	{"env", builtin_env},
 	{"exit", builtin_exit},
 	{NULL, NULL}};
-
 	i = 0;
 	shell->exec->nbr_arg = ft_tablen_2d(shell->cmd_list->args);
-	while (tab_link[i].builtin != NULL) 
+	while (tab_link[i].builtin != NULL)
 	{
 		if (ft_strcmp(shell->cmd_list->args[0], tab_link[i].builtin) == 0)
 			return (tab_link[i].fonction(shell));
@@ -76,7 +76,7 @@ int	execute_externe(char **args, t_shell *shell)
 	pid_t	pid;
 	int		status;
 	char	**env_temp;
-	t_exec *exec;
+	t_exec	*exec;
 
 	exec = shell->exec;
 	pid = fork();
@@ -88,7 +88,6 @@ int	execute_externe(char **args, t_shell *shell)
 			if (!apply_path(shell))
 				return (0);
 		}
-		// free env_temp à la fin ??
 		execve(exec->cmd_path, args, env_temp);
 		return (exit_codes(shell, COMMAND_NOT_FOUND, ""), 0);
 	}
@@ -98,14 +97,14 @@ int	execute_externe(char **args, t_shell *shell)
 		return (ft_printf("Erreur in Execution of externes CMDs\n"), 0);
 	return (1);
 }
+// free env_temp à la fin ??
 
-// Pas free env_temp 
-
-char **set_my_fucking_error(t_exec *exec)
+char	**set_my_fucking_error(t_exec *exec)
 {
-	char **new_env;
-	int	i;
-	int len;
+	char	**new_env;
+	int		i;
+	int		len;
+	char	*temp;
 
 	i = 0;
 	len = ft_envlen(exec->env);
@@ -114,7 +113,7 @@ char **set_my_fucking_error(t_exec *exec)
 		return (NULL);
 	while (exec->env[i])
 	{
-		char *temp = ft_strjoin(exec->env[i][0], "=");
+		temp = ft_strjoin(exec->env[i][0], "=");
 		new_env[i] = ft_strjoin(temp, exec->env[i][1]);
 		free(temp);
 		i++;
@@ -122,4 +121,3 @@ char **set_my_fucking_error(t_exec *exec)
 	new_env[i] = NULL;
 	return (new_env);
 }
-
