@@ -203,7 +203,6 @@ int		find_var_path(char ***env);
 char	*read_in_path(char ***env, int place);
 int		apply_path(t_shell *shell);
 
-
 /* ============================= PIPES ===================================== */
 int		pipeline(t_shell *shell);
 int		execute_pipeline(t_shell *shell, int **pipes);
@@ -283,7 +282,7 @@ int		copy_env2(char ***dest, char ***src, t_exec *exec);
 void	change_oldpwd_or_pwd(t_exec *exec, int option);
 int		exit_codes(t_shell *shell, int out, char *str);
 int		look_at_identifier(t_shell *shell);
-int 	is_a_valid_identifier(char *arg);
+int		is_a_valid_identifier(char *arg);
 int		skip_n(char **arg);
 int		its_absolute_path(t_shell *shell);
 int		its_relative_path(t_shell *shell);
@@ -304,8 +303,6 @@ int		ft_lstlen(t_cmd *cmd);
 char	**ft_lstcmd_copy(t_cmd *cmd, int index, t_exec *exec);
 
 /* ============================= MISSING FUNCTIONS ======================== */
-
-
 
 /* Quote utilities */
 int		check_quotes(char *str);

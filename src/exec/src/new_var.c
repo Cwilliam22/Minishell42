@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   new_var.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/02 18:42:02 by wcapt             #+#    #+#             */
+/*   Updated: 2025/07/02 18:42:08 by wcapt            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -6,13 +17,13 @@ int	new_var(char *new_value, char *new_variable, t_exec *exec)
 	char	***temp;
 	int		i;
 	int		j;
-	
+
 	i = 0;
-    exec->nbr_var_env++;
-    temp = malloc(sizeof(char **) * (exec->nbr_var_env + 1));
-    if (!temp)
+	exec->nbr_var_env++;
+	temp = malloc(sizeof(char **) * (exec->nbr_var_env + 1));
+	if (!temp)
 	{
-        return (0);
+		return (0);
 	}
 	while (exec->env[i])
 	{
@@ -22,7 +33,7 @@ int	new_var(char *new_value, char *new_variable, t_exec *exec)
 			return (0);
 		while (exec->env[i][j])
 		{
-			temp[i][j] = ft_strdup(exec->env[i][j]); 
+			temp[i][j] = ft_strdup(exec->env[i][j]);
 			j++;
 		}
 		temp[i][j] = NULL;
@@ -41,7 +52,6 @@ int	new_var(char *new_value, char *new_variable, t_exec *exec)
 	return (1);
 }
 
-
 int	replace_value_var(char *new_value, int i, char ***env)
 {
 	free(env[i][1]);
@@ -50,4 +60,3 @@ int	replace_value_var(char *new_value, int i, char ***env)
 		return (0);
 	return (1);
 }
-

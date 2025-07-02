@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   identification.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/02 18:44:01 by wcapt             #+#    #+#             */
+/*   Updated: 2025/07/02 18:59:19 by wcapt            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	clear_std(int saved_stdout, int saved_stdin)
@@ -49,9 +61,7 @@ int	identification(t_shell *shell)
 int	its_a_builtin(t_shell *shell)
 {
 	int			i;
-	t_builtin	*tab_link;
-
-	tab_link[] = {
+	t_builtin	tab_link[] = {
 	{"cd", builtin_cd},
 	{"echo", builtin_echo},
 	{"pwd", builtin_pwd},
@@ -60,6 +70,7 @@ int	its_a_builtin(t_shell *shell)
 	{"env", builtin_env},
 	{"exit", builtin_exit},
 	{NULL, NULL}};
+	
 	i = 0;
 	shell->exec->nbr_arg = ft_tablen_2d(shell->cmd_list->args);
 	while (tab_link[i].builtin != NULL)

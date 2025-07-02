@@ -1,6 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/02 18:42:25 by wcapt             #+#    #+#             */
+/*   Updated: 2025/07/02 18:43:41 by wcapt            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
-
 
 void	init_all(t_exec *exec)
 {
@@ -117,7 +127,7 @@ int	main(int argc, char **argv, char **envp)
 }
 */
 
-int ft_exec(t_shell *shell)
+int	ft_exec(t_shell *shell)
 {
 	init_all(shell->exec);
 	// Faire une fonction init exec !!!
@@ -127,7 +137,8 @@ int ft_exec(t_shell *shell)
 	shell->exec->nbr_process = ft_lstlen(shell->cmd_list);
 	shell->exec->nbr_pipes = shell->exec->nbr_process - 1;
 	if (find_var_path(shell->exec->env) >= 0)
-		shell->exec->path = ft_strdup(shell->exec->env[find_var_path(shell->exec->env)][1]);
+		shell->exec->path
+			= ft_strdup(shell->exec->env[find_var_path(shell->exec->env)][1]);
 	else
 		shell->exec->path = NULL;
 	if (shell->exec->nbr_process == 1)
@@ -150,4 +161,3 @@ int ft_exec(t_shell *shell)
 	//printf("Exit status: %d\n", shell->exec->out);
 	return (0);
 }
-

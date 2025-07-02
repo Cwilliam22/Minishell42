@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   copy_env.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/02 18:22:35 by wcapt             #+#    #+#             */
+/*   Updated: 2025/07/02 18:23:53 by wcapt            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -56,7 +67,7 @@ int	print_env(char ***env)
 		if (env[i][1])
 			ft_printf("%s=%s\n", env[i][0], env[i][1]);
 		else
-		    ft_printf("%s=NULL\n", env[i][0]);
+			ft_printf("%s=NULL\n", env[i][0]);
 		i++;
 	}
 	return (1);
@@ -64,9 +75,9 @@ int	print_env(char ***env)
 
 char	**copy_env_sorted(t_exec *exec)
 {
-	int i;
-	int count;
-	char **dest;
+	int		i;
+	int		count;
+	char	**dest;
 
 	i = 0;
 	count = 0;
@@ -85,12 +96,11 @@ char	**copy_env_sorted(t_exec *exec)
 	return (dest);
 }
 
-
 int	print_env_sorted(t_exec *exec)
 {
-	int	i;
-	int j;
-	char **temp;
+	int		i;
+	int		j;
+	char	**temp;
 
 	i = 0;
 	temp = copy_env_sorted(exec);
@@ -101,8 +111,9 @@ int	print_env_sorted(t_exec *exec)
 		{
 			if (ft_strcmp(temp[i], exec->env[j][0]) == 0)
 			{
-				ft_printf("declare -x %s=\"%s\"\n", exec->env[j][0], exec->env[j][1]);
-				break;
+				ft_printf("declare -x %s=\"%s\"\n", exec->env[j][0],
+					exec->env[j][1]);
+				break ;
 			}
 			j++;
 		}
@@ -111,4 +122,3 @@ int	print_env_sorted(t_exec *exec)
 	free_array(temp);
 	return (1);
 }
-
