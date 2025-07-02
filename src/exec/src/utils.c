@@ -49,10 +49,12 @@ int word_with_dollar(char *arg, t_shell *shell)
 	int len;
 
 	j = 0;
+	printf("I'm the word_with_dollar function\n");
 	while (arg[j])
 	{
 		if (arg[j] == '$')
 		{
+			printf("I have the char $\n");
 			j++;
 			if (arg[j] == '?')
 			{

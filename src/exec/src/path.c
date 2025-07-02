@@ -40,29 +40,29 @@ char	*read_in_path(char ***env, int place)
 	return (path);
 }
 
-int apply_path(t_exec *exec)
+int apply_path(t_shell *shell)
 {
     char **paths;
     char *test_path;
 	char *tmp;
     int i;
 
-    paths = ft_split(read_in_path(exec->env, find_var_path(exec->env)), ':');
+    paths = ft_split(read_in_path(shell->exec->env, find_var_path(shell->exec->env)), ':');
     if (!paths || !paths[0])
 	{
 		free_array(paths);
-		exec->cmd_path = NULL;
+		shell->exec->cmd_path = NULL;
 		return (ft_printf("No PATH variable found!\n"), 0);
 	}
     i = 0;
     while (paths[i])
     {
         tmp = ft_strjoin(paths[i], "/");
-		test_path = ft_strjoin(tmp, exec->cmd);
+		test_path = ft_strjoin(tmp, shell->exec->cmd);
 		free(tmp);
         if (access(test_path, X_OK) == 0)
         {
-            exec->cmd_path = test_path;
+            shell->exec->cmd_path = test_path;
             free_array(paths);
             return (1);
         }
@@ -70,5 +70,5 @@ int apply_path(t_exec *exec)
         i++;
     }
     free_array(paths);
-    return (ft_printf("Command not found!\n"), 0);
+    return (exit_codes(shell, 127, NULL), 0);
 }

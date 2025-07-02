@@ -200,7 +200,7 @@ char	**set_my_fucking_error(t_exec *exec);
 /* ============================= PATH ================================== */
 int		find_var_path(char ***env);
 char	*read_in_path(char ***env, int place);
-int		apply_path(t_exec *exec);
+int		apply_path(t_shell *shell);
 
 
 /* ============================= PIPES ===================================== */

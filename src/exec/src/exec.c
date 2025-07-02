@@ -146,6 +146,7 @@ int ft_exec(t_shell *shell)
 			return (ft_printf("Not a command valid\n"), 1);
 	}
 	free_var(shell->exec);
+	//printf("Exit status: %d\n", shell->exec->out);
 	return (0);
 }
 

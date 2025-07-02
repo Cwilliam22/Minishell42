@@ -85,7 +85,7 @@ int	execute_externe(char **args, t_shell *shell)
 		env_temp = set_my_fucking_error(exec);
 		if (!shell->exec->abs_path && !shell->exec->rel_path)
 		{
-			if (!apply_path(exec))
+			if (!apply_path(shell))
 				return (0);
 		}
 		// free env_temp à la fin ??
