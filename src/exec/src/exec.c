@@ -17,6 +17,7 @@ void	init_all(t_exec *exec)
 	exec->is_pipe = 0;
 	exec->abs_path = 0;
 	exec->rel_path = 0;
+	exec->exit = 0;
 }
 /*
 

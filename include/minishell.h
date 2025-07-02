@@ -112,6 +112,7 @@ typedef struct s_exec
 	int				rel_path;
 	int				abs_path;
 	int				shlvl;
+	int				exit;
 }	t_exec;
 
 /* Environment variable structure */

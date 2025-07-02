@@ -82,7 +82,7 @@ int builtin_exit(t_shell *shell)
         exec->out = 2;
     }
     free_all_env(exec);
-    exit(exec->out);
+    shell->exec->exit = 1;
     return (1);
 }
 

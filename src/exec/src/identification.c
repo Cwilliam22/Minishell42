@@ -90,7 +90,7 @@ int	execute_externe(char **args, t_shell *shell)
 		}
 		// free env_temp à la fin ??
 		execve(exec->cmd_path, args, env_temp);
-		exit(1);
+		return (exit_codes(shell, COMMAND_NOT_FOUND, ""), 0);
 	}
 	else if (pid > 0)
 		waitpid(pid, &status, 0);

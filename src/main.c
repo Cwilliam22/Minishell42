@@ -6,7 +6,11 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/07/02 17:02:08 by wcapt            ###   ########.fr       */
+=======
+/*   Updated: 2025/07/02 17:24:11 by alfavre          ###   ########.fr       */
+>>>>>>> 95085a12930a4d747a06c6bcdcaf68e271784191
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +157,19 @@ static int	process_input(t_shell *shell, char *input)
 	//print_commands(shell->cmd_list);
 
 	/* Execute the command pipeline */
-	exec_result = ft_exec(shell); // Again 
+	exec_result = ft_exec(shell);
+
+	if (shell->exec-> exit == 1)
+	{
+		/* If exit command was executed, clean up and exit */
+		free_commands(shell->cmd_list);
+		shell->cmd_list = NULL;
+		free_tokens(shell->token_list);
+		shell->token_list = NULL;
+		free(shell->input_line);
+		shell->input_line = NULL;
+		return (0); /* Signal to exit */
+	}
 	
 	/* Check if we should exit */
 	signal_exit_code = check_and_handle_signal();
@@ -282,7 +298,6 @@ static void	print_welcome(void)
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell	shell;
-	int		exit_status;
 	t_exec	exec;
 
 	/* Handle command line arguments */
@@ -300,11 +315,11 @@ int	main(int argc, char **argv, char **envp)
 	shell_loop(&shell);
 	
 	/* Store exit status before cleanup */
-	exit_status = shell.exit_status;
+	shell.exit_status = shell.exec->out;
 	
 	/* Cleanup and exit */
 	cleanup_shell(&shell);
 	rl_clear_history();
 	
-	return (exit_status);
+	return (shell.exit_status);
 }
