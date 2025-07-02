@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/07/02 16:54:00 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/02 17:02:08 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ static void	init_shell(t_shell *shell, char **envp, t_exec *exec)
 	
 	/* Initialize environment variables */
 	exec->env = NULL;
+	exec->out = 0;
 	ft_env(envp, exec);
 	shell->exec = exec;
 	
