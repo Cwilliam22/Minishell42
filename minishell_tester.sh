@@ -69,8 +69,9 @@ check_memory_leaks() {
         print_result "Memory leak - $test_name" "PASS"
     fi
     
-    # Nettoyer
-    rm -f "$valgrind_output"
+        # DEBUG: NE PAS NETTOYER POUR L'INSTANT
+        # rm -f "$valgrind_output"
+        echo "DEBUG: Fichier valgrind gardé"
 }
 
 # Fonction pour tester une commande
@@ -82,9 +83,11 @@ test_command() {
     
     echo -e "\n${BLUE}Testing:${NC} $cmd"
     
-    # Créer des fichiers temporaires
-    local minishell_output=$(mktemp)
-    local bash_output=$(mktemp)
+    # Créer des fichiers temporaires AVEC DES NOMS FIXES pour éviter les confusions
+    minishell_output=$(mktemp --suffix=.minishell)
+    bash_output=$(mktemp --suffix=.bash)
+    minishell_clean="${minishell_output}.clean"
+    minishell_no_colors="${minishell_output}.no_colors"
     
     # Tester avec bash (capturer stdout ET stderr)
     timeout "$timeout_duration" bash -c "$cmd" > "$bash_output" 2>&1
@@ -96,13 +99,40 @@ test_command() {
     
     # Filtrer le prompt du minishell en gérant les codes de couleur ANSI
     # Votre minishell utilise des codes couleur : ^[[32m minishell$> ^[[0m
-    # On doit d'abord supprimer les codes ANSI, puis filtrer
+    # Cas spécial pour echo -n : la sortie peut être collée au prompt suivant
     
     # Étape 1 : Supprimer tous les codes de couleur ANSI
     sed 's/\x1b\[[0-9;]*m//g' "$minishell_output" > "${minishell_output}.no_colors"
     
-    # Étape 2 : Filtrer les lignes contenant minishell$>
-    grep -v "minishell\$>" "${minishell_output}.no_colors" > "${minishell_output}.clean"
+    # Étape 2 : Détecter toutes les variantes d'echo -n qui suppriment le retour à la ligne
+    if [[ "$cmd" == *"echo -n"* ]] || [[ "$cmd" == *"echo -nn"* ]] || [[ "$cmd" == echo\ -n* ]]; then
+        # Cas spécial echo -n : approche très simple
+        
+        # Méthode directe avec sed - plus fiable
+        # Supprimer la première ligne, puis extraire ce qui précède "minishell$>"
+        tail -n +2 "${minishell_output}.no_colors" | sed 's/minishell\$>.*//' > "${minishell_output}.clean"
+        
+        echo "=== DEBUG SED SIMPLE ==="
+        echo "Fichier clean utilisé: ${minishell_output}.clean"
+        echo "Après tail:"
+        tail -n +2 "${minishell_output}.no_colors"
+        echo "Après sed (direct vers fichier):"
+        tail -n +2 "${minishell_output}.no_colors" | sed 's/minishell\$>.*//' | tee "${minishell_output}.clean.debug"
+        echo "Vérification fichier créé:"
+        ls -la "${minishell_output}.clean"
+        echo "Contenu via cat:"
+        cat "${minishell_output}.clean"
+        echo "=== FIN DEBUG SED ==="
+        
+    else
+        # Cas normal : filtrer les lignes contenant minishell$>
+        grep -v "minishell\$>" "${minishell_output}.no_colors" > "${minishell_output}.clean"
+    fi
+    
+    # S'assurer que le fichier .clean existe et est lisible
+    if [ ! -f "${minishell_output}.clean" ]; then
+        touch "${minishell_output}.clean"
+    fi
     
     # Si le fichier est vide après filtrage, créer un fichier vide propre
     if [ ! -s "${minishell_output}.clean" ]; then
@@ -126,12 +156,13 @@ test_command() {
     
     # Comparer les sorties (en normalisant les messages d'erreur)
     local outputs_match=false
-    if diff -q "$bash_output" "${minishell_output}.clean" > /dev/null 2>&1; then
+    
+    if diff -q "$bash_output" "$minishell_clean" > /dev/null 2>&1; then
         outputs_match=true
     else
         # Pour les erreurs, vérifier si c'est juste une différence de nom de programme
         local bash_content=$(cat "$bash_output" | sed 's/bash:/minishell:/g')
-        local minishell_content=$(cat "${minishell_output}.clean")
+        local minishell_content=$(cat "$minishell_clean")
         if [ "$bash_content" = "$minishell_content" ]; then
             outputs_match=true
         fi
@@ -145,7 +176,7 @@ test_command() {
         print_result "$test_name" "PASS" "Exit codes match ($bash_exit_code), error messages may differ"
     else
         local bash_sample=$(cat "$bash_output" | head -1 | cut -c1-50)
-        local minishell_sample=$(cat "${minishell_output}.clean" | head -1 | cut -c1-50)
+        local minishell_sample=$(cat "$minishell_clean" | head -1 | cut -c1-50)
         local details="Exit codes: bash($bash_exit_code) vs minishell($minishell_exit_code). Output: Expected: '$bash_sample', Got: '$minishell_sample'"
         print_result "$test_name" "FAIL" "$details"
     fi
@@ -155,8 +186,9 @@ test_command() {
         check_memory_leaks "$cmd" "$test_name"
     fi
     
-    # Nettoyer
-    rm -f "$minishell_output" "$minishell_output.clean" "$minishell_output.no_colors" "$bash_output"
+    # DEBUG: NE PAS NETTOYER POUR L'INSTANT
+    # rm -f "$minishell_output" "$minishell_clean" "$minishell_no_colors" "$bash_output"
+    echo "DEBUG: Fichiers gardés pour investigation"
 }
 
 # Fonction pour tester les erreurs de syntaxe (compare les codes de retour)

@@ -28,7 +28,7 @@
 /*                                 DEFINES                                    */
 /* ************************************************************************** */
 
-# define PROMPT "\033[32m minishell$> \033[0m"
+# define PROMPT "\033[32mminishell$> \033[0m"
 # define MAX_PATH 4096
 # define MAX_ARGS 1024
 

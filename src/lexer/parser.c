@@ -6,7 +6,7 @@
 /*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:31:41 by root              #+#    #+#             */
-/*   Updated: 2025/06/19 16:09:57 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/02 15:55:09 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -305,13 +305,18 @@ static int	extract_redirections(t_token *tokens, t_cmd *cmd)
  * @param tokens: Starting token for this command
  * @return: Command structure or NULL on error
  */
-static t_cmd	*parse_single_command(t_token *tokens)
+static t_cmd	*parse_single_command(t_token *tokens, t_shell *shell)
 {
 	t_cmd	*cmd;
 
 	if (!tokens)
 		return (NULL);
 	
+	if (strcmp(tokens->value, "$?") == 0)
+	{
+		free(tokens->value);
+		tokens->value = ft_itoa(shell->exit_status);
+	}
 	cmd = create_command();
 	if (!cmd)
 		return (NULL);
@@ -396,8 +401,6 @@ t_cmd	*parse_tokens(t_token *tokens, t_shell *shell)
 	t_token		**cmd_tokens;
 	int			i;
 
-	(void)shell; /* Not used in this version */
-	
 	if (!tokens)
 		return (NULL);
 	
@@ -412,7 +415,7 @@ t_cmd	*parse_tokens(t_token *tokens, t_shell *shell)
 	/* Parse each command */
 	while (cmd_tokens[i])
 	{
-		cmd = parse_single_command(cmd_tokens[i]);
+		cmd = parse_single_command(cmd_tokens[i], shell);
 		if (!cmd)
 		{
 			free_commands(head);
