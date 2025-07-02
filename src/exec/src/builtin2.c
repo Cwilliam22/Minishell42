@@ -6,38 +6,11 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:27:28 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/02 18:29:04 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/02 20:38:57 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	builtin_unset(t_shell *shell)
-{
-	int		i;
-	int		place;
-	char	**arg;
-	t_exec	*exec;
-
-	i = 0;
-	arg = shell->cmd_list->args;
-	exec = shell->exec;
-	if (exec->nbr_arg == 1)
-		return (exit_codes(shell, SUCCESS, ""), 1);
-	else
-	{
-		if (!look_at_identifier(shell))
-			return (exit_codes(shell, GENERAL_ERROR, ""), 0);
-		while (arg[i])
-		{
-			place = find_sth_in_env(arg[i], exec->env);
-			if (place != -1)
-				unset_var(place, exec);
-			i++;
-		}
-	}
-	return (exit_codes(shell, SUCCESS, ""), 1);
-}
 
 int	builtin_env(t_shell *shell)
 {

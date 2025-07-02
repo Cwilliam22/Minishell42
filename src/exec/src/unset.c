@@ -5,26 +5,42 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/02 18:44:37 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/02 18:44:54 by wcapt            ###   ########.fr       */
+/*   Created: 2025/07/02 20:38:16 by wcapt             #+#    #+#             */
+/*   Updated: 2025/07/02 20:59:38 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	unset_var(int index, t_exec *exec)
+int	malloc_allocations(char ***temp, int i, int size)
 {
-	char	***temp;
-	int		i;
-	int		j;
+	temp[i] = malloc(sizeof(char *) * size);
+	if (!temp[i])
+		return (0);
+	return (1);
+}
+
+int	copy_strings_in_env(t_exec *exec, int m, char ***temp, int i)
+{
+	int	j;
+
+	j = 0;
+	if (!malloc_allocations(temp, i, 3))
+		return (0);
+	while (exec->env[m][j])
+	{
+		temp[i][j] = ft_strdup(exec->env[m][j]);
+		j++;
+	}
+	temp[i][j] = NULL;
+	return (1);
+}
+
+int	make_a_new_env(t_exec *exec, int index, char ***temp, int i)
+{
 	int		m;
 
-	i = 0;
 	m = 0;
-	exec->nbr_var_env--;
-	temp = malloc(sizeof(char **) * (exec->nbr_var_env + 1));
-	if (!temp)
-		return (0);
 	while (exec->env[m])
 	{
 		if (m == index)
@@ -32,22 +48,50 @@ int	unset_var(int index, t_exec *exec)
 			m++;
 			continue ;
 		}
-		j = 0;
-		temp[i] = malloc(sizeof(char *) * 3);
-		if (!temp[i])
+		if (!copy_strings_in_env(exec, m, temp, i))
 			return (0);
-		while (exec->env[m][j])
-		{
-			temp[i][j] = ft_strdup(exec->env[m][j]);
-			j++;
-		}
-		temp[i][j] = NULL;
 		i++;
 		m++;
 	}
 	temp[i] = NULL;
+	return (1);
+}
+
+int	unset_var(int index, t_exec *exec)
+{
+	char	***temp;
+	int		i;
+
+	i = 0;
+	exec->nbr_var_env--;
+	temp = malloc(sizeof(char **) * (exec->nbr_var_env + 1));
+	if (!temp)
+		return (0);
+	make_a_new_env(exec, index, temp, i);
 	if (!free_env(exec->env))
 		return (0);
 	exec->env = temp;
 	return (1);
+}
+
+int	builtin_unset(t_shell *shell)
+{
+	int		i;
+	int		place;
+	char	**arg;
+	t_exec	*exec;
+
+	i = 0;
+	arg = shell->cmd_list->args;
+	exec = shell->exec;
+	if (exec->nbr_arg == 1)
+		return (exit_codes(shell, COMMAND_NOT_FOUND, ""), 1);
+	while (arg[i])
+	{
+		place = find_sth_in_env(arg[i], exec->env);
+		if (place != -1)
+			unset_var(place, exec);
+		i++;
+	}
+	return (exit_codes(shell, SUCCESS, ""), 1);
 }
