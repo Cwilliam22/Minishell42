@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:37:05 by root              #+#    #+#             */
-/*   Updated: 2025/07/02 15:34:22 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/02 22:18:49 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 char	*get_env_value(char *key, t_shell *shell)
 {
 	t_exec	*current;
-
+	
 	if (!key || !shell)
 		return (ft_strdup(""));
 	
@@ -207,15 +207,9 @@ static int	find_quote_end(char *str, int start, char quote_char)
 static char	*process_quoted_content(char *content, char quote_type, t_shell *shell)
 {
 	if (quote_type == '\'')
-	{
-		/* Single quotes: preserve everything literally */
 		return (ft_strdup(content));
-	}
 	else
-	{
-		/* Double quotes: expand variables */
 		return (expand_variables(content, shell));
-	}
 }
 
 /**
@@ -236,7 +230,6 @@ char	*handle_quotes(char *str, t_shell *shell)
 
 	if (!str)
 		return (NULL);
-	
 	result = ft_strdup("");
 	if (!result)
 		return (NULL);
@@ -313,7 +306,6 @@ char	*handle_quotes(char *str, t_shell *shell)
 			}
 		}
 	}
-	
 	return (result);
 }
 

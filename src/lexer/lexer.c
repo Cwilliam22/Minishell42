@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:15:11 by root              #+#    #+#             */
-/*   Updated: 2025/06/17 10:56:36 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/02 22:00:09 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,10 @@ static int	get_token_type(char *str)
 		return (TOKEN_REDIR_APPEND);
 	if (ft_strcmp(str, "<<") == 0)
 		return (TOKEN_HEREDOC);
+	if (str[0] == '$' && str[1] != '\0')
+		return (TOKEN_VAR);
+	if (str[0] == '\0')
+		return (TOKEN_EOF);
 	return (TOKEN_WORD);
 }
 
@@ -143,27 +147,34 @@ static int	get_token_type(char *str)
 static char	*extract_word(char *input, int start, int *end)
 {
 	int		i;
-	int		in_single_quote;
-	int		in_double_quote;
+	char	quote_char;
 	char	*word;
 
 	i = start;
-	in_single_quote = 0;
-	in_double_quote = 0;
-	while (input[i])
+	
+	// Vérifier si ça commence par une quote
+	if (input[i] == '\'' || input[i] == '"')
 	{
-		if (input[i] == '\'' && !in_double_quote)
-			in_single_quote = !in_single_quote;
-		else if (input[i] == '"' && !in_single_quote)
-			in_double_quote = !in_double_quote;
-		else if (!in_single_quote && !in_double_quote)
-		{
-			if (is_whitespace(input[i]) || is_operator(input[i]))
-				break ;
-		}
-		i++;
+		quote_char = input[i];
+		i++; // Passer la quote d'ouverture
+		
+		// Aller jusqu'à la quote de fermeture
+		while (input[i] && input[i] != quote_char)
+			i++;
+		
+		if (input[i] == quote_char)
+			i++; // Inclure la quote de fermeture
 	}
+	else
+	{
+		// Mot normal - s'arrêter aux espaces/opérateurs
+		while (input[i] && !is_whitespace(input[i]) && !is_operator(input[i]))
+			i++;
+	}
+	
 	*end = i;
+	
+	// Extraire le mot complet
 	word = malloc(i - start + 1);
 	if (!word)
 		return (NULL);
@@ -247,7 +258,11 @@ t_token	*tokenize(char *input)
 				free_tokens(head);
 				return (NULL);
 			}
-			new_token = create_token(token_value, TOKEN_WORD);
+			// Si ça contient des quotes, c'est forcément TOKEN_WORD
+			if (token_value[0] == '\'' || token_value[0] == '"')
+				new_token = create_token(token_value, TOKEN_WORD);
+			else
+				new_token = create_token(token_value, get_token_type(token_value));
 			free(token_value);
 		}
 		if (!new_token)
@@ -270,7 +285,7 @@ void	print_tokens(t_token *tokens)
 	t_token		*current;
 	const char	*type_names[] = {
 		"UNKNOWN", "WORD", "PIPE", "REDIR_IN", 
-		"REDIR_OUT", "REDIR_APPEND", "HEREDOC", "EOF"
+		"REDIR_OUT", "REDIR_APPEND", "HEREDOC", "EOF", "VAR"
 	};
 
 	current = tokens;

@@ -25,7 +25,7 @@ SRC_REDIR = src/exec/redir/
 FILES_REDIR = redir redir_utils
 
 SRC_LEXER = src/lexer/
-FILES_LEXER = 	lexer parser quotes assignment error \
+FILES_LEXER = 	lexer parser quotes assignment error expand \
 
 SRC_SIGNALS = src/signals/
 FILES_SIGNALS = signals

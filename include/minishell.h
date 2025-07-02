@@ -49,6 +49,7 @@
 # define TOKEN_REDIR_APPEND 5
 # define TOKEN_HEREDOC 6
 # define TOKEN_EOF 7
+# define TOKEN_VAR 8
 
 /* File descriptor constants */
 # define STDIN 0
@@ -189,6 +190,11 @@ char	*expand_variables(char *str, t_shell *shell);
 char	*get_env_value(char *key, t_shell *shell);
 int		count_quotes(char *str, char quote_type);
 char	*remove_quotes(char *str);
+
+/* ============================= EXPAND ==================================== */
+int		needs_expansion(char *str);
+void	expand_commands(t_cmd *commands, t_shell *shell);
+void	expand_command_args(t_cmd *cmd, t_shell *shell);
 
 /* ============================= EXECUTOR ================================== */
 int		ft_exec(t_shell *shell);

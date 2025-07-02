@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:17:09 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/02 18:17:12 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/02 22:09:33 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,13 +96,14 @@ int	ft_printf_arg(char **tab_arg, int index, int option, t_shell *shell)
 {
 	int	i;
 
+	(void)shell; // To avoid unused parameter warning
 	i = index;
 	while (tab_arg[i])
 	{
-		if (ft_search_char(tab_arg[i], '$'))
+		/*if (ft_search_char(tab_arg[i], '$'))
 			word_with_dollar(tab_arg[i], shell);
-		else
-			ft_printf("%s", tab_arg[i]);
+		else*/
+		ft_printf("%s", tab_arg[i]);
 		if (tab_arg[i + 1])
 			ft_printf(" ");
 		i++;

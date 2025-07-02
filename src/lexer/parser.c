@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:31:41 by root              #+#    #+#             */
-/*   Updated: 2025/07/02 16:07:03 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/02 22:17:08 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,19 +154,15 @@ static int	count_words(t_token *tokens)
 	
 	while (current && current->type != TOKEN_PIPE)
 	{
-		if (current->type == TOKEN_WORD)
+		if (current->type == TOKEN_WORD || current->type == TOKEN_VAR)
 		{
-			/* Check if this word is not a redirection target */
-			if (current == tokens || 
-				(current->type == TOKEN_WORD && 
-				 (!current->next || 
-				  (current->next->type != TOKEN_REDIR_IN &&
-				   current->next->type != TOKEN_REDIR_OUT &&
-				   current->next->type != TOKEN_REDIR_APPEND &&
-				   current->next->type != TOKEN_HEREDOC))))
-			{
-				count++;
-			}
+			count++;
+		}
+		else if (current->type >= TOKEN_REDIR_IN && current->type <= TOKEN_HEREDOC)
+		{
+			// Skip redirection and its target
+			if (current->next)
+				current = current->next; // Skip the target
 		}
 		current = current->next;
 	}
@@ -180,15 +176,11 @@ static int	count_words(t_token *tokens)
  * @param cmd: Command to fill
  * @return: 1 on success, 0 on error
  */
-static int	extract_arguments(t_token *tokens, t_cmd *cmd)
+static int	extract_arguments(t_token *tokens, t_cmd *cmd, t_shell *shell)
 {
 	t_token	*current;
 	int		word_count;
 	int		i;
-	int		skip_next;
-	char	*key;
-	char	*value;
-	t_assignment *assign;
 
 	word_count = count_words(tokens);
 	if (word_count == 0)
@@ -203,54 +195,31 @@ static int	extract_arguments(t_token *tokens, t_cmd *cmd)
 	
 	current = tokens;
 	i = 0;
-	skip_next = 0;
 	
 	while (current && current->type != TOKEN_PIPE && i < word_count)
 	{
-		if (skip_next)
+		if (current->type == TOKEN_WORD || current->type == TOKEN_VAR)
 		{
-			skip_next = 0;
-			current = current->next;
-			continue ;
-		}
-		
-		if (current->type == TOKEN_WORD)
-		{
-			cmd->args[i] = handle_quotes(current->value, NULL);
+			if (current->type == TOKEN_VAR)
+				cmd->args[i] = expand_variables(current->value, shell);
+			else
+				cmd->args[i] = handle_quotes(current->value, shell);
 			if (!cmd->args[i])
 			{
-				/* Free already allocated args */
 				while (--i >= 0)
 					free(cmd->args[i]);
 				free(cmd->args);
 				cmd->args = NULL;
 				return (0);
 			}
-			
-			/* Check if this is an assignment for export */
-			if (i > 0 && cmd->args[0] && ft_strcmp(cmd->args[0], "export") == 0)
-			{
-				if (is_assignment_word(cmd->args[i]))
-				{
-					if (split_assignment(cmd->args[i], &key, &value))
-					{
-						assign = create_assignment(key, value);
-						if (assign)
-							add_assignment(&cmd->assignments, assign);
-						free(key);
-						free(value);
-					}
-				}
-			}
-			
 			i++;
 		}
 		else if (current->type >= TOKEN_REDIR_IN && current->type <= TOKEN_HEREDOC)
 		{
-			/* Skip redirection token and its target */
-			skip_next = 1;
+			// Skip redirection and its target
+			if (current->next)
+				current = current->next;
 		}
-		
 		current = current->next;
 	}
 	
@@ -322,7 +291,7 @@ static t_cmd	*parse_single_command(t_token *tokens, t_shell *shell)
 		return (NULL);
 	
 	/* Extract arguments */
-	if (!extract_arguments(tokens, cmd))
+	if (!extract_arguments(tokens, cmd, shell))
 	{
 		free_commands(cmd);
 		return (NULL);
