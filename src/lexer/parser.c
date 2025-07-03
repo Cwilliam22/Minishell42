@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:31:41 by root              #+#    #+#             */
-/*   Updated: 2025/07/02 22:17:08 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/03 13:22:56 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,55 +176,100 @@ static int	count_words(t_token *tokens)
  * @param cmd: Command to fill
  * @return: 1 on success, 0 on error
  */
-static int	extract_arguments(t_token *tokens, t_cmd *cmd, t_shell *shell)
+static int extract_arguments(t_token *tokens, t_cmd *cmd, t_shell *shell)
 {
-	t_token	*current;
-	int		word_count;
-	int		i;
+    t_token *current;
+    int word_count;
+    int i;
+    int skip_next;
+    char *key;
+    char *value;
+    t_assignment *assign;
 
-	word_count = count_words(tokens);
-	if (word_count == 0)
-	{
-		cmd->args = NULL;
-		return (1);
-	}
-	
-	cmd->args = malloc(sizeof(char *) * (word_count + 1));
-	if (!cmd->args)
-		return (0);
-	
-	current = tokens;
-	i = 0;
-	
-	while (current && current->type != TOKEN_PIPE && i < word_count)
-	{
-		if (current->type == TOKEN_WORD || current->type == TOKEN_VAR)
-		{
-			if (current->type == TOKEN_VAR)
-				cmd->args[i] = expand_variables(current->value, shell);
-			else
-				cmd->args[i] = handle_quotes(current->value, shell);
-			if (!cmd->args[i])
-			{
-				while (--i >= 0)
-					free(cmd->args[i]);
-				free(cmd->args);
-				cmd->args = NULL;
-				return (0);
-			}
-			i++;
-		}
-		else if (current->type >= TOKEN_REDIR_IN && current->type <= TOKEN_HEREDOC)
-		{
-			// Skip redirection and its target
-			if (current->next)
-				current = current->next;
-		}
-		current = current->next;
-	}
-	
-	cmd->args[i] = NULL;
-	return (1);
+    word_count = count_words(tokens);
+    if (word_count == 0)
+    {
+        cmd->args = NULL;
+        return (1);
+    }
+
+    cmd->args = malloc(sizeof(char *) * (word_count + 1));
+    if (!cmd->args)
+        return (0);
+
+    current = tokens;
+    i = 0;
+    skip_next = 0;
+
+    while (current && current->type != TOKEN_PIPE && i < word_count)
+    {
+        if (skip_next)
+        {
+            skip_next = 0;
+            current = current->next;
+            continue;
+        }
+
+        if (current->type == TOKEN_WORD || current->type == TOKEN_VAR)
+        {
+            // Expand variables or handle quotes based on token type
+            if (current->type == TOKEN_VAR)
+                cmd->args[i] = expand_variables(current->value, shell);
+            else
+                cmd->args[i] = handle_quotes(current->value, shell);
+
+            if (!cmd->args[i])
+            {
+                // Free already allocated args
+                while (--i >= 0)
+                    free(cmd->args[i]);
+                free(cmd->args);
+                cmd->args = NULL;
+                return (0);
+            }
+
+            // Check if this is an assignment for export/declare commands
+            if (i > 0 && cmd->args[0] && 
+                (ft_strcmp(cmd->args[0], "export") == 0 || 
+                 ft_strcmp(cmd->args[0], "declare") == 0))
+            {
+                if (is_assignment_word(cmd->args[i]))
+                {
+                    // Regular assignment VAR=value
+                    if (split_assignment(cmd->args[i], &key, &value))
+                    {
+                        assign = create_assignment(key, value);
+                        if (assign)
+                            add_assignment(&cmd->assignments, assign);
+                        free(key);
+                        free(value);
+                    }
+                }
+                else if (is_append_assignment_word(cmd->args[i]))
+                {
+                    // Append assignment VAR+=value
+                    if (split_append_assignment(cmd->args[i], &key, &value))
+                    {
+                        assign = create_append_assignment(key, value);
+                        if (assign)
+                            add_assignment(&cmd->assignments, assign);
+                        free(key);
+                        free(value);
+                    }
+                }
+            }
+            i++;
+        }
+        else if (current->type >= TOKEN_REDIR_IN && current->type <= TOKEN_HEREDOC)
+        {
+            // Skip redirection token and its target
+            skip_next = 1;
+        }
+        current = current->next;
+    }
+
+    cmd->args[i] = NULL;
+    return (1);
 }
 
 /**

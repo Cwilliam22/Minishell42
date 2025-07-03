@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/07/03 10:59:05 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/03 12:52:49 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ static int	process_input(t_shell *shell, char *input)
 		return (1);
 	}
 
-	//print_tokens(shell->token_list);
+	print_tokens(shell->token_list);
 	
 	/* Check syntax errors */
 	if (check_token_syntax(shell->token_list) != 1)
@@ -151,7 +151,7 @@ static int	process_input(t_shell *shell, char *input)
 		return (1);
 	}
 	
-	//print_commands(shell->cmd_list);
+	print_commands(shell->cmd_list);
 
 	/* Execute the command pipeline */
 	exec_result = ft_exec(shell);
