@@ -6,7 +6,7 @@
 /*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:37:05 by root              #+#    #+#             */
-/*   Updated: 2025/07/02 22:18:49 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/03 11:04:20 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,13 @@ static char	*extract_var_name(char *str, int *len)
 	{
 		*len = 1;
 		return (ft_strdup("?"));
+	}
+
+	/* Handle single digit positional parameters $0-$9 */
+	if (ft_isdigit(str[0]))
+	{
+		*len = 1; // ← Seulement UN chiffre !
+		return (ft_substr(str, 0, 1));
 	}
 	
 	/* Variable name must start with letter or underscore */

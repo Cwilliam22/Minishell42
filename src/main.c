@@ -6,7 +6,7 @@
 /*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/07/02 22:20:19 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/03 10:59:05 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ static int	process_input(t_shell *shell, char *input)
 	/* Execute the command pipeline */
 	exec_result = ft_exec(shell);
 
-	if (shell->exec-> exit == 1)
+	if (shell->exec->exit == 1)
 	{
 		/* If exit command was executed, clean up and exit */
 		free_commands(shell->cmd_list);
@@ -224,7 +224,7 @@ static void	shell_loop(t_shell *shell)
 		if (!input)
 		{
 			printf("exit\n");
-			break;
+			break ;
 		}
 		
 		/* Handle signal interruption */
