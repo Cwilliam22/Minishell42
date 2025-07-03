@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:17:09 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/02 22:09:33 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/03 13:21:47 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,66 +51,6 @@ int	skip_n(char **arg)
 		j++;
 	}
 	return (i);
-}
-
-int	word_with_dollar(char *arg, t_shell *shell)
-{
-	size_t	j;
-	char	*var;
-	char	*value;
-	int		len;
-
-	j = 0;
-	printf("I'm the word_with_dollar function\n");
-	while (arg[j])
-	{
-		if (arg[j] == '$')
-		{
-			printf("I have the char $\n");
-			j++;
-			if (arg[j] == '?')
-			{
-				ft_printf("%d", shell->exec->out);
-				j++;
-			}
-			else if (ft_isalpha(arg[j]))
-			{
-				var = ft_strdup_from_index(arg, j);
-				value = ft_strdup(find_value_in_env(var, shell->exec));
-				len = ft_strlen(var);
-				ft_printf("%s", value);
-				j += len;
-				free(var);
-				free(value);
-			}
-			else if (ft_isdigit(arg[j]))
-				j++;
-		}
-		ft_printf("%c", arg[j]);
-		j++;
-	}
-	return (1);
-}
-
-int	ft_printf_arg(char **tab_arg, int index, int option, t_shell *shell)
-{
-	int	i;
-
-	(void)shell; // To avoid unused parameter warning
-	i = index;
-	while (tab_arg[i])
-	{
-		/*if (ft_search_char(tab_arg[i], '$'))
-			word_with_dollar(tab_arg[i], shell);
-		else*/
-		ft_printf("%s", tab_arg[i]);
-		if (tab_arg[i + 1])
-			ft_printf(" ");
-		i++;
-	}
-	if (option == 0)
-		ft_printf("\n");
-	return (1);
 }
 
 int	copy_env2(char ***dest, char ***src, t_exec *exec)

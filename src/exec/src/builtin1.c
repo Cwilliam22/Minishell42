@@ -6,39 +6,11 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:25:06 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/02 18:27:00 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/03 13:40:21 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	builtin_echo(t_shell *shell)
-{
-	int		i;
-	char	**arg;
-
-	i = 1;
-	arg = shell->cmd_list->args;
-	if (arg[1] == NULL)
-	{
-		ft_printf("\n");
-		return (exit_codes(shell, SUCCESS, ""), 0);
-	}
-	else if (ft_strncmp("-n", arg[1], 2) == 0)
-	{
-		i = skip_n(arg);
-		if (i == -1)
-			return (0);
-		if (!ft_printf_arg(arg, i, 1, shell))
-			return (exit_codes(shell, SUCCESS, ""), 0);
-	}
-	else
-	{
-		if (!ft_printf_arg(arg, i, 0, shell))
-			return (exit_codes(shell, SUCCESS, ""), 0);
-	}
-	return (1);
-}
 
 int	builtin_cd(t_shell *shell)
 {
@@ -82,43 +54,3 @@ int	builtin_pwd(t_shell *shell)
 	return (exit_codes(shell, SUCCESS, ""), 1);
 }
 
-int	builtin_export(t_shell *shell)
-{
-	int		i;
-	char	*new_value;
-	char	*new_variable;
-	char	**arg;
-	t_exec	*exec;
-
-	new_value = NULL;
-	new_variable = NULL;
-	exec = shell->exec;
-	arg = shell->cmd_list->args;
-	if (exec->nbr_arg >= 2)
-	{
-		new_value = ft_strdup(arg[3]);
-		new_variable = ft_strdup(arg[1]);
-	}
-	if (exec->nbr_arg == 1)
-	{
-		if (!print_env_sorted(exec))
-			return (0);
-	}
-	else if (exec->nbr_arg == 4)
-	{
-		i = find_sth_in_env(arg[1], exec->env);
-		if (i == -1)
-		{
-			if (!new_var(new_value, new_variable, exec))
-				return (0);
-		}
-		else if (!replace_value_var(new_value, i, exec->env))
-			return (0);
-	}
-	if (new_value != NULL || new_variable != NULL)
-	{
-		free(new_value);
-		free(new_variable);
-	}
-	return (1);
-}

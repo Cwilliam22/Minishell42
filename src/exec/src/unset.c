@@ -6,7 +6,7 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:38:16 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/02 20:59:38 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/03 13:30:18 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	copy_strings_in_env(t_exec *exec, int m, char ***temp, int i)
 
 	j = 0;
 	if (!malloc_allocations(temp, i, 3))
-		return (0);
+		return (free_env(temp), 0);
 	while (exec->env[m][j])
 	{
 		temp[i][j] = ft_strdup(exec->env[m][j]);

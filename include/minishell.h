@@ -251,6 +251,7 @@ int		new_var(char *new_value, char *new_variable, t_exec *exec);
 int		replace_value_var(char *new_value, int i, char ***env);
 
 // unset.c
+int		malloc_allocations(char ***temp, int i, int size);
 int		unset_var(int index, t_exec *exec);
 
 /* ============================= ERROR HANDLING ============================ */

@@ -18,7 +18,7 @@ SRC_EXEC = src/exec/src/
 FILES_EXEC = exec path copy_env \
 			utils identification builtin1 \
 			builtin2 free len \
-			new_var get \
+			export get echo\
 			pipe list check_utils unset\
 
 SRC_REDIR = src/exec/redir/
