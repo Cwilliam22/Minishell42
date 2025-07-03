@@ -82,6 +82,7 @@ typedef struct s_assignment
 {
 	char					*key;
 	char					*value;
+	int						is_append; // 1 if append assignment (VAR+=value), 0 otherwise
 	struct s_assignment		*next;
 }	t_assignment;
 
@@ -191,6 +192,11 @@ char	*get_env_value(char *key, t_shell *shell);
 int		count_quotes(char *str, char quote_type);
 char	*remove_quotes(char *str);
 
+/* Quote utilities */
+int		check_quotes(char *str);
+int		count_quotes(char *str, char quote_type);
+char	*remove_quotes(char *str);
+
 /* ============================= EXPAND ==================================== */
 int		needs_expansion(char *str);
 void	expand_commands(t_cmd *commands, t_shell *shell);
@@ -222,6 +228,16 @@ int		create_heredoc_pipe(const char *delimiter);
 t_redir	*create_redirection(int type, char *file);
 void	add_redirection(t_redir **head, t_redir *new_redir);
 void	free_redirections(t_redir *redirections);
+
+/* ============================= ASSIGNEMENTS ============================= */
+t_assignment	*create_assignment(char *key, char *value);
+t_assignment	*create_append_assignment(char *key, char *value);
+void			add_assignment(t_assignment **head, t_assignment *new_assign);
+void			free_assignments(t_assignment *assignments);
+int				is_assignment_word(char *str);
+int				split_assignment(char *assignment, char **key, char **value);
+int				is_append_assignment_word(const char *word);
+int				split_append_assignment(const char *assignment, char **key, char **value);
 
 /* ============================= BUILTINS ================================== */
 // builtin1.;
@@ -310,11 +326,6 @@ char	**ft_lstcmd_copy(t_cmd *cmd, int index, t_exec *exec);
 
 /* ============================= MISSING FUNCTIONS ======================== */
 
-/* Quote utilities */
-int		check_quotes(char *str);
-int		count_quotes(char *str, char quote_type);
-char	*remove_quotes(char *str);
-
 /* Error utilities */
 void	print_syntax_error(char *token);
 void	print_error(char *cmd, char *arg, char *msg);
@@ -323,11 +334,6 @@ void	print_error(char *cmd, char *arg, char *msg);
 void	print_tokens(t_token *tokens);
 void	print_commands(t_cmd *commands);
 
-/* Assignement */
-t_assignment	*create_assignment(char *key, char *value);
-void			add_assignment(t_assignment **head, t_assignment *new_assign);
-void			free_assignments(t_assignment *assignments);
-int				is_assignment_word(char *str);
-int				split_assignment(char *assignment, char **key, char **value);
+
 
 #endif
