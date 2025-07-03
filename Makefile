@@ -72,6 +72,7 @@ $(NAME): $(OBJS)
 $(LIBFT):
 	@echo " [ .. ] | Compiling libft.."
 	make -C libft || (echo "Error compiling libft" && exit 1)
+	make bonus -C libft || (echo "Error compiling libft bonus" && exit 1)
 	@echo " [ OK ] | Libft ready!"
 
 clean:
