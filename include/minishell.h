@@ -264,7 +264,8 @@ char	**copy_env_sorted(t_exec *exec);
 
 // new_var.c
 int		new_var(char *new_value, char *new_variable, t_exec *exec);
-int		replace_value_var(char *new_value, int i, char ***env);
+int		replace_value_var_or_add(char *new_value, int i, char ***env, int j);
+
 
 // unset.c
 int		malloc_allocations(char ***temp, int i, int size);
@@ -323,6 +324,7 @@ int		get_var_in_order(int index, t_exec *exec);
 
 // list.c
 int		ft_lstlen(t_cmd *cmd);
+int		ft_lstcmdlen(t_assignment *assignment);
 char	**ft_lstcmd_copy(t_cmd *cmd, int index, t_exec *exec);
 
 /* ============================= MISSING FUNCTIONS ======================== */

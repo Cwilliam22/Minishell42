@@ -6,7 +6,7 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:18:45 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/02 18:20:15 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/03 15:05:34 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,25 +25,22 @@ int	ft_lstlen(t_cmd *cmd)
 	return (i);
 }
 
-int	ft_lstcmdlen(t_cmd *cmd, int index)
+int	ft_lstcmdlen(t_assignment *assignment)
 {
 	int	i;
-	int	count;
 
 	i = 0;
-	count = 0;
-	while (i < index && cmd)
+	if (!assignment || !assignment->key)
+		return (0);
+	while (assignment)
 	{
-		cmd = cmd->next;
+		assignment = assignment->next;
 		i++;
 	}
-	if (!cmd || !cmd->args)
-		return (0);
-	while (cmd->args[count])
-		count++;
-	return (count);
+	return (i);
 }
 
+/*
 char	**ft_lstcmd_copy(t_cmd *cmd, int index, t_exec *exec)
 {
 	char	**command;
@@ -71,3 +68,4 @@ char	**ft_lstcmd_copy(t_cmd *cmd, int index, t_exec *exec)
 	command[j] = NULL;
 	return (command);
 }
+	*/

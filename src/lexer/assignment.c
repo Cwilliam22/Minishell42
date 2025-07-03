@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assignment.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:41:26 by alfavre           #+#    #+#             */
-/*   Updated: 2025/07/03 13:50:47 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/03 15:13:34 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_assignment	*create_assignment(char *key, char *value)
 		free(assign);
 		return (NULL);
 	}
+	assign->is_append = 0;
 	assign->next = NULL;
 	return (assign);
 }

@@ -6,7 +6,7 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:25:06 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/03 13:40:21 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/03 16:19:02 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,3 @@ int	builtin_pwd(t_shell *shell)
 	free(path);
 	return (exit_codes(shell, SUCCESS, ""), 1);
 }
-

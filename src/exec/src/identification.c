@@ -6,7 +6,7 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:44:01 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/02 18:59:19 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/03 16:19:47 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	its_a_builtin(t_shell *shell)
 	{"env", builtin_env},
 	{"exit", builtin_exit},
 	{NULL, NULL}};
-	
+
 	i = 0;
 	shell->exec->nbr_arg = ft_tablen_2d(shell->cmd_list->args);
 	while (tab_link[i].builtin != NULL)

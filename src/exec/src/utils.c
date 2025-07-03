@@ -6,7 +6,7 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:17:09 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/03 13:21:47 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/03 16:21:01 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,24 +142,5 @@ int	exit_codes(t_shell *shell, int out, char *str)
 	shell->exec->out = out;
 	if (str)
 		printf("%s", str);
-	return (1);
-}
-
-int	its_absolute_path(t_shell *shell)
-{
-	if (shell->cmd_list->args[0][0] == '/')
-		shell->exec->cmd_path = ft_strdup(shell->cmd_list->args[0]);
-	if (!shell->exec->cmd_path)
-		return (0);
-	return (1);
-}
-
-int	its_relative_path(t_shell *shell)
-{
-	if (shell->cmd_list->args[0][0] == '.'
-		&& shell->cmd_list->args[0][1] == '/')
-		shell->exec->cmd_path = ft_strdup(shell->cmd_list->args[0]);
-	if (!shell->exec->cmd_path)
-		return (0);
 	return (1);
 }
