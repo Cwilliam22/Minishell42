@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser_args.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 17:04:38 by alexis            #+#    #+#             */
-/*   Updated: 2025/07/04 17:07:08 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/06 14:20:36 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 static char	*process_token_value(t_token *current, t_shell *shell)
 {
@@ -35,7 +34,8 @@ static void	handle_assignment(char *arg, t_cmd *cmd)
 		free(key);
 		free(value);
 	}
-	else if (is_append_assignment_word(arg) && split_append_assignment(arg, &key, &value))
+	else if (is_append_assignment_word(arg)
+		&& split_append_assignment(arg, &key, &value))
 	{
 		assign = create_append_assignment(key, value);
 		if (assign)
@@ -45,7 +45,8 @@ static void	handle_assignment(char *arg, t_cmd *cmd)
 	}
 }
 
-static int	process_word_token(t_token *current, t_cmd *cmd, t_shell *shell, int *i)
+static int	process_word_token(t_token *current, t_cmd *cmd,
+	t_shell *shell, int *i)
 {
 	int		j;
 	char	*processed_value;
@@ -59,8 +60,8 @@ static int	process_word_token(t_token *current, t_cmd *cmd, t_shell *shell, int 
 		return (free(cmd->args), cmd->args = NULL, 0);
 	}
 	cmd->args[*i] = processed_value;
-	if (*i > 0 && cmd->args[0] && (ft_strcmp(cmd->args[0], "export") == 0 || 
-		ft_strcmp(cmd->args[0], "declare") == 0))
+	if (*i > 0 && cmd->args[0] && (ft_strcmp(cmd->args[0], "export") == 0
+			|| ft_strcmp(cmd->args[0], "declare") == 0))
 		handle_assignment(cmd->args[*i], cmd);
 	return ((*i)++, 1);
 }
@@ -75,7 +76,7 @@ static int	init_and_check_args(t_cmd *cmd, int word_count)
 
 int	extract_arguments(t_token *tokens, t_cmd *cmd, t_shell *shell)
 {
-	t_token	*current;
+	t_token	*curr;
 	int		word_count;
 	int		i;
 	int		skip_next;
@@ -83,21 +84,21 @@ int	extract_arguments(t_token *tokens, t_cmd *cmd, t_shell *shell)
 	word_count = count_words(tokens);
 	if (!init_and_check_args(cmd, word_count) || word_count == 0)
 		return (word_count == 0);
-	current = tokens;
+	curr = tokens;
 	i = 0;
 	skip_next = 0;
-	while (current && current->type != TOKEN_PIPE && i < word_count)
+	while (curr && curr->type != TOKEN_PIPE && i < word_count)
 	{
 		if (skip_next)
 			skip_next = 0;
-		else if (current->type == TOKEN_WORD || current->type == TOKEN_VAR)
+		else if (curr->type == TOKEN_WORD || curr->type == TOKEN_VAR)
 		{
-			if (!process_word_token(current, cmd, shell, &i))
+			if (!process_word_token(curr, cmd, shell, &i))
 				return (0);
 		}
-		else if (current->type >= TOKEN_REDIR_IN && current->type <= TOKEN_HEREDOC)
+		else if (curr->type >= TOKEN_REDIR_IN && curr->type <= TOKEN_HEREDOC)
 			skip_next = 1;
-		current = current->next;
+		curr = curr->next;
 	}
 	return (cmd->args[i] = NULL, 1);
 }

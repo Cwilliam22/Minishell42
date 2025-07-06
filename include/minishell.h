@@ -259,6 +259,8 @@ int		create_heredoc_pipe(const char *delimiter);
 t_redir	*create_redirection(int type, char *file);
 void	add_redirection(t_redir **head, t_redir *new_redir);
 void	free_redirections(t_redir *redirections);
+int		open_and_dup(const char *file, int flags, int stdfd);
+int		dup_and_close(int fd, int stdfd, const char *err);
 
 /* ============================= ASSIGNEMENTS ============================= */
 t_assignment	*create_assignment(char *key, char *value);
@@ -268,7 +270,8 @@ void			free_assignments(t_assignment *assignments);
 int				is_assignment_word(char *str);
 int				split_assignment(char *assignment, char **key, char **value);
 int				is_append_assignment_word(const char *word);
-int				split_append_assignment(const char *assignment, char **key, char **value);
+int				split_append_assignment(const char *assignment,
+					char **key, char **value);
 
 /* ============================= BUILTINS ================================== */
 // builtin1.;
