@@ -25,7 +25,11 @@ SRC_REDIR = src/exec/redir/
 FILES_REDIR = redir redir_utils
 
 SRC_LEXER = src/lexer/
-FILES_LEXER = 	lexer parser quotes assignment error expand \
+FILES_LEXER = 	lexer lexer_utils token_utils \
+				parser_args parser_redir parser cmd_utils \
+				quotes expand \
+				assignment append_assignment \
+				error check_token_syntax debug_token debug_cmds \
 
 SRC_SIGNALS = src/signals/
 FILES_SIGNALS = signals

@@ -174,16 +174,35 @@ int		get_signal_number(void);
 int		wait_child_with_signals(pid_t pid);
 
 /* ============================= LEXER ===================================== */
+/* Lexer */
 t_token	*tokenize(char *input);
+
+/* Token utilities */
 t_token	*create_token(char *value, int type);
 void	add_token(t_token **head, t_token *new_token);
 void	free_tokens(t_token *tokens);
 
+/* Lexer utilities */
+int		is_operator(char c);
+int		is_whitespace(char c);
+int		skip_whitespace(char *input, int i);
+char	*extract_word(char *input, int start, int *end);
+char	*extract_operator(char *input, int start, int *end);
+
 /* ============================= PARSER ==================================== */
-t_cmd	*parse_tokens(t_token *tokens, t_shell *shell);
+/* Command utils */
 t_cmd	*create_command(void);
 void	add_command(t_cmd **head, t_cmd *new_cmd);
 void	free_commands(t_cmd *commands);
+
+/* Argument parsing */
+int		extract_arguments(t_token *tokens, t_cmd *cmd, t_shell *shell);
+
+/* Redirection parsing */
+int		extract_redirections(t_token *tokens, t_cmd *cmd);
+
+/* Parser*/
+t_cmd	*parse_tokens(t_token *tokens, t_shell *shell);
 
 /* ============================= QUOTES ==================================== */
 char	*handle_quotes(char *str, t_shell *shell);
@@ -278,6 +297,10 @@ void	print_export_error(char *arg);
 void	perror_exit(char *msg);
 int		check_token_syntax(t_token *tokens);
 int		is_all_spaces(const char *s);
+
+/* ==================================== DEBUG ============================== */
+void	print_tokens(t_token *tokens);
+void	print_commands(t_cmd *commands);
 
 /* ============================= MEMORY MANAGEMENT ========================= */
 void	free_shell(t_shell *shell);

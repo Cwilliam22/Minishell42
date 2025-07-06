@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/07/03 15:51:11 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/04 16:32:26 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,10 +127,11 @@ static int	process_input(t_shell *shell, char *input)
 		return (1);
 	}
 
-	//print_tokens(shell->token_list);
+	print_tokens(shell->token_list);
 	
 	/* Check syntax errors */
-	if (check_token_syntax(shell->token_list) != 1)
+	int	error = check_token_syntax(shell->token_list);
+	if (error != 1)
 	{
 		shell->exit_status = 2;
 		free_tokens(shell->token_list);
@@ -139,7 +140,6 @@ static int	process_input(t_shell *shell, char *input)
 		shell->input_line = NULL;
 		return (1);
 	}
-	
 	/* Parse tokens into commands */
 	shell->cmd_list = parse_tokens(shell->token_list, shell);
 	if (!shell->cmd_list)
@@ -150,10 +150,7 @@ static int	process_input(t_shell *shell, char *input)
 		shell->input_line = NULL;
 		return (1);
 	}
-	
-	//print_commands(shell->cmd_list);
-
-	/* Execute the command pipeline */
+	print_commands(shell->cmd_list);
 	exec_result = ft_exec(shell);
 
 	if (shell->exec->exit == 1)
