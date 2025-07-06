@@ -6,7 +6,7 @@
 /*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:37:05 by root              #+#    #+#             */
-/*   Updated: 2025/07/06 11:50:27 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/06 17:17:23 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,15 @@ char	*expand_variables(char *str, t_shell *shell)
 	{
 		if (str[i] == '$' && str[i + 1])
 		{
-			var_name = extract_var_name(str + i + 1, &i);
-			var_value = get_env_var(var_name, shell);
-			result = join_and_free(result, var_value);
-			free(var_name);
+			if (str[i + 1] >= 1 && str[i + 1] <= 9)
+			{
+				var_name = extract_var_name(str + i + 1, &i);
+				var_value = get_env_var(var_name, shell);
+				result = join_and_free(result, var_value);
+				free(var_name);
+			}
+			else
+				result = append_char_to_str(result, str[i++]);
 		}
 		else
 			result = append_char_to_str(result, str[i++]);
