@@ -82,7 +82,7 @@ typedef struct s_assignment
 {
 	char					*key;
 	char					*value;
-	int						is_append; // 1 if append assignment (VAR+=value), 0 otherwise
+	int						is_append;
 	struct s_assignment		*next;
 }	t_assignment;
 
@@ -204,17 +204,29 @@ int		extract_redirections(t_token *tokens, t_cmd *cmd);
 /* Parser*/
 t_cmd	*parse_tokens(t_token *tokens, t_shell *shell);
 
-/* ============================= QUOTES ==================================== */
-char	*handle_quotes(char *str, t_shell *shell);
-char	*expand_variables(char *str, t_shell *shell);
-char	*get_env_value(char *key, t_shell *shell);
-int		count_quotes(char *str, char quote_type);
-char	*remove_quotes(char *str);
+/* Parser utilities */
+int		count_words(t_token *tokens);
 
-/* Quote utilities */
+/* ============================= QUOTES ==================================== */
+/* Quotes*/
+char	*get_env_value(char *key, t_shell *shell);
+char	*extract_var_name(char *str, int *index);
+char	*expand_variables(char *str, t_shell *shell);
+char	*handle_quotes(char *str, t_shell *shell);
 int		check_quotes(char *str);
-int		count_quotes(char *str, char quote_type);
-char	*remove_quotes(char *str);
+
+/* Quotes utilities */
+int		find_matching_quote(char *str, int start);
+char	*append_char_to_str(char *str, char c);
+char	*join_and_free(char *str1, char *str2);
+int		is_valid_var_char(char c);
+
+/* Quote helper */
+char	*process_unquoted_char(char *result, char *str,
+			int *index, t_shell *shell);
+char	*extract_unquoted_section(char *str, int *index);
+char	*process_quoted_section(char *result, char *str,
+			int *index, t_shell *shell);
 
 /* ============================= EXPAND ==================================== */
 int		needs_expansion(char *str);

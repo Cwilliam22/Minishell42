@@ -26,8 +26,9 @@ FILES_REDIR = redir redir_utils
 
 SRC_LEXER = src/lexer/
 FILES_LEXER = 	lexer lexer_utils token_utils \
-				parser_args parser_redir parser cmd_utils \
-				quotes expand \
+				parser_args parser_redir parser parser_utils cmd_utils \
+				quotes quotes_utils quotes_helpers \
+				expand \
 				assignment append_assignment \
 				error check_token_syntax debug_token debug_cmds \
 
