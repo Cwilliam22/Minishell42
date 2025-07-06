@@ -3,25 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/07/04 16:32:26 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/06 16:23:01 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "minishell.h"
 
-int ft_shlvl(t_exec *exec)
+int	ft_shlvl(t_exec *exec)
 {
-	int shlvl;
-	int place;
-	char *new_lvl;
+	int		shlvl;
+	int		place;
+	char	*new_lvl;
 
 	place = find_sth_in_env("SHLVL", exec->env);
 	if (place == -1)
-		return(0);
+		return (0);
 	shlvl = ft_atoi(find_value_in_env("SHLVL", exec));
 	shlvl++;
 	free(exec->env[place][1]);
@@ -31,16 +30,16 @@ int ft_shlvl(t_exec *exec)
 	return (1);
 }
 
-int ft_env(char **envp, t_exec *exec)
+int	ft_env(char **envp, t_exec *exec)
 {
 	if (!copy_env1(envp, exec))
 		return (0);
 	if (!ft_shlvl(exec))
 		return (0);
-  	if (!exec->env)
+	if (!exec->env)
 		return (0);
-  exec->nbr_var_env = ft_envlen(exec->env);
-  return (1);
+	exec->nbr_var_env = ft_envlen(exec->env);
+	return (1);
 }
 
 /**
@@ -55,17 +54,11 @@ static void	init_shell(t_shell *shell, char **envp, t_exec *exec)
 	shell->exit_status = 0;
 	shell->in_heredoc = 0;
 	shell->input_line = NULL;
-	
-	/*Initialize exec struct*/
 	init_all(exec);
-	
-	/* Initialize environment variables */
 	exec->env = NULL;
 	exec->out = 0;
 	ft_env(envp, exec);
 	shell->exec = exec;
-	
-	/* Set up signal handlers */
 	setup_signals();
 }
 
@@ -102,23 +95,17 @@ static int	process_input(t_shell *shell, char *input)
 {
 	int	exec_result;
 	int	signal_exit_code;
+	int	error;
 
-	/* Skip empty lines */
 	if (!input || !*input || ft_strlen(input) == 0)
 		return (1);
-	
-	/* Add to history if not empty */
 	add_history(input);
-	
-	/* Store input line in shell structure */
 	shell->input_line = ft_strdup(input);
 	if (!shell->input_line)
 	{
 		print_error("minishell", NULL, "malloc failed");
 		return (1);
 	}
-	
-	/* Tokenize the input */
 	shell->token_list = tokenize(shell->input_line);
 	if (!shell->token_list)
 	{
@@ -126,11 +113,8 @@ static int	process_input(t_shell *shell, char *input)
 		shell->input_line = NULL;
 		return (1);
 	}
-
-	print_tokens(shell->token_list);
-	
-	/* Check syntax errors */
-	int	error = check_token_syntax(shell->token_list);
+	//print_tokens(shell->token_list);
+	error = check_token_syntax(shell->token_list);
 	if (error != 1)
 	{
 		shell->exit_status = 2;
@@ -140,7 +124,6 @@ static int	process_input(t_shell *shell, char *input)
 		shell->input_line = NULL;
 		return (1);
 	}
-	/* Parse tokens into commands */
 	shell->cmd_list = parse_tokens(shell->token_list, shell);
 	if (!shell->cmd_list)
 	{
@@ -150,22 +133,18 @@ static int	process_input(t_shell *shell, char *input)
 		shell->input_line = NULL;
 		return (1);
 	}
-	print_commands(shell->cmd_list);
+	//print_commands(shell->cmd_list);
 	exec_result = ft_exec(shell);
-
 	if (shell->exec->exit == 1)
 	{
-		/* If exit command was executed, clean up and exit */
 		free_commands(shell->cmd_list);
 		shell->cmd_list = NULL;
 		free_tokens(shell->token_list);
 		shell->token_list = NULL;
 		free(shell->input_line);
 		shell->input_line = NULL;
-		return (0); /* Signal to exit */
+		return (0);
 	}
-	
-	/* Check if we should exit */
 	signal_exit_code = check_and_handle_signal();
 	if (signal_exit_code != 0)
 		shell->exit_status = signal_exit_code;
@@ -173,24 +152,20 @@ static int	process_input(t_shell *shell, char *input)
 		shell->exit_status = exec_result;
 	if (exec_result == -1)
 	{
-		/* Clean up for next iteration */
 		free_commands(shell->cmd_list);
 		shell->cmd_list = NULL;
 		free_tokens(shell->token_list);
 		shell->token_list = NULL;
 		free(shell->input_line);
 		shell->input_line = NULL;
-		return (0); /* Signal to exit */
+		return (0);
 	}
-	
-	/* Clean up for next iteration */
 	free_commands(shell->cmd_list);
 	shell->cmd_list = NULL;
 	free_tokens(shell->token_list);
 	shell->token_list = NULL;
 	free(shell->input_line);
 	shell->input_line = NULL;
-	
 	return (1);
 }
 
@@ -208,35 +183,22 @@ static void	shell_loop(t_shell *shell)
 	setup_interactive_signals();
 	while (continue_loop)
 	{
-		/* Reset signal flag */
 		g_signal_received = 0;
-
-		/*Be sure to be in interactif mode*/
 		setup_interactive_signals();
-		
-		/* Read input from user */
 		input = readline(PROMPT);
-		
-		/* Handle EOF (ctrl-D) */
 		if (!input)
 		{
 			printf("exit\n");
 			break ;
 		}
-		
-		/* Handle signal interruption */
 		signal_exit_code = check_and_handle_signal();
 		if (signal_exit_code != 0)
 		{
 			shell->exit_status = signal_exit_code;
 			free(input);
-			continue;
+			break ;
 		}
-		
-		/* Process the input */
 		continue_loop = process_input(shell, input);
-		
-		/* Free the input line */
 		free(input);
 	}
 }
@@ -294,26 +256,14 @@ int	main(int argc, char **argv, char **envp)
 	t_shell	shell;
 	t_exec	exec;
 
-	/* Handle command line arguments */
 	if (handle_arguments(argc, argv))
 		return (1);
-	
-	/* Initialize shell */
 	init_shell(&shell, envp, &exec);
-	
-	/* Print welcome message only in interactive mode */
 	if (isatty(STDIN_FILENO))
 		print_welcome();
-	
-	/* Main shell loop */
 	shell_loop(&shell);
-	
-	/* Store exit status before cleanup */
 	shell.exit_status = shell.exec->out;
-	
-	/* Cleanup and exit */
 	cleanup_shell(&shell);
 	rl_clear_history();
-	
 	return (shell.exit_status);
 }

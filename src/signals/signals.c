@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:10:39 by root              #+#    #+#             */
-/*   Updated: 2025/06/19 11:10:41 by root             ###   ########.fr       */
+/*   Updated: 2025/07/06 16:23:17 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,6 @@
 
 /* Variable globale unique qui encode TOUT l'état des signaux */
 int	g_signal_received = 0;
-
-/* ═══════════════════════════════════════════════════════════════════ */
-/*                    DÉCLARATIONS DES HANDLERS                       */
-/* ═══════════════════════════════════════════════════════════════════ */
 
 static void	handle_sigint_heredoc(int sig);
 
@@ -133,15 +129,13 @@ int	check_and_handle_signal(void)
 	int	exit_code;
 
 	signal_num = g_signal_received;
-	g_signal_received = 0;  /* Reset */
-	
+	g_signal_received = 0;
 	if (signal_num == SIGINT)
 		exit_code = 130;
 	else if (signal_num == SIGQUIT)
 		exit_code = 131;
 	else
 		exit_code = 0;
-	
 	return (exit_code);
 }
 
