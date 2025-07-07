@@ -6,7 +6,7 @@
 /*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:37:05 by root              #+#    #+#             */
-/*   Updated: 2025/07/07 11:40:50 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/07 11:42:06 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ char	*extract_var_name(char *str, int *index)
 	var_name = ft_substr(str, 0, len);
 	return (var_name);
 }
+
 
 static char	*process_variable(char *str, int *i, t_shell *shell)
 {
