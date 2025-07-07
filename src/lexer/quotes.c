@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:37:05 by root              #+#    #+#             */
-/*   Updated: 2025/07/06 17:17:23 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/07 10:00:07 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,13 @@ char	*extract_var_name(char *str, int *index)
 	if (str[0] == '?')
 		return (*index += 2, ft_strdup("?"));
 	if (ft_isdigit(str[0]))
-		return (*index += 2, ft_substr(str, 0, 1));
+	{
+		*index += 2;
+		var_name = ft_substr(str, 0, 1);
+		return (var_name);
+	}
 	if (!ft_isalpha(str[0]) && str[0] != '_')
-		return (*index += 1, ft_strdup(""));
+		return (ft_strdup(""));
 	len = 0;
 	while (str[len] && (ft_isalnum(str[len]) || str[len] == '_'))
 		len++;
@@ -83,15 +87,18 @@ char	*expand_variables(char *str, t_shell *shell)
 	{
 		if (str[i] == '$' && str[i + 1])
 		{
-			if (str[i + 1] >= 1 && str[i + 1] <= 9)
+			var_name = extract_var_name(str + i + 1, &i);
+			if (var_name && var_name[0] != '\0')
 			{
-				var_name = extract_var_name(str + i + 1, &i);
 				var_value = get_env_var(var_name, shell);
 				result = join_and_free(result, var_value);
-				free(var_name);
 			}
 			else
-				result = append_char_to_str(result, str[i++]);
+			{
+				result = append_char_to_str(result, '$');
+				i++;
+			}
+			free(var_name);
 		}
 		else
 			result = append_char_to_str(result, str[i++]);
