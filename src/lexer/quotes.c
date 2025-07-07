@@ -6,34 +6,11 @@
 /*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:37:05 by root              #+#    #+#             */
-/*   Updated: 2025/07/07 10:00:07 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/07 11:40:50 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/**
- * Get environment variable value
- * @param key: Variable name
- * @param shell: Shell structure
- * @return: Variable value or empty string if not found
- */
-char	*get_env_var(char *key, t_shell *shell)
-{
-	t_exec	*current;
-	int		env_index;
-
-	if (!key || !shell)
-		return (ft_strdup(""));
-	if (ft_strcmp(key, "?") == 0)
-		return (ft_itoa(shell->exit_status));
-	current = shell->exec;
-	env_index = find_sth_in_env(key, current->env);
-	if (env_index >= 0)
-		return (find_value_in_env(key, current));
-	else
-		return (ft_strdup(""));
-}
 
 /**
  * Extract variable name from string and update index
@@ -66,17 +43,40 @@ char	*extract_var_name(char *str, int *index)
 	return (var_name);
 }
 
+static char	*process_variable(char *str, int *i, t_shell *shell)
+{
+	char	*var_name;
+	char	*var_value;
+	char	*result;
+
+	var_name = extract_var_name(str + *i + 1, i);
+	if (var_name && var_name[0] != '\0')
+	{
+		var_value = get_env_var(var_name, shell);
+		if (var_value)
+			result = ft_strdup(var_value);
+		else
+			result = ft_strdup("");
+	}
+	else
+	{
+		result = ft_strdup("$");
+		(*i)++;
+	}
+	free(var_name);
+	return (result);
+}
+
 /**
- * Expand variables in string (handle $ expansions)
- * @param str: String to expand
+ * Expand variables in a string
+ * @param str: Input string
  * @param shell: Shell structure
- * @return: Expanded string or NULL on error
+ * @return: New string with variables expanded
  */
 char	*expand_variables(char *str, t_shell *shell)
 {
 	char	*result;
-	char	*var_name;
-	char	*var_value;
+	char	*temp;
 	int		i;
 
 	if (!str)
@@ -87,18 +87,8 @@ char	*expand_variables(char *str, t_shell *shell)
 	{
 		if (str[i] == '$' && str[i + 1])
 		{
-			var_name = extract_var_name(str + i + 1, &i);
-			if (var_name && var_name[0] != '\0')
-			{
-				var_value = get_env_var(var_name, shell);
-				result = join_and_free(result, var_value);
-			}
-			else
-			{
-				result = append_char_to_str(result, '$');
-				i++;
-			}
-			free(var_name);
+			temp = process_variable(str, &i, shell);
+			result = join_and_free(result, temp);
 		}
 		else
 			result = append_char_to_str(result, str[i++]);

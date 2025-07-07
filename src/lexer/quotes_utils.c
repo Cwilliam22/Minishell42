@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 11:24:27 by alfavre           #+#    #+#             */
-/*   Updated: 2025/07/06 11:50:50 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/07 11:41:02 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,4 +88,27 @@ char	*join_and_free(char *str1, char *str2)
 int	is_valid_var_char(char c)
 {
 	return (ft_isalnum(c) || c == '_' || c == '?');
+}
+
+/**
+ * Get environment variable value
+ * @param key: Variable name
+ * @param shell: Shell structure
+ * @return: Variable value or empty string if not found
+ */
+char	*get_env_var(char *key, t_shell *shell)
+{
+	t_exec	*current;
+	int		env_index;
+
+	if (!key || !shell)
+		return (ft_strdup(""));
+	if (ft_strcmp(key, "?") == 0)
+		return (ft_itoa(shell->exit_status));
+	current = shell->exec;
+	env_index = find_sth_in_env(key, current->env);
+	if (env_index >= 0)
+		return (find_value_in_env(key, current));
+	else
+		return (ft_strdup(""));
 }

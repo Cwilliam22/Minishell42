@@ -209,7 +209,6 @@ int		count_words(t_token *tokens);
 
 /* ============================= QUOTES ==================================== */
 /* Quotes*/
-char	*get_env_value(char *key, t_shell *shell);
 char	*extract_var_name(char *str, int *index);
 char	*expand_variables(char *str, t_shell *shell);
 char	*handle_quotes(char *str, t_shell *shell);
@@ -220,6 +219,7 @@ int		find_matching_quote(char *str, int start);
 char	*append_char_to_str(char *str, char c);
 char	*join_and_free(char *str1, char *str2);
 int		is_valid_var_char(char c);
+char	*get_env_var(char *key, t_shell *shell);
 
 /* Quote helper */
 char	*process_unquoted_char(char *result, char *str,
