@@ -6,15 +6,15 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 19:00:07 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/02 19:00:09 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/08 19:56:12 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/libft.h"
 
-int ft_search_char(char *str, char c)
+int	ft_search_char(char *str, char c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])

@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   ft_arraylen.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt <williamcapt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:29:57 by wcapt             #+#    #+#             */
-/*   Updated: 2025/04/10 15:31:14 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/08 19:58:59 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/libft.h"
 
-int ft_arraylen(char **array)
+int	ft_arraylen(char **array)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (array[i])
-        i++;
-    return (i);
+	i = 0;
+	while (array[i])
+		i++;
+	return (i);
 }
