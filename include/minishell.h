@@ -236,6 +236,7 @@ void	expand_command_args(t_cmd *cmd, t_shell *shell);
 /* ============================= EXECUTOR ================================== */
 int		ft_exec(t_shell *shell);
 void	init_all(t_exec *exec);
+void	init_exec(t_shell *shell);
 int		identification(t_shell *shell);
 int		its_a_builtin(t_shell *shell);
 int		execute_externe(char **args, t_shell *shell);
@@ -244,11 +245,13 @@ char	**set_my_fucking_error(t_exec *exec);
 /* ============================= PATH ================================== */
 int		find_var_path(char ***env);
 char	*read_in_path(char ***env, int place);
+int		find_in_path(t_shell *shell, char **paths, int flag);
 int		apply_path(t_shell *shell);
 int		command_exist(t_shell *shell);
 
 /* ============================= PIPES ===================================== */
 int		pipeline(t_shell *shell);
+int		exec_pipe(t_shell *shell, int i, int **pipes, pid_t *pids);
 int		execute_pipeline(t_shell *shell, int **pipes);
 int		close_pipes(int **pipes, t_exec *exec);
 

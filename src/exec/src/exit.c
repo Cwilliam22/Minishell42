@@ -6,21 +6,14 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:23:34 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/08 14:24:05 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/08 16:19:53 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	builtin_exit(t_shell *shell)
+int	conditions_exit(t_exec *exec, int number, char **arg)
 {
-	char	**arg;
-	t_exec	*exec;
-	int		number;
-
-	arg = shell->cmd_list->args;
-	exec = shell->exec;
-	ft_printf("exit\n");
 	if (exec->nbr_arg == 1)
 		exec->out = 0;
 	else if (exec->nbr_arg == 2)
@@ -45,6 +38,21 @@ int	builtin_exit(t_shell *shell)
 		ft_printf("bash: exit: %s: numeric argument required\n", arg[1]);
 		exec->out = 2;
 	}
+	return (1);
+}
+
+int	builtin_exit(t_shell *shell)
+{
+	char	**arg;
+	t_exec	*exec;
+	int		number;
+
+	arg = shell->cmd_list->args;
+	exec = shell->exec;
+	number = 0;
+	ft_printf("exit\n");
+	if (!conditions_exit(exec, number, arg))
+		return (0);
 	free_all_env(exec);
 	shell->exec->exit = 1;
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:17:24 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/02 18:17:26 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/08 17:06:00 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,8 @@ int	pipeline(t_shell *shell)
 	return (1);
 }
 
-int	execute_pipeline(t_shell *shell, int **pipes)
+int	exec_pipe(t_shell *shell, int i, int **pipes, pid_t *pids)
 {
-	pid_t	*pids;
-	int		i;
-	int		status;
-
-	i = 0;
-	pids = malloc(sizeof(pid_t) * shell->exec->nbr_process);
-	if (!pids)
-		return (ft_printf("Error malloc pids\n"), 0);
 	while (i < shell->exec->nbr_process && shell->cmd_list)
 	{
 		pids[i] = fork();
@@ -64,6 +56,21 @@ int	execute_pipeline(t_shell *shell, int **pipes)
 		shell->cmd_list = shell->cmd_list->next;
 		i++;
 	}
+	return (1);
+}
+
+int	execute_pipeline(t_shell *shell, int **pipes)
+{
+	pid_t	*pids;
+	int		i;
+	int		status;
+
+	i = 0;
+	pids = malloc(sizeof(pid_t) * shell->exec->nbr_process);
+	if (!pids)
+		return (ft_printf("Error malloc pids\n"), 0);
+	if (!exec_pipe(shell, i, pipes, pids))
+		return (0);
 	close_pipes(pipes, shell->exec);
 	i = 0;
 	while (i < shell->exec->nbr_process)
@@ -91,8 +98,3 @@ int	close_pipes(int **pipes, t_exec *exec)
 	}
 	return (1);
 }
-
-// exit(0) au cas ou il ne trouve pas la commande,
-	// qu'il continue a executer le code dans le child 
-// i == 0 (pas de stdin)
-// i == nb_process - 1 (pas de stdout)

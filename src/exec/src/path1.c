@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   path.c                                             :+:      :+:    :+:   */
+/*   path1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:17:34 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/08 15:05:36 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/08 17:44:53 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,6 @@ char	*read_in_path(char ***env, int place)
 int	apply_path(t_shell *shell)
 {
 	char	**paths;
-	char	*test_path;
-	char	*tmp;
-	int		i;
 
 	paths = ft_split(read_in_path(shell->exec->env,
 				find_var_path(shell->exec->env)), ':');
@@ -66,74 +63,7 @@ int	apply_path(t_shell *shell)
 		shell->exec->cmd_path = NULL;
 		return (ft_printf("No PATH variable found!\n"), 0);
 	}
-	i = 0;
-	while (paths[i])
-	{
-		tmp = ft_strjoin(paths[i], "/");
-		test_path = ft_strjoin(tmp, shell->exec->cmd);
-		free(tmp);
-		if (access(test_path, X_OK) == 0)
-		{
-			shell->exec->cmd_path = test_path;
-			free_array(paths);
-			return (1);
-		}
-		free(test_path);
-		i++;
-	}
-	free_array(paths);
-	return (exit_codes(shell, 127, NULL), 0);
-}
-
-int	its_absolute_path(t_shell *shell)
-{
-	if (shell->cmd_list->args[0][0] == '/')
-		shell->exec->cmd_path = ft_strdup(shell->cmd_list->args[0]);
-	if (!shell->exec->cmd_path)
-		return (0);
-	return (1);
-}
-
-int	its_relative_path(t_shell *shell)
-{
-	if (shell->cmd_list->args[0][0] == '.'
-		&& shell->cmd_list->args[0][1] == '/')
-		shell->exec->cmd_path = ft_strdup(shell->cmd_list->args[0]);
-	if (!shell->exec->cmd_path)
-		return (0);
-	return (1);
-}
-
-int	command_exist(t_shell *shell)
-{
-	char	**paths;
-	char	*test_path;
-	char	*tmp;
-	int		i;
-
-	paths = ft_split(read_in_path(shell->exec->env,
-				find_var_path(shell->exec->env)), ':');
-	if (!paths || !paths[0])
-	{
-		free_array(paths);
-		shell->exec->cmd_path = NULL;
-		return (ft_printf("No PATH variable found!\n"), 0);
-	}
-	i = 0;
-	while (paths[i])
-	{
-		tmp = ft_strjoin(paths[i], "/");
-		test_path = ft_strjoin(tmp, shell->exec->cmd);
-		free(tmp);
-		if (access(test_path, F_OK) == 0)
-		{
-			shell->exec->cmd_path = test_path;
-			free_array(paths);
-			return (1);
-		}
-		free(test_path);
-		i++;
-	}
-	free_array(paths);
+	if (find_in_path(shell, paths, X_OK))
+		return (1);
 	return (exit_codes(shell, 127, NULL), 0);
 }

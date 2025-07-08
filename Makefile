@@ -15,9 +15,9 @@ LIB = -Llibft -lft
 
 # Fichiers sources
 SRC_EXEC = src/exec/src/
-FILES_EXEC = exec path copy_env \
-			utils identification builtin1 \
-			builtin2 free len \
+FILES_EXEC = exec path1 path2 copy_env \
+			utils identification pwd \
+			env free len cd its\
 			export get echo exit\
 			pipe list check_utils unset\
 

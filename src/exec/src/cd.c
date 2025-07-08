@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin1.c                                         :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:25:06 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/03 16:19:02 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/08 16:12:32 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,4 @@ int	builtin_cd(t_shell *shell)
 		ft_printf("bash: cd: no such file or directory: %s\n", path);
 	}
 	return (exit_codes(shell, GENERAL_ERROR, ""), 0);
-}
-
-int	builtin_pwd(t_shell *shell)
-{
-	char	*path;
-
-	path = getcwd(NULL, 0);
-	if (!path)
-		return (0);
-	printf("%s\n", path);
-	free(shell->exec->oldpwd);
-	free(path);
-	return (exit_codes(shell, SUCCESS, ""), 1);
 }

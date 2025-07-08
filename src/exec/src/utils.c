@@ -6,7 +6,7 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:17:09 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/03 16:21:01 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/08 16:56:13 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,39 +102,6 @@ void	change_oldpwd_or_pwd(t_exec *exec, int option)
 		free(exec->env[index][1]);
 		exec->env[index][1] = ft_strdup(exec->pwd);
 	}
-}
-
-int	is_a_valid_identifier(char *arg)
-{
-	int	i;
-
-	i = 0;
-	if (!ft_isalpha((int)arg[i]))
-		return (0);
-	while (arg[i])
-	{
-		if (!ft_isalpha((int)arg[i]) || !ft_isdigit((int)arg[i])
-			|| arg[i] != '-')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-int	look_at_identifier(t_shell *shell)
-{
-	int		i;
-	char	**args;
-
-	i = 0;
-	args = shell->cmd_list->args;
-	while (args[i])
-	{
-		if (!is_a_valid_identifier(args[i]))
-			return (exit_codes(shell, GENERAL_ERROR, ""), 0);
-		i++;
-	}
-	return (exit_codes(shell, SUCCESS, ""), 1);
 }
 
 int	exit_codes(t_shell *shell, int out, char *str)

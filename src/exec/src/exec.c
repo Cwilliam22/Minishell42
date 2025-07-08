@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:42:25 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/08 14:07:56 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/08 17:44:12 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,20 +146,29 @@ static int	check_args(t_shell *shell)
 	return (1);
 }
 
-int	ft_exec(t_shell *shell)
+void	init_exec(t_shell *shell)
 {
-	init_all(shell->exec);
-	// Faire une fonction init exec !!!
 	shell->exec->oldpwd = ft_strdup(getcwd(NULL, 0));
 	shell->exec->pwd = ft_strdup(getcwd(NULL, 0));
 	shell->exec->nbr_var_env = ft_envlen(shell->exec->env);
 	shell->exec->nbr_process = ft_lstlen(shell->cmd_list);
 	shell->exec->nbr_pipes = shell->exec->nbr_process - 1;
+}
+
+void	var_path(t_shell *shell)
+{
 	if (find_var_path(shell->exec->env) >= 0)
 		shell->exec->path
 			= ft_strdup(shell->exec->env[find_var_path(shell->exec->env)][1]);
 	else
 		shell->exec->path = NULL;
+}
+
+int	ft_exec(t_shell *shell)
+{
+	init_all(shell->exec);
+	init_exec(shell);
+	var_path(shell);
 	if (shell->exec->nbr_process == 1)
 	{
 		if (its_absolute_path(shell))
@@ -179,7 +188,5 @@ int	ft_exec(t_shell *shell)
 		if (!pipeline(shell))
 			return (ft_printf("Not a command valid\n"), 1);
 	}
-	free_var(shell->exec);
-	//printf("Exit status: %d\n", shell->exec->out);
-	return (shell->exec->out);
+	return (free_var(shell->exec), shell->exec->out);
 }
