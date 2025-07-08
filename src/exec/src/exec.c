@@ -6,7 +6,7 @@
 /*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:42:25 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/08 13:56:56 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/08 14:07:56 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ static int	check_args(t_shell *shell)
 	if (!shell || !shell->cmd_list || !shell->cmd_list->args)
 		return (ft_printf("Error: Shell or command list is NULL\n"), 1);
 	process = shell->cmd_list->args;
-	if (!process || !process[0] || !process[0][0])
+	if (!process || !process[0] || !process[0][0] || is_all_spaces(process[0]))
 	{
 		if (process[0] && process[0][0] == '\0')
 			printf("Command '%s' not found\n", process[0]);
