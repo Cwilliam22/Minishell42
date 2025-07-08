@@ -6,7 +6,7 @@
 /*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:42:25 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/08 11:46:48 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/08 13:56:56 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,25 @@ int	main(int argc, char **argv, char **envp)
 }
 */
 
+static int	check_args(t_shell *shell)
+{
+	char	**process;
+
+	if (!shell || !shell->cmd_list || !shell->cmd_list->args)
+		return (ft_printf("Error: Shell or command list is NULL\n"), 1);
+	process = shell->cmd_list->args;
+	if (!process || !process[0] || !process[0][0])
+	{
+		if (process[0] && process[0][0] == '\0')
+			printf("Command '%s' not found\n", process[0]);
+		else if (is_all_spaces(process[0]))
+			printf("%s: command not found\n", process[0]);
+		exit_codes(shell, 127, NULL);
+		return (0);
+	}
+	return (1);
+}
+
 int	ft_exec(t_shell *shell)
 {
 	init_all(shell->exec);
@@ -148,8 +167,11 @@ int	ft_exec(t_shell *shell)
 		if (its_relative_path(shell))
 			shell->exec->rel_path = 1;
 		shell->exec->is_pipe = 0;
-		if (!identification(shell))
-			return (shell->exec->out);
+		if (check_args(shell))
+		{
+			if (!identification(shell))
+				return (shell->exec->out);
+		}
 	}
 	else if (shell->exec->nbr_process > 1)
 	{
@@ -159,5 +181,5 @@ int	ft_exec(t_shell *shell)
 	}
 	free_var(shell->exec);
 	//printf("Exit status: %d\n", shell->exec->out);
-	return (0);
+	return (shell->exec->out);
 }

@@ -6,7 +6,7 @@
 /*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:44:01 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/08 11:48:12 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/08 13:20:30 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,6 @@ int	identification(t_shell *shell)
 	saved_stdin = dup(STDIN_FILENO);
 	process = shell->cmd_list->args;
 	apply_redir_result = apply_redirections(shell->cmd_list->redirections);
-	shell->exec->cmd = ft_strdup(shell->cmd_list->args[0]);
-	if (!process || !process[0] || process[0][0] == '\0'
-		|| is_all_spaces(process[0]))
-	{
-		printf("Command %s not found\n", process[0]);
-		shell->exec->out = 127;
-		return (0);
-	}
 	shell->exec->cmd = ft_strdup(shell->cmd_list->args[0]);
 	if (!shell->exec->cmd)
 		return (clear_std(saved_stdout, saved_stdin), 0);
