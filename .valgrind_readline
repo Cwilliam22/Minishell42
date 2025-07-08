@@ -11,10 +11,3 @@
    ...
    fun:add_history
 }
-
-{
-   rl_initialize_leak
-   Memcheck:Leak
-   ...
-   fun:rl_initialize
-}

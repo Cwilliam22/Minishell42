@@ -80,6 +80,17 @@ $(LIBFT):
 	make bonus -C libft || (echo "Error compiling libft bonus" && exit 1)
 	@echo " [ OK ] | Libft ready!"
 
+# Exécution avec valgrind (Linux uniquement)
+valgrind:
+ifeq ($(shell uname), Linux)
+	@echo "Running with valgrind..."
+	valgrind --leak-check=full --log-file=valgrind.log --show-leak-kinds=all --track-fds=all --default-suppressions=yes --suppressions=.valgrind_readline ./$(NAME)
+else
+	@echo "Valgrind is only available on Linux"
+	@echo "Running normally..."
+	./$(NAME)
+endif
+
 clean:
 	make $@ -C libft
 	@rm -rf $(OBJ_DIR)

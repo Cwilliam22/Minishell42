@@ -6,7 +6,7 @@
 /*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 14:34:20 by alexis            #+#    #+#             */
-/*   Updated: 2025/07/04 14:50:35 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/08 21:39:57 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,18 +59,32 @@ char	*extract_word(char *input, int start, int *end)
 	char	*word;
 
 	i = start;
-	if (input[i] == '\'' || input[i] == '"')
+	quote_char = '\0';
+	
+	while (input[i])
 	{
-		quote_char = input[i++];
-		while (input[i] && input[i] != quote_char)
-			i++;
-		if (input[i] == quote_char)
-			i++;
-	}
-	else
-	{
-		while (input[i] && !is_whitespace(input[i]) && !is_operator(input[i]))
-			i++;
+		if (quote_char == '\0')
+		{
+			if (input[i] == '\'' || input[i] == '"')
+			{
+				quote_char = input[i];
+				i++;
+			}
+			else if (is_whitespace(input[i]) || is_operator(input[i]))
+				break;
+			else
+				i++;
+		}
+		else
+		{
+			if (input[i] == quote_char)
+			{
+				quote_char = '\0';
+				i++;
+			}
+			else
+				i++;
+		}
 	}
 	*end = i;
 	word = malloc(i - start + 1);
