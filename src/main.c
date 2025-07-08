@@ -6,7 +6,7 @@
 /*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/07/06 16:23:01 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/08 11:03:48 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,7 @@ static int	process_input(t_shell *shell, char *input)
 		shell->input_line = NULL;
 		return (0);
 	}
+	printf("%d\n", exec_result);
 	signal_exit_code = check_and_handle_signal();
 	if (signal_exit_code != 0)
 		shell->exit_status = signal_exit_code;

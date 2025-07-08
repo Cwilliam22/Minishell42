@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:42:25 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/02 18:43:41 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/08 11:46:48 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ int	ft_exec(t_shell *shell)
 			shell->exec->rel_path = 1;
 		shell->exec->is_pipe = 0;
 		if (!identification(shell))
-			return (ft_printf("Not a command valid\n"), 1);
+			return (shell->exec->out);
 	}
 	else if (shell->exec->nbr_process > 1)
 	{

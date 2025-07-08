@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   identification.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:44:01 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/03 16:19:47 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/08 11:48:12 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,9 @@ int	identification(t_shell *shell)
 	if (!process || !process[0] || process[0][0] == '\0'
 		|| is_all_spaces(process[0]))
 	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		if (process && process[0])
-			ft_putstr_fd(process[0], STDERR_FILENO);
-		ft_putstr_fd(": command not found\n", STDERR_FILENO);
-		exit(127);
+		printf("Command %s not found\n", process[0]);
+		shell->exec->out = 127;
+		return (0);
 	}
 	shell->exec->cmd = ft_strdup(shell->cmd_list->args[0]);
 	if (!shell->exec->cmd)
