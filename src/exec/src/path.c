@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:17:34 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/08 14:58:51 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/08 15:05:36 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,16 +72,6 @@ int	apply_path(t_shell *shell)
 		tmp = ft_strjoin(paths[i], "/");
 		test_path = ft_strjoin(tmp, shell->exec->cmd);
 		free(tmp);
-		printf("test_path %s\n", test_path);
-		int access_result = access(test_path, F_OK);
-		printf("acces %d\n", access_result);
-		if (access(test_path, F_OK) == -1)
-		{
-			return (exit_codes(shell, 127, NULL),
-				free(test_path), free_array(paths), 0);
-		}
-		access_result = access(test_path, X_OK);
-		printf("acces %d\n", access_result);
 		if (access(test_path, X_OK) == 0)
 		{
 			shell->exec->cmd_path = test_path;
@@ -112,4 +102,38 @@ int	its_relative_path(t_shell *shell)
 	if (!shell->exec->cmd_path)
 		return (0);
 	return (1);
+}
+
+int	command_exist(t_shell *shell)
+{
+	char	**paths;
+	char	*test_path;
+	char	*tmp;
+	int		i;
+
+	paths = ft_split(read_in_path(shell->exec->env,
+				find_var_path(shell->exec->env)), ':');
+	if (!paths || !paths[0])
+	{
+		free_array(paths);
+		shell->exec->cmd_path = NULL;
+		return (ft_printf("No PATH variable found!\n"), 0);
+	}
+	i = 0;
+	while (paths[i])
+	{
+		tmp = ft_strjoin(paths[i], "/");
+		test_path = ft_strjoin(tmp, shell->exec->cmd);
+		free(tmp);
+		if (access(test_path, F_OK) == 0)
+		{
+			shell->exec->cmd_path = test_path;
+			free_array(paths);
+			return (1);
+		}
+		free(test_path);
+		i++;
+	}
+	free_array(paths);
+	return (exit_codes(shell, 127, NULL), 0);
 }

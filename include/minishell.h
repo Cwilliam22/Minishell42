@@ -245,6 +245,7 @@ char	**set_my_fucking_error(t_exec *exec);
 int		find_var_path(char ***env);
 char	*read_in_path(char ***env, int place);
 int		apply_path(t_shell *shell);
+int		command_exist(t_shell *shell);
 
 /* ============================= PIPES ===================================== */
 int		pipeline(t_shell *shell);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/07/08 12:56:46 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/08 14:07:27 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ static int	process_input(t_shell *shell, char *input)
 		shell->input_line = NULL;
 		return (1);
 	}
-	print_tokens(shell->token_list);
+	//print_tokens(shell->token_list);
 	error = check_token_syntax(shell->token_list);
 	if (error != 1)
 	{
@@ -133,7 +133,7 @@ static int	process_input(t_shell *shell, char *input)
 		shell->input_line = NULL;
 		return (1);
 	}
-	print_commands(shell->cmd_list);
+	//print_commands(shell->cmd_list);
 	exec_result = ft_exec(shell);
 	if (shell->exec->exit == 1)
 	{
@@ -145,7 +145,7 @@ static int	process_input(t_shell *shell, char *input)
 		shell->input_line = NULL;
 		return (0);
 	}
-	printf("%d\n", exec_result);
+	//printf("%d\n", exec_result);
 	signal_exit_code = check_and_handle_signal();
 	if (signal_exit_code != 0)
 		shell->exit_status = signal_exit_code;
