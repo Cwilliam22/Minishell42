@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:17:34 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/03 16:20:54 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/08 14:58:51 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,16 @@ int	apply_path(t_shell *shell)
 		tmp = ft_strjoin(paths[i], "/");
 		test_path = ft_strjoin(tmp, shell->exec->cmd);
 		free(tmp);
+		printf("test_path %s\n", test_path);
+		int access_result = access(test_path, F_OK);
+		printf("acces %d\n", access_result);
+		if (access(test_path, F_OK) == -1)
+		{
+			return (exit_codes(shell, 127, NULL),
+				free(test_path), free_array(paths), 0);
+		}
+		access_result = access(test_path, X_OK);
+		printf("acces %d\n", access_result);
 		if (access(test_path, X_OK) == 0)
 		{
 			shell->exec->cmd_path = test_path;

@@ -6,7 +6,7 @@
 /*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:44:01 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/08 13:20:30 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/08 14:53:42 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,11 @@ int	execute_externe(char **args, t_shell *shell)
 	t_exec	*exec;
 
 	exec = shell->exec;
+	if (!shell->exec->abs_path && !shell->exec->rel_path)
+	{
+		if (!apply_path(shell))
+			return (0);
+	}
 	pid = fork();
 	if (pid == 0)
 	{
