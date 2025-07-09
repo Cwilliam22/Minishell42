@@ -6,7 +6,7 @@
 /*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 14:34:20 by alexis            #+#    #+#             */
-/*   Updated: 2025/07/04 14:50:35 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/08 21:50:20 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,29 +56,24 @@ char	*extract_word(char *input, int start, int *end)
 {
 	int		i;
 	char	quote_char;
-	char	*word;
 
 	i = start;
-	if (input[i] == '\'' || input[i] == '"')
+	quote_char = '\0';
+	while (input[i])
 	{
-		quote_char = input[i++];
-		while (input[i] && input[i] != quote_char)
-			i++;
-		if (input[i] == quote_char)
-			i++;
-	}
-	else
-	{
-		while (input[i] && !is_whitespace(input[i]) && !is_operator(input[i]))
-			i++;
+		if (quote_char == '\0')
+		{
+			if (input[i] == '\'' || input[i] == '"')
+				quote_char = input[i];
+			else if (is_whitespace(input[i]) || is_operator(input[i]))
+				break ;
+		}
+		else if (input[i] == quote_char)
+			quote_char = '\0';
+		i++;
 	}
 	*end = i;
-	word = malloc(i - start + 1);
-	if (!word)
-		return (NULL);
-	ft_strncpy(word, input + start, i - start);
-	word[i - start] = '\0';
-	return (word);
+	return (ft_strndup(input + start, i - start));
 }
 
 /**

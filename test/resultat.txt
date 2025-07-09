@@ -1,10 +1,10 @@
 # empty inputs
 																												FINAL VERIFICATION
-""										okay, return value is 127	Leaks because of env, normal				KO, quitte le programme
-""""									okay, return value is 127	Leaks because of env, normal				KO, quitte le programme
-''										okay, return value is 127	Leaks because of env, normal				KO, quitte le programme
-" "										okay, return value is 127	Leaks because of env, normal				KO, quitte le programme
-"	"									okay, return value is 127	Leaks because of env, normal				KO, quitte le programme
+""										okay, return value is 127	Leaks because of env, normal				ok, return 127
+""""									okay, return value is 127	Leaks because of env, normal				ok, return 127
+''										okay, return value is 127	Leaks because of env, normal				ok, return 127
+" "										okay, return value is 127	Leaks because of env, normal				ok, return 127
+"	"									okay, return value is 127	Leaks because of env, normal				ok, return 127
 
 # builtin commands
 echo									okay, return value is 0		No leaks									KO affiche 2 lignes vide, ok return value is 0
