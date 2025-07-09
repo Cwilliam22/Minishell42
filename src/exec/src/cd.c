@@ -6,11 +6,18 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:25:06 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/09 14:09:25 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/09 16:02:03 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	print_error_cd(char *path, int way)
+{
+	ft_putstr_fd("bash: cd: ", way);
+	ft_putstr_fd(path, way);
+	ft_putendl_fd(": No such file or directory:", way);
+}
 
 int	builtin_cd(t_shell *shell)
 {
@@ -33,7 +40,7 @@ int	builtin_cd(t_shell *shell)
 		change_oldpwd_or_pwd(shell->exec, 1);
 		if (!chdir(path))
 			return (change_oldpwd_or_pwd(shell->exec, 0), free(path), 0);
-		ft_printf("bash: cd: No such file or directory: %s\n", path);
+		print_error_cd(path, STDERR);
 	}
 	return (1);
 }

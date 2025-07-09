@@ -6,7 +6,7 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:23:48 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/09 13:20:54 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/09 15:18:41 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,17 @@
 
 int	is_a_valid_identifier(char *arg)
 {
-	int	i;
+	int i;
 
 	i = 0;
-	if (!ft_isalpha((int)arg[i]) && arg[i] == '_')
+	if (!ft_isalpha((int)arg[i]) && arg[i] != '_')
 		return (0);
+	i++;
 	while (arg[i])
 	{
-		if (!ft_isalpha((int)arg[i]) && !ft_isdigit((int)arg[i])
-			&& arg[i] != '_')
+		if (!ft_isalpha((int)arg[i]) &&
+			!ft_isdigit((int)arg[i]) &&
+			arg[i] != '_')
 			return (0);
 		i++;
 	}

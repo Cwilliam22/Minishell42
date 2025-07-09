@@ -6,7 +6,7 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:38:16 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/09 14:12:03 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/09 15:34:32 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	builtin_unset(t_shell *shell)
 	arg = shell->cmd_list->args;
 	exec = shell->exec;
 	if (exec->nbr_arg == 1)
-		return (127);
+		return (0);
 	while (arg[i])
 	{
 		place = find_sth_in_env(arg[i], exec->env);
