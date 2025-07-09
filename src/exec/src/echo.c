@@ -6,7 +6,7 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 13:18:37 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/08 16:13:44 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/09 14:08:34 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,20 +40,20 @@ int	builtin_echo(t_shell *shell)
 	if (arg[1] == NULL)
 	{
 		ft_printf("\n");
-		return (exit_codes(shell, SUCCESS, ""), 0);
+		return (0);
 	}
 	else if (ft_strncmp("-n", arg[1], 2) == 0)
 	{
 		i = skip_n(arg);
 		if (i == -1)
-			return (0);
+			return (1);
 		if (!ft_printf_arg(arg, i, 1, shell))
-			return (exit_codes(shell, SUCCESS, ""), 0);
+			return (1);
 	}
 	else
 	{
 		if (!ft_printf_arg(arg, i, 0, shell))
-			return (exit_codes(shell, SUCCESS, ""), 0);
+			return (1);
 	}
-	return (1);
+	return (0);
 }

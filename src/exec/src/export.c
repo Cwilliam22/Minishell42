@@ -6,7 +6,7 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:42:02 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/03 16:17:00 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/09 14:14:32 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int	new_var(char *new_value, char *new_variable, t_exec *exec)
 	int		place;
 
 	i = 0;
+	if (!is_a_valid_identifier(new_variable))
+		return (printf("bash: export: `%s': not a valid identifier\n", new_variable), 0);
 	exec->nbr_var_env++;
 	temp = malloc(sizeof(char **) * (exec->nbr_var_env + 1));
 	if (!temp)
@@ -90,17 +92,17 @@ int	export_with_assignment(t_shell *shell)
 		if (i == -1)
 		{
 			if (!new_var(head->value, head->key, shell->exec))
-				return (exit_codes(shell, GENERAL_ERROR, ""), 0);
+				return (1);
 		}
 		else
 		{
 			if (!replace_value_var_or_add(head->value, i, shell->exec->env,
 					head->is_append))
-				return (exit_codes(shell, GENERAL_ERROR, ""), 0);
+				return (1);
 		}
 		head = head->next;
 	}
-	return (exit_codes(shell, SUCCESS, ""), 1);
+	return (0);
 }
 
 int	builtin_export(t_shell *shell)
@@ -112,21 +114,21 @@ int	builtin_export(t_shell *shell)
 	if (shell->exec->nbr_arg == 1)
 	{
 		if (!print_env_sorted(shell->exec))
-			return (exit_codes(shell, GENERAL_ERROR, ""), 0);
+			return (1);
 	}
 	i = 1;
 	while (arg[i])
 	{
 		if (ft_search_char(arg[i], '='))
 		{
-			if (!export_with_assignment(shell))
-				return (exit_codes(shell, GENERAL_ERROR, ""), 0);
+			if (export_with_assignment(shell))
+				return (1);
 			i++;
 			continue ;
 		}
 		if (!new_var("", arg[i], shell->exec))
-			return (exit_codes(shell, GENERAL_ERROR, ""), 0);
+			return (1);
 		i++;
 	}
-	return (1);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:44:01 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/08 15:06:07 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/09 13:42:41 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	its_a_builtin(t_shell *shell)
 	while (tab_link[i].builtin != NULL)
 	{
 		if (ft_strcmp(shell->cmd_list->args[0], tab_link[i].builtin) == 0)
-			return (tab_link[i].fonction(shell));
+			return (exit_codes(shell, tab_link[i].fonction(shell), ""), 1);
 		i++;
 	}
 	return (0);

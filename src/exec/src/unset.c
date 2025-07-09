@@ -6,7 +6,7 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:38:16 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/03 13:30:18 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/09 14:12:03 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	builtin_unset(t_shell *shell)
 	arg = shell->cmd_list->args;
 	exec = shell->exec;
 	if (exec->nbr_arg == 1)
-		return (exit_codes(shell, COMMAND_NOT_FOUND, ""), 1);
+		return (127);
 	while (arg[i])
 	{
 		place = find_sth_in_env(arg[i], exec->env);
@@ -93,5 +93,5 @@ int	builtin_unset(t_shell *shell)
 			unset_var(place, exec);
 		i++;
 	}
-	return (exit_codes(shell, SUCCESS, ""), 1);
+	return (0);
 }

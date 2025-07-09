@@ -6,7 +6,7 @@
 /*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:27:28 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/08 16:11:08 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/09 14:07:01 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ int	builtin_env(t_shell *shell)
 	if (exec->nbr_arg == 1)
 	{
 		if (!print_env(exec->env))
-			return (0);
+			return (1);
 	}
 	else if (exec->nbr_arg != 1)
 	{
-		return (ft_printf("env: ‘%d’: No such file or directory\n", arg[1]),
-			exit_codes(shell, COMMAND_NOT_FOUND, ""), 0);
+		ft_printf("env: ‘%d’: No such file or directory\n", arg[1]);
+		return (127);
 	}
-	return (exit_codes(shell, SUCCESS, ""), 1);
+	return (0);
 }
