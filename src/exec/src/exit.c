@@ -6,7 +6,7 @@
 /*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:23:34 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/09 22:19:53 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/10 06:35:50 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int	builtin_exit(t_shell *shell)
 	exit_code = get_exit_code(exec, arg);
 	if (exec->nbr_arg > 2 && ft_is_a_number(arg[1]))
 		return (shell->exit_status = 1, 1);
-	free_all_env(exec);
-	exit(exit_code);
+	exec->exit = 1;
+	exit_codes(shell, exit_code, NULL);
+	return (0);
 }

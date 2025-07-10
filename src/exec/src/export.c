@@ -6,7 +6,7 @@
 /*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:42:02 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/09 23:46:28 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/10 06:14:51 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,16 @@ int	make_a_bigger_env(t_exec *exec, char ***temp, int i)
 		j = 0;
 		temp[i] = malloc(sizeof(char *) * 3);
 		if (!temp[i])
-			return (free_env(temp), -1);
+			return (free_temp_env(temp, i), -1);
 		while (exec->env[i][j])
 		{
 			temp[i][j] = ft_strdup(exec->env[i][j]);
 			if (!temp[i][j])
-				return (free_env(temp), -1);
+			{
+				temp[i][j] = NULL;
+				free_array(temp[i]);
+				return (free_temp_env(temp, i), -1);
+			}
 			j++;
 		}
 		temp[i][j] = NULL;
@@ -58,12 +62,18 @@ int	new_var(char *new_value, char *new_variable, t_exec *exec)
 		return (exec->nbr_var_env--, 0);
 	temp[place] = malloc(sizeof(char *) * 3);
 	if (!temp[place])
-		return (free_env(temp), exec->nbr_var_env--, 0);
+		return (free_temp_env(temp, place), exec->nbr_var_env--, 0);
 	temp[place][0] = ft_strdup(new_variable);
 	temp[place][1] = ft_strdup(new_value);
 	temp[place][2] = NULL;
 	temp[place + 1] = NULL;
-	free_env(exec->env);
+	if (!temp[place][0] || !temp[place][1])
+	{
+		free_array(temp[place]);
+		temp[place] = NULL;
+		return (free_temp_env(temp, place), exec->nbr_var_env--, 0);
+	}
+	free_env(exec);
 	exec->env = temp;
 	return (1);
 }
@@ -72,6 +82,8 @@ int	replace_value_var_or_add(char *new_value, int i, char ***env, int is_append)
 {
 	char	*old_value;
 
+	if (!new_value)
+		return (0);
 	if (!is_append)
 	{
 		free(env[i][1]);

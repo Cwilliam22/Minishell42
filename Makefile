@@ -84,7 +84,7 @@ $(LIBFT):
 valgrind:
 ifeq ($(shell uname), Linux)
 	@echo "Running with valgrind..."
-	valgrind --leak-check=full --log-file=valgrind.log --show-leak-kinds=all --track-fds=all --default-suppressions=yes --suppressions=.valgrind_readline ./$(NAME)
+	valgrind -s --leak-check=full --log-file=valgrind.log --show-leak-kinds=all --track-fds=all --default-suppressions=yes --suppressions=.valgrind_readline ./$(NAME)
 else
 	@echo "Valgrind is only available on Linux"
 	@echo "Running normally..."

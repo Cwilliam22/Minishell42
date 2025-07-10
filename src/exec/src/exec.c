@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:42:25 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/08 17:44:12 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/10 06:38:47 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,20 +148,61 @@ static int	check_args(t_shell *shell)
 
 void	init_exec(t_shell *shell)
 {
-	shell->exec->oldpwd = ft_strdup(getcwd(NULL, 0));
-	shell->exec->pwd = ft_strdup(getcwd(NULL, 0));
+	if (shell->exec->oldpwd)
+	{
+		free(shell->exec->oldpwd);
+		shell->exec->oldpwd = NULL;
+	}
+	if (shell->exec->pwd)
+	{
+		free(shell->exec->pwd);
+		shell->exec->pwd = NULL;
+	}
+	shell->exec->oldpwd = getcwd(NULL, 0);
+	shell->exec->pwd = getcwd(NULL, 0);
 	shell->exec->nbr_var_env = ft_envlen(shell->exec->env);
 	shell->exec->nbr_process = ft_lstlen(shell->cmd_list);
 	shell->exec->nbr_pipes = shell->exec->nbr_process - 1;
 }
 
+void	free_exec(t_exec *exec)
+{
+	if (!exec)
+		return ;
+	free(exec->cmd_path);
+	free(exec->path);
+	free(exec->oldpwd);
+	free(exec->pwd);
+	if (exec->env)
+		free_all_env(exec);
+}
+
 void	var_path(t_shell *shell)
 {
-	if (find_var_path(shell->exec->env) >= 0)
-		shell->exec->path
-			= ft_strdup(shell->exec->env[find_var_path(shell->exec->env)][1]);
-	else
+	int path_index;
+	static int call_count = 0;
+	
+	call_count++;
+	printf("DEBUG: var_path() call #%d, current path = %p\n", call_count, shell->exec->path);
+
+	if (shell->exec->path)
+	{
+		printf("DEBUG: Freeing old path %p\n", shell->exec->path);
+		free(shell->exec->path);
 		shell->exec->path = NULL;
+	}
+	
+	path_index = find_var_path(shell->exec->env);
+	if (path_index >= 0)
+	{
+		shell->exec->path = ft_strdup(shell->exec->env[path_index][1]);
+		printf("DEBUG: New path allocated: %p\n", shell->exec->path);
+	}
+	else
+	{
+		shell->exec->path = NULL;
+		printf("DEBUG: No PATH found, set to NULL\n");
+	}
 }
 
 int	ft_exec(t_shell *shell)

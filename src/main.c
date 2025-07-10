@@ -6,7 +6,7 @@
 /*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/07/09 23:52:19 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/10 05:36:53 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,27 @@ int	ft_shlvl(t_exec *exec)
 	int		shlvl;
 	int		place;
 	char	*new_lvl;
+	char	*value;
+	char	*new_value;
 
 	place = find_sth_in_env("SHLVL", exec->env);
 	if (place == -1)
 		return (0);
-	shlvl = ft_atoi(find_value_in_env("SHLVL", exec));
+	value = find_value_in_env("SHLVL", exec);
+	if (!value)
+		return (0);
+	shlvl = ft_atoi(value);
 	shlvl++;
-	free(exec->env[place][1]);
+	free(value);
 	new_lvl = ft_itoa(shlvl);
-	exec->env[place][1] = ft_strdup(new_lvl);
+	if (!new_lvl)
+		return (0);
+	new_value = ft_strdup(new_lvl);
 	free(new_lvl);
+	if (!new_value)
+		return (0);
+	free(exec->env[place][1]);
+	exec->env[place][1] = new_value;
 	return (1);
 }
 
@@ -83,6 +94,31 @@ static void	cleanup_shell(t_shell *shell)
 		free_commands(shell->cmd_list);
 		shell->cmd_list = NULL;
 	}
+	if (shell->exec)
+	{
+		if (shell->exec->path)
+		{
+			free(shell->exec->path);
+			shell->exec->path = NULL;
+		}
+		if (shell->exec->env)
+		{
+			free_env(shell->exec);
+		}
+		if (shell->exec->pwd)
+		{
+			free(shell->exec->pwd);
+			shell->exec->pwd = NULL;
+		}
+		if (shell->exec->oldpwd)
+		{
+			free(shell->exec->oldpwd);
+			shell->exec->oldpwd = NULL;
+		}
+	}
+	rl_clear_history();
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 }
 
 /**
@@ -265,6 +301,5 @@ int	main(int argc, char **argv, char **envp)
 	shell_loop(&shell);
 	shell.exit_status = shell.exec->out;
 	cleanup_shell(&shell);
-	rl_clear_history();
 	return (shell.exit_status);
 }

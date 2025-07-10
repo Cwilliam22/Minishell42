@@ -303,7 +303,6 @@ char	**copy_env_sorted(t_exec *exec);
 int		new_var(char *new_value, char *new_variable, t_exec *exec);
 int		replace_value_var_or_add(char *new_value, int i, char ***env, int j);
 
-
 // unset.c
 int		malloc_allocations(char ***temp, int i, int size);
 int		unset_var(int index, t_exec *exec);
@@ -325,11 +324,12 @@ void	*safe_malloc(size_t size);
 char	*safe_strdup(const char *s);
 
 // free.c
-int		free_env(char ***env);
+void	free_env(t_exec *exec);
 int		free_array(char **array);
 int		free_var(t_exec *exec);
 int		free_all_env(t_exec *exec);
 int		free_pipes(int **pipes, t_exec *exec);
+void	free_temp_env(char ***temp, int max_i);
 
 /* ============================= UTILS ===================================== */
 int		ft_isalnum_underscore(int c);

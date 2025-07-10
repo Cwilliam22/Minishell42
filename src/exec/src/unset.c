@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 20:38:16 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/09 15:34:32 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/10 05:59:56 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,22 @@ int	malloc_allocations(char ***temp, int i, int size)
 int	copy_strings_in_env(t_exec *exec, int m, char ***temp, int i)
 {
 	int	j;
+	int	k;
 
 	j = 0;
 	if (!malloc_allocations(temp, i, 3))
-		return (free_env(temp), 0);
+		return (0);
 	while (exec->env[m][j])
 	{
 		temp[i][j] = ft_strdup(exec->env[m][j]);
+		if (!temp[i][j])
+		{
+			k = 0;
+			while (k < j)
+				free(temp[i][k++]);
+			free(temp[i]);
+			return (0);
+		}
 		j++;
 	}
 	temp[i][j] = NULL;
@@ -49,7 +58,10 @@ int	make_a_new_env(t_exec *exec, int index, char ***temp, int i)
 			continue ;
 		}
 		if (!copy_strings_in_env(exec, m, temp, i))
+		{
+			free_temp_env(temp, i);
 			return (0);
+		}
 		i++;
 		m++;
 	}
@@ -66,10 +78,16 @@ int	unset_var(int index, t_exec *exec)
 	exec->nbr_var_env--;
 	temp = malloc(sizeof(char **) * (exec->nbr_var_env + 1));
 	if (!temp)
+	{
+		exec->nbr_var_env++;
 		return (0);
-	make_a_new_env(exec, index, temp, i);
-	if (!free_env(exec->env))
+	}
+	if (!make_a_new_env(exec, index, temp, i))
+	{
+		exec->nbr_var_env++;
 		return (0);
+	}
+	free_env(exec);
 	exec->env = temp;
 	return (1);
 }

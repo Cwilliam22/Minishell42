@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:11:50 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/09 14:10:48 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/10 06:07:18 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,18 @@ int	builtin_pwd(t_shell *shell)
 {
 	char	*path;
 
-	path = getcwd(NULL, 0);
-	if (!path)
+	if (shell->exec->pwd)
+	{
+		printf("%s\n", shell->exec->pwd);
 		return (0);
-	printf("%s\n", path);
-	free(shell->exec->oldpwd);
-	free(path);
-	return (0);
+	}
+	else
+	{
+		path = getcwd(NULL, 0);
+		if (!path)
+			return (1);
+		printf("%s\n", path);
+		free(path);
+		return (0);
+	}
 }

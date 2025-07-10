@@ -1,100 +1,95 @@
-==13475== Memcheck, a memory error detector
-==13475== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==13475== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
-==13475== Command: ./minishell
-==13475== Parent PID: 13472
-==13475== 
-==13475== 
-==13475== FILE DESCRIPTORS: 4 open (3 std) at exit.
-==13475== Open file descriptor 3: /mnt/c/Users/phili/Documents/42_Lausanne/github/Minishell42/valgrind.log
-==13475==    <inherited from parent>
-==13475== 
-==13475== Open file descriptor 2: /dev/pts/9
-==13475==    <inherited from parent>
-==13475== 
-==13475== Open file descriptor 1: /dev/pts/9
-==13475==    at 0x49CB96B: dup2 (dup2.c:29)
-==13475==    by 0x10A6CA: clear_std (identification.c:17)
-==13475==    by 0x10A808: identification (identification.c:43)
-==13475==    by 0x1098FA: ft_exec (exec.c:181)
-==13475==    by 0x110008: process_input (main.c:137)
-==13475==    by 0x1101EC: shell_loop (main.c:202)
-==13475==    by 0x1103D0: main (main.c:265)
-==13475== 
-==13475== Open file descriptor 0: /dev/pts/9
-==13475==    at 0x49CB96B: dup2 (dup2.c:29)
-==13475==    by 0x10A6D9: clear_std (identification.c:18)
-==13475==    by 0x10A808: identification (identification.c:43)
-==13475==    by 0x1098FA: ft_exec (exec.c:181)
-==13475==    by 0x110008: process_input (main.c:137)
-==13475==    by 0x1101EC: shell_loop (main.c:202)
-==13475==    by 0x1103D0: main (main.c:265)
-==13475== 
-==13475== 
-==13475== HEAP SUMMARY:
-==13475==     in use at exit: 200,030 bytes in 225 blocks
-==13475==   total heap usage: 549 allocs, 324 frees, 248,202 bytes allocated
-==13475== 
-==13475== 2 bytes in 1 blocks are definitely lost in loss record 2 of 57
-==13475==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==13475==    by 0x110864: ft_strdup (in /mnt/c/Users/phili/Documents/42_Lausanne/github/Minishell42/minishell)
-==13475==    by 0x10BC1E: find_value_in_env (get.c:39)
-==13475==    by 0x10FC23: ft_shlvl (main.c:24)
-==13475==    by 0x10FCE5: ft_env (main.c:37)
-==13475==    by 0x10FDA7: init_shell (main.c:60)
-==13475==    by 0x1103AE: main (main.c:262)
-==13475== 
-==13475== 120 bytes in 2 blocks are definitely lost in loss record 18 of 57
-==13475==    at 0x484DB80: realloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==13475==    by 0x49CFA97: getcwd (getcwd.c:86)
-==13475==    by 0x10973E: init_exec (exec.c:151)
-==13475==    by 0x109879: ft_exec (exec.c:170)
-==13475==    by 0x110008: process_input (main.c:137)
-==13475==    by 0x1101EC: shell_loop (main.c:202)
-==13475==    by 0x1103D0: main (main.c:265)
-==13475== 
-==13475== 120 bytes in 2 blocks are definitely lost in loss record 19 of 57
-==13475==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==13475==    by 0x110864: ft_strdup (in /mnt/c/Users/phili/Documents/42_Lausanne/github/Minishell42/minishell)
-==13475==    by 0x109750: init_exec (exec.c:151)
-==13475==    by 0x109879: ft_exec (exec.c:170)
-==13475==    by 0x110008: process_input (main.c:137)
-==13475==    by 0x1101EC: shell_loop (main.c:202)
-==13475==    by 0x1103D0: main (main.c:265)
-==13475== 
-==13475== 120 bytes in 2 blocks are definitely lost in loss record 20 of 57
-==13475==    at 0x484DB80: realloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==13475==    by 0x49CFA97: getcwd (getcwd.c:86)
-==13475==    by 0x109763: init_exec (exec.c:152)
-==13475==    by 0x109879: ft_exec (exec.c:170)
-==13475==    by 0x110008: process_input (main.c:137)
-==13475==    by 0x1101EC: shell_loop (main.c:202)
-==13475==    by 0x1103D0: main (main.c:265)
-==13475== 
-==13475== 120 bytes in 2 blocks are definitely lost in loss record 21 of 57
-==13475==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==13475==    by 0x110864: ft_strdup (in /mnt/c/Users/phili/Documents/42_Lausanne/github/Minishell42/minishell)
-==13475==    by 0x109775: init_exec (exec.c:152)
-==13475==    by 0x109879: ft_exec (exec.c:170)
-==13475==    by 0x110008: process_input (main.c:137)
-==13475==    by 0x1101EC: shell_loop (main.c:202)
-==13475==    by 0x1103D0: main (main.c:265)
-==13475== 
-==13475== 839 bytes in 1 blocks are definitely lost in loss record 25 of 57
-==13475==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==13475==    by 0x110864: ft_strdup (in /mnt/c/Users/phili/Documents/42_Lausanne/github/Minishell42/minishell)
-==13475==    by 0x109832: var_path (exec.c:162)
-==13475==    by 0x109885: ft_exec (exec.c:171)
-==13475==    by 0x110008: process_input (main.c:137)
-==13475==    by 0x1101EC: shell_loop (main.c:202)
-==13475==    by 0x1103D0: main (main.c:265)
-==13475== 
-==13475== LEAK SUMMARY:
-==13475==    definitely lost: 1,321 bytes in 10 blocks
-==13475==    indirectly lost: 0 bytes in 0 blocks
-==13475==      possibly lost: 0 bytes in 0 blocks
-==13475==    still reachable: 0 bytes in 0 blocks
-==13475==         suppressed: 198,709 bytes in 215 blocks
-==13475== 
-==13475== For lists of detected and suppressed errors, rerun with: -s
-==13475== ERROR SUMMARY: 6 errors from 6 contexts (suppressed: 0 from 0)
+==64474== Memcheck, a memory error detector
+==64474== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==64474== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==64474== Command: ./minishell
+==64474== Parent PID: 64471
+==64474== 
+==64474== 
+==64474== FILE DESCRIPTORS: 7 open (3 std) at exit.
+==64474== Open file descriptor 24: /home/alexis/.vscode-server/data/logs/20250710T044802/remoteagent.log
+==64474==    <inherited from parent>
+==64474== 
+==64474== Open file descriptor 23: /home/alexis/.vscode-server/data/logs/20250710T044802/remoteTelemetry.log
+==64474==    <inherited from parent>
+==64474== 
+==64474== Open file descriptor 22: /home/alexis/.vscode-server/data/logs/20250710T044802/ptyhost.log
+==64474==    <inherited from parent>
+==64474== 
+==64474== Open file descriptor 3: /mnt/c/Users/phili/Documents/42_Lausanne/github/Minishell42/valgrind.log
+==64474==    <inherited from parent>
+==64474== 
+==64474== Open file descriptor 2: /dev/pts/5
+==64474==    <inherited from parent>
+==64474== 
+==64474== Open file descriptor 1: /dev/pts/5
+==64474==    at 0x49CB96B: dup2 (dup2.c:29)
+==64474==    by 0x10A87A: clear_std (identification.c:18)
+==64474==    by 0x10B02B: identification (identification.c:187)
+==64474==    by 0x109A8E: ft_exec (exec.c:222)
+==64474==    by 0x110BA7: process_input (main.c:173)
+==64474==    by 0x110D8B: shell_loop (main.c:238)
+==64474==    by 0x110F6F: main (main.c:301)
+==64474== 
+==64474== Open file descriptor 0: /dev/pts/5
+==64474==    at 0x49CB96B: dup2 (dup2.c:29)
+==64474==    by 0x10A889: clear_std (identification.c:19)
+==64474==    by 0x10B02B: identification (identification.c:187)
+==64474==    by 0x109A8E: ft_exec (exec.c:222)
+==64474==    by 0x110BA7: process_input (main.c:173)
+==64474==    by 0x110D8B: shell_loop (main.c:238)
+==64474==    by 0x110F6F: main (main.c:301)
+==64474== 
+==64474== 
+==64474== HEAP SUMMARY:
+==64474==     in use at exit: 199,766 bytes in 220 blocks
+==64474==   total heap usage: 589 allocs, 369 frees, 249,491 bytes allocated
+==64474== 
+==64474== 10 bytes in 2 blocks are definitely lost in loss record 4 of 55
+==64474==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64474==    by 0x1113FE: ft_strdup (in /mnt/c/Users/phili/Documents/42_Lausanne/github/Minishell42/minishell)
+==64474==    by 0x10AF33: identification (identification.c:166)
+==64474==    by 0x109A8E: ft_exec (exec.c:222)
+==64474==    by 0x110BA7: process_input (main.c:173)
+==64474==    by 0x110D8B: shell_loop (main.c:238)
+==64474==    by 0x110F6F: main (main.c:301)
+==64474== 
+==64474== 60 bytes in 1 blocks are definitely lost in loss record 16 of 55
+==64474==    at 0x484DB80: realloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64474==    by 0x49CFA97: getcwd (getcwd.c:86)
+==64474==    by 0x1097C9: init_exec (exec.c:161)
+==64474==    by 0x109A0D: ft_exec (exec.c:211)
+==64474==    by 0x110BA7: process_input (main.c:173)
+==64474==    by 0x110D8B: shell_loop (main.c:238)
+==64474==    by 0x110F6F: main (main.c:301)
+==64474== 
+==64474== 60 bytes in 1 blocks are definitely lost in loss record 17 of 55
+==64474==    at 0x484DB80: realloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64474==    by 0x49CFA97: getcwd (getcwd.c:86)
+==64474==    by 0x1097E3: init_exec (exec.c:162)
+==64474==    by 0x109A0D: ft_exec (exec.c:211)
+==64474==    by 0x110BA7: process_input (main.c:173)
+==64474==    by 0x110D8B: shell_loop (main.c:238)
+==64474==    by 0x110F6F: main (main.c:301)
+==64474== 
+==64474== 927 bytes in 1 blocks are definitely lost in loss record 23 of 55
+==64474==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==64474==    by 0x1113FE: ft_strdup (in /mnt/c/Users/phili/Documents/42_Lausanne/github/Minishell42/minishell)
+==64474==    by 0x109995: var_path (exec.c:198)
+==64474==    by 0x109A19: ft_exec (exec.c:212)
+==64474==    by 0x110BA7: process_input (main.c:173)
+==64474==    by 0x110D8B: shell_loop (main.c:238)
+==64474==    by 0x110F6F: main (main.c:301)
+==64474== 
+==64474== LEAK SUMMARY:
+==64474==    definitely lost: 1,057 bytes in 5 blocks
+==64474==    indirectly lost: 0 bytes in 0 blocks
+==64474==      possibly lost: 0 bytes in 0 blocks
+==64474==    still reachable: 0 bytes in 0 blocks
+==64474==         suppressed: 198,709 bytes in 215 blocks
+==64474== 
+==64474== ERROR SUMMARY: 4 errors from 4 contexts (suppressed: 0 from 0)
+--64474-- 
+--64474-- used_suppression:     50 readline_leak .valgrind_readline:2 suppressed: 194,693 bytes in 214 blocks
+--64474-- used_suppression:      1 add_history_leak .valgrind_readline:9 suppressed: 4,016 bytes in 1 blocks
+==64474== 
+==64474== ERROR SUMMARY: 4 errors from 4 contexts (suppressed: 0 from 0)
