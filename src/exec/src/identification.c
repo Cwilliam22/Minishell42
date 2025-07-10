@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   identification.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:44:01 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/09 13:42:41 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/10 01:29:37 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,58 +20,83 @@ static void	clear_std(int saved_stdout, int saved_stdin)
 	close(saved_stdin);
 }
 
-int	identification(t_shell *shell)
+// Fonction pour vérifier si c'est un builtin (sans exécuter)
+static int	is_builtin(char *cmd)
 {
-	char	**process;
-	int		apply_redir_result;
-	int		saved_stdout;
-	int		saved_stdin;
+	char	*builtins[] = {
+		"cd", "echo", "pwd", "export", "unset", "env", "exit", NULL
+	};
+	int		i;
 
-	if (!shell || !shell->cmd_list || !shell->exec)
-		return (ft_printf("Error: Shell or command list is NULL\n"), 0);
-	saved_stdout = dup(STDOUT_FILENO);
-	saved_stdin = dup(STDIN_FILENO);
-	process = shell->cmd_list->args;
-	apply_redir_result = apply_redirections(shell->cmd_list->redirections);
-	shell->exec->cmd = ft_strdup(shell->cmd_list->args[0]);
-	if (!shell->exec->cmd)
-		return (clear_std(saved_stdout, saved_stdin), 0);
-	if (apply_redir_result == EXIT_SIGINT
-		|| apply_redir_result == GENERAL_ERROR)
-		return (clear_std(saved_stdout, saved_stdin), apply_redir_result);
-	if (its_a_builtin(shell))
-		return (clear_std(saved_stdout, saved_stdin), 1);
-	else
-		return (execute_externe(process, shell),
-			clear_std(saved_stdout, saved_stdin), 1);
-	clear_std(saved_stdout, saved_stdin);
+	i = 0;
+	while (builtins[i])
+	{
+		if (ft_strcmp(cmd, builtins[i]) == 0)
+			return (1);
+		i++;
+	}
 	return (0);
 }
 
-int	its_a_builtin(t_shell *shell)
+// Fonction pour exécuter un builtin (retourne le bon exit code)
+int	execute_builtin(t_shell *shell)
 {
 	int			i;
+	int			exit_code;
 	t_builtin	tab_link[] = {
-	{"cd", builtin_cd},
-	{"echo", builtin_echo},
-	{"pwd", builtin_pwd},
-	{"export", builtin_export},
-	{"unset", builtin_unset},
-	{"env", builtin_env},
-	{"exit", builtin_exit},
-	{NULL, NULL}};
+		{"cd", builtin_cd},
+		{"echo", builtin_echo},
+		{"pwd", builtin_pwd},
+		{"export", builtin_export},
+		{"unset", builtin_unset},
+		{"env", builtin_env},
+		{"exit", builtin_exit},
+		{NULL, NULL}
+	};
 
 	i = 0;
 	shell->exec->nbr_arg = ft_tablen_2d(shell->cmd_list->args);
 	while (tab_link[i].builtin != NULL)
 	{
 		if (ft_strcmp(shell->cmd_list->args[0], tab_link[i].builtin) == 0)
-			return (exit_codes(shell, tab_link[i].fonction(shell), ""), 1);
+		{
+			exit_code = tab_link[i].fonction(shell);
+			return (exit_code);
+		}
 		i++;
+	}
+	return (127);
+}
+
+int	check_file_before_exec(char *path, char *cmd_name)
+{
+	struct stat st;
+
+	if (stat(path, &st) == -1)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd_name, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		return (127);
+	}
+	if (S_ISDIR(st.st_mode))
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd_name, 2);
+		ft_putstr_fd(": Is a directory\n", 2);
+		return (126);
+	}
+	if (!(st.st_mode & S_IXUSR))
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd_name, 2);
+		ft_putstr_fd(": Permission denied\n", 2);
+		return (126);
 	}
 	return (0);
 }
 
+// Ajoutez du debug dans execute_externe :
 int	execute_externe(char **args, t_shell *shell)
 {
 	pid_t	pid;
@@ -83,27 +108,77 @@ int	execute_externe(char **args, t_shell *shell)
 	if (!shell->exec->abs_path && !shell->exec->rel_path)
 	{
 		if (!command_exist(shell))
-			return (0);
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(args[0], 2);
+			ft_putstr_fd(": command not found\n", 2);
+			return (127);
+		}
 	}
 	pid = fork();
 	if (pid == 0)
 	{
+		int check_result = check_file_before_exec(exec->cmd_path, args[0]);
+		if (check_result != 0)
+			exit(check_result);
 		env_temp = set_my_fucking_error(exec);
 		if (!shell->exec->abs_path && !shell->exec->rel_path)
 		{
 			if (!apply_path(shell))
-				return (0);
+				exit(127);
 		}
 		execve(exec->cmd_path, args, env_temp);
-		return (exit_codes(shell, COMMAND_NOT_FOUND, ""), 0);
+		perror("execve failed");
+		exit(126);
 	}
 	else if (pid > 0)
+	{
 		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
+		else if (WIFSIGNALED(status))
+			return (128 + WTERMSIG(status));
+	}
 	else
-		return (ft_printf("Erreur in Execution of externes CMDs\n"), 0);
+		return (perror("fork failed"), 1);
 	return (1);
 }
-// free env_temp à la fin ??
+
+int	identification(t_shell *shell)
+{
+	char	**process;
+	int		apply_redir_result;
+	int		saved_stdout;
+	int		saved_stdin;
+	int		exit_code;
+
+	if (!shell || !shell->cmd_list || !shell->exec)
+		return (ft_printf("Error: Shell or command list is NULL\n"), 0);
+	saved_stdout = dup(STDOUT_FILENO);
+	saved_stdin = dup(STDIN_FILENO);
+	process = shell->cmd_list->args;
+	apply_redir_result = apply_redirections(shell->cmd_list->redirections);
+	shell->exec->cmd = ft_strdup(shell->cmd_list->args[0]);
+	if (!shell->exec->cmd)
+		return (clear_std(saved_stdout, saved_stdin), 0);
+	if (apply_redir_result != 0)
+	{
+		clear_std(saved_stdout, saved_stdin);
+		exit_codes(shell, apply_redir_result, "");
+		if (shell->exec->nbr_process > 1)
+			exit(apply_redir_result);
+		return (apply_redir_result);
+	}
+	if (is_builtin(shell->cmd_list->args[0]))
+		exit_code = execute_builtin(shell);
+	else
+		exit_code = execute_externe(process, shell);
+	clear_std(saved_stdout, saved_stdin);
+	exit_codes(shell, exit_code, "");
+	if (shell->exec->nbr_process > 1)
+		exit(exit_code);
+	return (exit_code);
+}
 
 char	**set_my_fucking_error(t_exec *exec)
 {

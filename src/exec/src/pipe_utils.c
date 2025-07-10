@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_is_a_number.c                                   :+:      :+:    :+:   */
+/*   pipe_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/08 19:56:32 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/09 21:41:37 by alexis           ###   ########.fr       */
+/*   Created: 2025/07/10 00:29:00 by alexis            #+#    #+#             */
+/*   Updated: 2025/07/10 00:32:29 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/libft.h"
+#include "minishell.h"
 
-int	ft_is_a_number(char *arg)
+int	close_pipes(int **pipes, t_exec *exec)
 {
-	int	i;
+	int	j;
 
-	i = 0;
-	if (!arg || !*arg)
-		return (0);
-	if (arg[i] == '+' || arg[i] == '-')
-		i++;
-	if (!arg[i])
-		return (0);
-	while (arg[i])
+	j = 0;
+	while (j < exec->nbr_pipes)
 	{
-		if (!ft_isdigit((int)arg[i]))
-			return (0);
-		i++;
+		close(pipes[j][0]);
+		close(pipes[j][1]);
+		j++;
 	}
 	return (1);
 }
+

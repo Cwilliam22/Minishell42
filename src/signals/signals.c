@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:10:39 by root              #+#    #+#             */
-/*   Updated: 2025/07/06 16:23:17 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/10 01:33:38 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,7 @@ int	get_signal_number(void)
  */
 void	setup_signals(void)
 {
+	signal(SIGPIPE, SIG_IGN);
 	g_signal_received = 0;
 	setup_interactive_signals();
 }

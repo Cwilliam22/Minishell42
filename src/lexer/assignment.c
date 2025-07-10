@@ -6,7 +6,7 @@
 /*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 15:41:26 by alfavre           #+#    #+#             */
-/*   Updated: 2025/07/04 14:27:33 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/09 23:51:51 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,18 +94,7 @@ void	free_assignments(t_assignment *assignments)
  */
 int	is_assignment_word(char *str)
 {
-	int	i;
-
-	if (!str || (!ft_isalpha(str[0]) && str[0] != '_'))
-		return (0);
-	i = 0;
-	while (str[i] && str[i] != '=')
-	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (0);
-		i++;
-	}
-	return (str[i] == '=' && i > 0);
+	return (str && ft_strchr(str, '='));
 }
 
 /**

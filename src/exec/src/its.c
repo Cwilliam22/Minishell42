@@ -3,28 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   its.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:23:48 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/09 15:18:41 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/09 23:25:26 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_a_valid_identifier(char *arg)
+int	is_a_valid_identifier(char *str)
 {
-	int i;
+	int	i;
 
-	i = 0;
-	if (!ft_isalpha((int)arg[i]) && arg[i] != '_')
+	if (!str || !*str)
 		return (0);
-	i++;
-	while (arg[i])
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+		return (0);
+	i = 1;
+	while (str[i])
 	{
-		if (!ft_isalpha((int)arg[i]) &&
-			!ft_isdigit((int)arg[i]) &&
-			arg[i] != '_')
+		if (!ft_isalnum(str[i]) && str[i] != '_')
 			return (0);
 		i++;
 	}

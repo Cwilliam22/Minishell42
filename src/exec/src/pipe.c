@@ -3,98 +3,143 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:17:24 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/08 17:06:00 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/10 01:48:29 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	pipeline(t_shell *shell)
+static int	create_pipes(t_shell *shell, int ***pipes)
 {
-	int	**pipes;
 	int	i;
 
 	i = 0;
-	pipes = malloc(sizeof(int *) * shell->exec->nbr_pipes);
+	*pipes = malloc(sizeof(int *) * shell->exec->nbr_pipes);
+	if (!*pipes)
+		return (0);
 	while (i < shell->exec->nbr_pipes)
 	{
-		pipes[i] = malloc(sizeof(int) * 2);
-		pipe(pipes[i]);
+		(*pipes)[i] = malloc(sizeof(int) * 2);
+		if (!(*pipes)[i])
+			return (free_pipes(*pipes, shell->exec), 0);
+		if (pipe((*pipes)[i]) == -1)
+			return (free_pipes(*pipes, shell->exec), 0);
 		i++;
 	}
-	if (!execute_pipeline(shell, pipes))
-		return (ft_printf("Error in execute pipeline\n"), 0);
 	return (1);
 }
 
-int	exec_pipe(t_shell *shell, int i, int **pipes, pid_t *pids)
+static void	setup_child_pipes(int i, int **pipes, t_exec *exec)
 {
-	while (i < shell->exec->nbr_process && shell->cmd_list)
+	if (i == 0 && exec->nbr_process > 1)
+	{
+		dup2(pipes[i][1], STDOUT_FILENO);
+	}
+	else if (i == exec->nbr_process - 1)
+	{
+		dup2(pipes[i - 1][0], STDIN_FILENO);
+	}
+	else
+	{
+		dup2(pipes[i - 1][0], STDIN_FILENO);
+		dup2(pipes[i][1], STDOUT_FILENO);
+	}
+}
+
+static int	exec_pipe(t_shell *shell, int **pipes, pid_t *pids)
+{
+	int		i;
+	t_cmd	*current_cmd;
+
+	i = 0;
+	current_cmd = shell->cmd_list;
+	while (i < shell->exec->nbr_process && current_cmd)
 	{
 		pids[i] = fork();
 		if (pids[i] == 0)
 		{
-			if (i == 0)
-				dup2(pipes[i][1], STDOUT_FILENO);
-			else if (i < shell->exec->nbr_process - 1)
-			{
-				dup2(pipes[i - 1][0], STDIN_FILENO);
-				dup2(pipes[i][1], STDOUT_FILENO);
-			}
-			else
-				dup2(pipes[i - 1][0], STDIN_FILENO);
+			// ✅ Dans les enfants, restaurer SIGPIPE par défaut
+			signal(SIGPIPE, SIG_DFL);
+			if (shell->exec->nbr_process > 1)
+				setup_child_pipes(i, pipes, shell->exec);
 			close_pipes(pipes, shell->exec);
+			shell->cmd_list = current_cmd;
 			if (!identification(shell))
-				exit(1);
-			exit(0);
+				exit(127);
+			exit(shell->exec->out);
 		}
 		else if (pids[i] < 0)
 			return (ft_printf("Error in fork\n"), 0);
-		shell->cmd_list = shell->cmd_list->next;
+		current_cmd = current_cmd->next;
 		i++;
 	}
 	return (1);
 }
 
-int	execute_pipeline(t_shell *shell, int **pipes)
+static int	wait_processes(pid_t *pids, t_exec *exec)
 {
-	pid_t	*pids;
-	int		i;
-	int		status;
+	int	i;
+	int	status;
+	int	last_status;
 
 	i = 0;
-	pids = malloc(sizeof(pid_t) * shell->exec->nbr_process);
-	if (!pids)
-		return (ft_printf("Error malloc pids\n"), 0);
-	if (!exec_pipe(shell, i, pipes, pids))
-		return (0);
-	close_pipes(pipes, shell->exec);
-	i = 0;
-	while (i < shell->exec->nbr_process)
+	last_status = 0;
+	while (i < exec->nbr_process)
 	{
 		if (pids[i] > 0)
+		{
 			waitpid(pids[i], &status, 0);
+			
+			if (WIFSIGNALED(status))
+			{
+				int sig = WTERMSIG(status);
+				if (sig == SIGPIPE)
+					ft_putstr_fd("Broken pipe\n", 2);
+			}
+			else if (WIFEXITED(status))
+			{
+				int exit_code = WEXITSTATUS(status);
+				// ✅ Détecter SIGPIPE encodé dans l'exit code
+				if (exit_code == 141)  // 128 + 13 (SIGPIPE)
+					ft_putstr_fd("Broken pipe\n", 2);
+			}
+			
+			// Le statut final est celui du dernier processus de la pipeline
+			if (i == exec->nbr_process - 1)
+			{
+				if (WIFEXITED(status))
+					last_status = WEXITSTATUS(status);
+				else if (WIFSIGNALED(status))
+					last_status = 128 + WTERMSIG(status);
+			}
+		}
 		i++;
 	}
+	
+	return (last_status);
+}
+
+int	pipeline(t_shell *shell)
+{
+	int		**pipes;
+	pid_t	*pids;
+	int		exit_status;
+
+	if (!create_pipes(shell, &pipes))
+		return (ft_printf("Error creating pipes\n"), 0);
+	pids = malloc(sizeof(pid_t) * shell->exec->nbr_process);
+	if (!pids)
+		return (free_pipes(pipes, shell->exec), 0);
+	if (!exec_pipe(shell, pipes, pids))
+		return (free(pids), free_pipes(pipes, shell->exec), 0);
+	close_pipes(pipes, shell->exec);
+	exit_status = wait_processes(pids, shell->exec);
 	free_pipes(pipes, shell->exec);
 	free(pipes);
 	free(pids);
-	return (1);
-}
-
-int	close_pipes(int **pipes, t_exec *exec)
-{
-	int	j;
-
-	j = 0;
-	while (j < exec->nbr_process - 1)
-	{
-		close(pipes[j][0]);
-		close(pipes[j][1]);
-		j++;
-	}
+	exit_codes(shell, exit_status, NULL);
 	return (1);
 }

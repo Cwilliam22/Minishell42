@@ -238,7 +238,6 @@ int		ft_exec(t_shell *shell);
 void	init_all(t_exec *exec);
 void	init_exec(t_shell *shell);
 int		identification(t_shell *shell);
-int		its_a_builtin(t_shell *shell);
 int		execute_externe(char **args, t_shell *shell);
 char	**set_my_fucking_error(t_exec *exec);
 
@@ -251,8 +250,8 @@ int		command_exist(t_shell *shell);
 
 /* ============================= PIPES ===================================== */
 int		pipeline(t_shell *shell);
-int		exec_pipe(t_shell *shell, int i, int **pipes, pid_t *pids);
-int		execute_pipeline(t_shell *shell, int **pipes);
+
+/* Pipe utilities*/
 int		close_pipes(int **pipes, t_exec *exec);
 
 /* ============================= REDIRECTIONS ============================= */
@@ -312,7 +311,6 @@ int		unset_var(int index, t_exec *exec);
 /* ============================= ERROR HANDLING ============================ */
 void	print_error(char *cmd, char *arg, char *msg);
 void	print_syntax_error(char *token);
-void	print_export_error(char *arg);
 void	perror_exit(char *msg);
 int		check_token_syntax(t_token *tokens);
 int		is_all_spaces(const char *s);

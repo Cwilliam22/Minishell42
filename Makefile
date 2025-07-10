@@ -19,7 +19,7 @@ FILES_EXEC = exec path1 path2 copy_env \
 			utils identification pwd \
 			env free len cd its\
 			export get echo exit\
-			pipe list check_utils unset\
+			pipe pipe_utils list check_utils unset\
 
 SRC_REDIR = src/exec/redir/
 FILES_REDIR = redir redir_utils
