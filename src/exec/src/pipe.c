@@ -6,7 +6,7 @@
 /*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:17:24 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/10 01:48:29 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/12 18:34:22 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,21 +92,25 @@ static int	wait_processes(pid_t *pids, t_exec *exec)
 		if (pids[i] > 0)
 		{
 			waitpid(pids[i], &status, 0);
-			
 			if (WIFSIGNALED(status))
 			{
 				int sig = WTERMSIG(status);
 				if (sig == SIGPIPE)
+				{
+					ft_putstr_fd("minishell: ", 2);
 					ft_putstr_fd("Broken pipe\n", 2);
+				}
 			}
 			else if (WIFEXITED(status))
 			{
 				int exit_code = WEXITSTATUS(status);
 				// ✅ Détecter SIGPIPE encodé dans l'exit code
 				if (exit_code == 141)  // 128 + 13 (SIGPIPE)
+				{
+					ft_putstr_fd("minishell: ", 2);
 					ft_putstr_fd("Broken pipe\n", 2);
+				}
 			}
-			
 			// Le statut final est celui du dernier processus de la pipeline
 			if (i == exec->nbr_process - 1)
 			{
@@ -118,7 +122,6 @@ static int	wait_processes(pid_t *pids, t_exec *exec)
 		}
 		i++;
 	}
-	
 	return (last_status);
 }
 
