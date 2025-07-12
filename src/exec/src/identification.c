@@ -6,7 +6,7 @@
 /*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:44:01 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/10 06:32:55 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/12 18:28:42 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,10 @@
 
 static void	clear_std(int saved_stdout, int saved_stdin)
 {
-	printf("DEBUG: clear_std called with fd %d and %d\n", saved_stdout, saved_stdin);
 	dup2(saved_stdout, STDOUT_FILENO);
 	dup2(saved_stdin, STDIN_FILENO);
 	close(saved_stdout);
 	close(saved_stdin);
-	printf("DEBUG: clear_std finished\n");
 }
 
 // Fonction pour vérifier si c'est un builtin (sans exécuter)
@@ -156,22 +154,15 @@ int	identification(t_shell *shell)
 
 	if (!shell || !shell->cmd_list || !shell->exec)
 		return (ft_printf("Error: Shell or command list is NULL\n"), 0);
-	
 	saved_stdout = dup(STDOUT_FILENO);
 	saved_stdin = dup(STDIN_FILENO);
-	printf("DEBUG: Created fd %d and %d\n", saved_stdout, saved_stdin);
-	
 	process = shell->cmd_list->args;
 	apply_redir_result = apply_redirections(shell->cmd_list->redirections);
 	shell->exec->cmd = ft_strdup(shell->cmd_list->args[0]);
 	if (!shell->exec->cmd)
-	{
-		printf("DEBUG: Error path - calling clear_std\n");
 		return (clear_std(saved_stdout, saved_stdin), 0);
-	}
 	if (apply_redir_result != 0)
 	{
-		printf("DEBUG: Redirection error - calling clear_std\n");
 		clear_std(saved_stdout, saved_stdin);
 		exit_codes(shell, apply_redir_result, "");
 		if (shell->exec->nbr_process > 1)
@@ -182,8 +173,6 @@ int	identification(t_shell *shell)
 		exit_code = execute_builtin(shell);
 	else
 		exit_code = execute_externe(process, shell);
-	
-	printf("DEBUG: Normal path - calling clear_std\n");
 	clear_std(saved_stdout, saved_stdin);
 	exit_codes(shell, exit_code, "");
 	if (shell->exec->nbr_process > 1)
