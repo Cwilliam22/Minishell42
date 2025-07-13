@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   identification.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:44:01 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/12 18:28:42 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/13 12:43:22 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,9 @@ int	check_file_before_exec(char *path, char *cmd_name)
 int	execute_externe(char **args, t_shell *shell)
 {
 	pid_t	pid;
-	int		status;
 	char	**env_temp;
 	t_exec	*exec;
+	int check_result;
 
 	exec = shell->exec;
 	if (!shell->exec->abs_path && !shell->exec->rel_path)
@@ -118,7 +118,7 @@ int	execute_externe(char **args, t_shell *shell)
 	pid = fork();
 	if (pid == 0)
 	{
-		int check_result = check_file_before_exec(exec->cmd_path, args[0]);
+		check_result = check_file_before_exec(exec->cmd_path, args[0]);
 		if (check_result != 0)
 			exit(check_result);
 		env_temp = set_my_fucking_error(exec);
@@ -132,13 +132,7 @@ int	execute_externe(char **args, t_shell *shell)
 		exit(126);
 	}
 	else if (pid > 0)
-	{
-		waitpid(pid, &status, 0);
-		if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
-		else if (WIFSIGNALED(status))
-			return (128 + WTERMSIG(status));
-	}
+		exit_codes(shell, wait_child_with_signals(pid), NULL);
 	else
 		return (perror("fork failed"), 1);
 	return (1);

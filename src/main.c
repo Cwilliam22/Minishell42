@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/07/10 05:36:53 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/13 16:09:51 by alfavre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,99 @@ static void	cleanup_shell(t_shell *shell)
 }
 
 /**
+ * Helper function to clean up current command resources
+ * @param shell: Shell structure to clean
+ */
+static void	cleanup_current_command(t_shell *shell)
+{
+	if (shell->cmd_list)
+	{
+		free_commands(shell->cmd_list);
+		shell->cmd_list = NULL;
+	}
+	if (shell->token_list)
+	{
+		free_tokens(shell->token_list);
+		shell->token_list = NULL;
+	}
+	if (shell->input_line)
+	{
+		free(shell->input_line);
+		shell->input_line = NULL;
+	}
+}
+
+/**
+ * Initialize command processing - tokenize and parse
+ * @param shell: Shell structure
+ * @param input: Input string to process
+ * @return: 1 on success, 0 on failure
+ */
+static int	init_command_processing(t_shell *shell, char *input)
+{
+	shell->input_line = ft_strdup(input);
+	if (!shell->input_line)
+	{
+		print_error("minishell", NULL, "malloc failed");
+		return (0);
+	}
+	shell->token_list = tokenize(shell->input_line);
+	if (!shell->token_list)
+	{
+		cleanup_current_command(shell);
+		return (0);
+	}
+	if (check_token_syntax(shell->token_list) != 1)
+	{
+		exit_codes(shell, 2, NULL);
+		cleanup_current_command(shell);
+		return (0);
+	}
+	shell->cmd_list = parse_tokens(shell->token_list, shell);
+	if (!shell->cmd_list)
+	{
+		cleanup_current_command(shell);
+		return (0);
+	}
+	return (1);
+}
+
+/**
+ * Handle execution results and signals
+ * @param shell: Shell structure
+ * @param exec_result: Result from ft_exec
+ * @return: 1 to continue, 0 to exit
+ */
+static int	handle_execution_result(t_shell *shell, int exec_result)
+{
+	int	signal_exit_code;
+
+	if (shell->exec->exit == 1)
+	{
+		cleanup_current_command(shell);
+		return (0);
+	}
+	signal_exit_code = check_and_handle_signal();
+	if (signal_exit_code == 130)
+	{
+		exit_codes(shell, 130, NULL);
+		cleanup_current_command(shell);
+		return (1);
+	}
+	else if (signal_exit_code != 0)
+		exit_codes(shell, signal_exit_code, NULL);
+	else
+		exit_codes(shell, exec_result, NULL);
+	if (exec_result == -1)
+	{
+		cleanup_current_command(shell);
+		return (0);
+	}
+	cleanup_current_command(shell);
+	return (1);
+}
+
+/**
  * Process a single line of input
  * @param shell: Shell structure
  * @param input: Input line to process
@@ -130,91 +223,25 @@ static void	cleanup_shell(t_shell *shell)
 static int	process_input(t_shell *shell, char *input)
 {
 	int	exec_result;
-	int	signal_exit_code;
-	int	error;
 
 	if (!input || !*input || ft_strlen(input) == 0)
 		return (1);
 	add_history(input);
-	shell->input_line = ft_strdup(input);
-	if (!shell->input_line)
-	{
-		print_error("minishell", NULL, "malloc failed");
+	if (!init_command_processing(shell, input))
 		return (1);
-	}
-	shell->token_list = tokenize(shell->input_line);
-	if (!shell->token_list)
-	{
-		free(shell->input_line);
-		shell->input_line = NULL;
-		return (1);
-	}
-	//print_tokens(shell->token_list);
-	error = check_token_syntax(shell->token_list);
-	if (error != 1)
-	{
-		shell->exit_status = 2;
-		free_tokens(shell->token_list);
-		shell->token_list = NULL;
-		free(shell->input_line);
-		shell->input_line = NULL;
-		return (1);
-	}
-	shell->cmd_list = parse_tokens(shell->token_list, shell);
-	if (!shell->cmd_list)
-	{
-		free_tokens(shell->token_list);
-		shell->token_list = NULL;
-		free(shell->input_line);
-		shell->input_line = NULL;
-		return (1);
-	}
-	//print_commands(shell->cmd_list);
 	exec_result = ft_exec(shell);
-	if (shell->exec->exit == 1)
-	{
-		free_commands(shell->cmd_list);
-		shell->cmd_list = NULL;
-		free_tokens(shell->token_list);
-		shell->token_list = NULL;
-		free(shell->input_line);
-		shell->input_line = NULL;
-		return (0);
-	}
-	//printf("%d\n", exec_result);
-	signal_exit_code = check_and_handle_signal();
-	if (signal_exit_code != 0)
-		shell->exit_status = signal_exit_code;
-	else
-		shell->exit_status = exec_result;
-	if (exec_result == -1)
-	{
-		free_commands(shell->cmd_list);
-		shell->cmd_list = NULL;
-		free_tokens(shell->token_list);
-		shell->token_list = NULL;
-		free(shell->input_line);
-		shell->input_line = NULL;
-		return (0);
-	}
-	free_commands(shell->cmd_list);
-	shell->cmd_list = NULL;
-	free_tokens(shell->token_list);
-	shell->token_list = NULL;
-	free(shell->input_line);
-	shell->input_line = NULL;
-	return (1);
+	return (handle_execution_result(shell, exec_result));
 }
 
 /**
  * Main shell loop - REPL (Read-Eval-Print Loop)
  * @param shell: Shell structure
  */
-static void	shell_loop(t_shell *shell)
+static void shell_loop(t_shell *shell)
 {
 	char	*input;
 	int		continue_loop;
-	int		signal_exit_code;
+	int		result;
 
 	continue_loop = 1;
 	setup_interactive_signals();
@@ -228,14 +255,9 @@ static void	shell_loop(t_shell *shell)
 			printf("exit\n");
 			break ;
 		}
-		signal_exit_code = check_and_handle_signal();
-		if (signal_exit_code != 0)
-		{
-			shell->exit_status = signal_exit_code;
-			free(input);
-			break ;
-		}
-		continue_loop = process_input(shell, input);
+		result = process_input(shell, input);
+		if (result == 0)
+			continue_loop = 0;
 		free(input);
 	}
 }

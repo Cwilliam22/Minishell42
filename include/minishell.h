@@ -157,21 +157,25 @@ extern int	g_signal_received;
 int		main(int argc, char **argv, char **envp);
 
 /* ============================= SIGNALS ================================== */
-/* Fonctions de configuration */
+/* signal_handler */
+void	handle_sigint(int sig);
+void	handle_sigint_heredoc(int sig);
+
+/* signal_init */
 void	setup_signals(void);
+int		wait_child_with_signals(pid_t pid);
+
+/* signal_setup */
 void	setup_interactive_signals(void);
 void	setup_execution_signals(void);
 void	setup_heredoc_signals(void);
 void	restore_default_signals(void);
 
-/* Fonctions de vérification */
+/* signal_states */
 int		check_and_handle_signal(void);
 int		signal_received(void);
 void	reset_signal(void);
 int		get_signal_number(void);
-
-/* Fonctions utilitaires pour processus enfants */
-int		wait_child_with_signals(pid_t pid);
 
 /* ============================= LEXER ===================================== */
 /* Lexer */
