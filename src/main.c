@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/07/16 18:51:13 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/16 21:23:37 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ static void	init_shell(t_shell *shell, char **envp, t_exec *exec)
 	exec->out = 0;
 	ft_env(envp, exec);
 	shell->exec = exec;
+	signal(SIGPIPE, SIG_IGN);
 	parent_signal();
 }
 

@@ -6,7 +6,7 @@
 /*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:17:24 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/16 14:05:45 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/16 21:39:36 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ static int	create_pipes(t_shell *shell, int ***pipes)
 	return (1);
 }
 
-static void	setup_child_pipes(int i, int **pipes, t_exec *exec)
+static void	setup_child_pipes_and_redir(int i, int **pipes, t_exec *exec,
+	t_cmd *current_cmd)
 {
 	if (i == 0 && exec->nbr_process > 1)
 	{
@@ -47,6 +48,8 @@ static void	setup_child_pipes(int i, int **pipes, t_exec *exec)
 		dup2(pipes[i - 1][0], STDIN_FILENO);
 		dup2(pipes[i][1], STDOUT_FILENO);
 	}
+	if (current_cmd->redirections)
+		apply_redirections(current_cmd->redirections, NULL);
 }
 
 static void	kill_all_process(pid_t *pids, int count)
@@ -75,9 +78,11 @@ static int	exec_pipe(t_shell *shell, int **pipes, pid_t *pids)
 		if (pids[i] == 0)
 		{
 			child_signal();
-			signal(SIGPIPE, SIG_IGN);
+			signal(SIGPIPE, SIG_DFL);
 			if (shell->exec->nbr_process > 1)
-				setup_child_pipes(i, pipes, shell->exec);
+				setup_child_pipes_and_redir(i, pipes, shell->exec, current_cmd);
+			else if (current_cmd->redirections)
+				apply_redirections(current_cmd->redirections, NULL);
 			close_pipes(pipes, shell->exec);
 			shell->cmd_list = current_cmd;
 			if (!identification(shell))
@@ -108,6 +113,7 @@ int	pipeline(t_shell *shell)
 	pids = malloc(sizeof(pid_t) * shell->exec->nbr_process);
 	if (!pids)
 		return (free_pipes(pipes, shell->exec), 0);
+	signal(SIGPIPE, SIG_IGN);
 	sig_core_dump_parent_signal();
 	if (!exec_pipe(shell, pipes, pids))
 		return (free(pids), free_pipes(pipes, shell->exec), 0);
