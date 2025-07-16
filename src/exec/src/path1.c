@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
+/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:17:34 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/08 17:44:53 by wcapt            ###   ########.fr       */
+/*   Updated: 2025/07/16 12:10:36 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,11 @@ int	apply_path(t_shell *shell)
 {
 	char	**paths;
 
+	if (g_signal_received == SIGINT)
+	{
+		exit_codes(shell, 130, NULL);
+		return (0);
+	}
 	paths = ft_split(read_in_path(shell->exec->env,
 				find_var_path(shell->exec->env)), ':');
 	if (!paths || !paths[0])

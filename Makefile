@@ -33,7 +33,7 @@ FILES_LEXER = 	lexer lexer_utils token_utils \
 				error check_token_syntax debug_token debug_cmds \
 
 SRC_SIGNALS = src/signals/
-FILES_SIGNALS = signal_init signal_handler signal_setup signal_states
+FILES_SIGNALS = signal_handler signal_parents signal_child
 
 
 SRC_DIR	= src/

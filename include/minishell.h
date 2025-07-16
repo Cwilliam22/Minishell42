@@ -160,22 +160,19 @@ int		main(int argc, char **argv, char **envp);
 /* signal_handler */
 void	handle_sigint(int sig);
 void	handle_sigint_heredoc(int sig);
+void	handler_sigquit(int sig);
+void	handle_signal(t_shell *shell);
+void	wait_for_all(t_shell *shell, pid_t last_pid);
 
-/* signal_init */
-void	setup_signals(void);
-int		wait_child_with_signals(pid_t pid);
+/* signal_parent */
+void	parent_signal(void);
+void	heredoc_parent_signal(void);
+void	sig_core_dump_parent_signal(void);
 
-/* signal_setup */
-void	setup_interactive_signals(void);
-void	setup_execution_signals(void);
-void	setup_heredoc_signals(void);
-void	restore_default_signals(void);
-
-/* signal_states */
-int		check_and_handle_signal(void);
-int		signal_received(void);
-void	reset_signal(void);
-int		get_signal_number(void);
+/* signal_child*/
+void	heredoc_child_signal(void);
+void	child_signal(void);
+void	handler_sigint_child(int sig);
 
 /* ============================= LEXER ===================================== */
 /* Lexer */
@@ -259,8 +256,8 @@ int		pipeline(t_shell *shell);
 int		close_pipes(int **pipes, t_exec *exec);
 
 /* ============================= REDIRECTIONS ============================= */
-int		apply_redirections(t_redir *redirs);
-int		create_heredoc_pipe(const char *delimiter);
+int		apply_redirections(t_redir *redirs, t_shell *shell);
+int		create_heredoc_pipe(const char *delimiter, t_shell *shell);
 
 /* Redirection utilities */
 t_redir	*create_redirection(int type, char *file);
@@ -380,7 +377,5 @@ void	print_error(char *cmd, char *arg, char *msg);
 /* Debug functions */
 void	print_tokens(t_token *tokens);
 void	print_commands(t_cmd *commands);
-
-
 
 #endif

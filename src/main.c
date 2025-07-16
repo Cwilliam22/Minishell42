@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/07/13 16:09:51 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/16 12:33:52 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int g_signal_received = 0;
 
 int	ft_shlvl(t_exec *exec)
 {
@@ -70,7 +72,7 @@ static void	init_shell(t_shell *shell, char **envp, t_exec *exec)
 	exec->out = 0;
 	ft_env(envp, exec);
 	shell->exec = exec;
-	setup_signals();
+	parent_signal();
 }
 
 /**
@@ -187,24 +189,12 @@ static int	init_command_processing(t_shell *shell, char *input)
  */
 static int	handle_execution_result(t_shell *shell, int exec_result)
 {
-	int	signal_exit_code;
-
 	if (shell->exec->exit == 1)
 	{
 		cleanup_current_command(shell);
 		return (0);
 	}
-	signal_exit_code = check_and_handle_signal();
-	if (signal_exit_code == 130)
-	{
-		exit_codes(shell, 130, NULL);
-		cleanup_current_command(shell);
-		return (1);
-	}
-	else if (signal_exit_code != 0)
-		exit_codes(shell, signal_exit_code, NULL);
-	else
-		exit_codes(shell, exec_result, NULL);
+	handle_signal(shell);
 	if (exec_result == -1)
 	{
 		cleanup_current_command(shell);
@@ -244,17 +234,17 @@ static void shell_loop(t_shell *shell)
 	int		result;
 
 	continue_loop = 1;
-	setup_interactive_signals();
 	while (continue_loop)
 	{
 		g_signal_received = 0;
-		setup_interactive_signals();
+		parent_signal();
 		input = readline(PROMPT);
 		if (!input)
 		{
 			printf("exit\n");
 			break ;
 		}
+		handle_signal(shell);
 		result = process_input(shell, input);
 		if (result == 0)
 			continue_loop = 0;

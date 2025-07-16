@@ -6,7 +6,7 @@
 /*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:42:25 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/12 18:25:02 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/16 12:21:39 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,9 +197,21 @@ void	var_path(t_shell *shell)
 
 int	ft_exec(t_shell *shell)
 {
+	int	exec_result;
+
+	if (g_signal_received == SIGINT)
+	{
+		exit_codes(shell, 130, NULL);
+		return (130);
+	}
 	init_all(shell->exec);
 	init_exec(shell);
 	var_path(shell);
+	if (g_signal_received == SIGINT)
+	{
+		exit_codes(shell, 130, NULL);
+		return (130);
+	}
 	if (shell->exec->nbr_process == 1)
 	{
 		if (its_absolute_path(shell))
@@ -209,15 +221,27 @@ int	ft_exec(t_shell *shell)
 		shell->exec->is_pipe = 0;
 		if (check_args(shell))
 		{
-			if (!identification(shell))
-				return (shell->exec->out);
+			exec_result = identification(shell);
+			if (exec_result == 0)
+				exec_result = shell->exec->out;
 		}
+		else
+			exec_result = shell->exec->out;
 	}
 	else if (shell->exec->nbr_process > 1)
 	{
 		shell->exec->is_pipe = 1;
 		if (!pipeline(shell))
-			return (ft_printf("Not a command valid\n"), 1);
+		{
+			ft_printf("Not a command valid\n");
+			exec_result = 1;
+		}
+		else
+			exec_result = shell->exec->out;
 	}
-	return (free_var(shell->exec), shell->exec->out);
+	else
+		exec_result = shell->exec->out;
+	handle_signal(shell);
+	free_var(shell->exec);
+	return (exec_result);
 }

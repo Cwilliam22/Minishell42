@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   identification.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alfavre <alfavre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:44:01 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/13 12:43:22 by alfavre          ###   ########.fr       */
+/*   Updated: 2025/07/16 14:05:12 by alexis           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,42 +68,16 @@ int	execute_builtin(t_shell *shell)
 	return (127);
 }
 
-int	check_file_before_exec(char *path, char *cmd_name)
-{
-	struct stat st;
-
-	if (stat(path, &st) == -1)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd_name, 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
-		return (127);
-	}
-	if (S_ISDIR(st.st_mode))
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd_name, 2);
-		ft_putstr_fd(": Is a directory\n", 2);
-		return (126);
-	}
-	if (!(st.st_mode & S_IXUSR))
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(cmd_name, 2);
-		ft_putstr_fd(": Permission denied\n", 2);
-		return (126);
-	}
-	return (0);
-}
-
 // Ajoutez du debug dans execute_externe :
 int	execute_externe(char **args, t_shell *shell)
 {
 	pid_t	pid;
 	char	**env_temp;
 	t_exec	*exec;
-	int check_result;
 
+	int i = 0;
+	while (args[i])
+		i++;
 	exec = shell->exec;
 	if (!shell->exec->abs_path && !shell->exec->rel_path)
 	{
@@ -115,12 +89,12 @@ int	execute_externe(char **args, t_shell *shell)
 			return (127);
 		}
 	}
+	if (shell->exec->nbr_process == 1)
+		sig_core_dump_parent_signal();
 	pid = fork();
 	if (pid == 0)
 	{
-		check_result = check_file_before_exec(exec->cmd_path, args[0]);
-		if (check_result != 0)
-			exit(check_result);
+		child_signal();
 		env_temp = set_my_fucking_error(exec);
 		if (!shell->exec->abs_path && !shell->exec->rel_path)
 		{
@@ -132,10 +106,50 @@ int	execute_externe(char **args, t_shell *shell)
 		exit(126);
 	}
 	else if (pid > 0)
-		exit_codes(shell, wait_child_with_signals(pid), NULL);
+	{
+		if (shell->exec->nbr_process == 1)
+		{
+			int status;
+			waitpid(pid, &status, 0);
+			int real_exit_code = 0;
+			if (WIFEXITED(status))
+				real_exit_code = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				real_exit_code = 128 + WTERMSIG(status);
+			parent_signal();
+			return (real_exit_code);
+		}
+		else
+			return (0);
+	}
 	else
 		return (perror("fork failed"), 1);
 	return (1);
+}
+
+int	execute_externe_pipeline(char **args, t_shell *shell)
+{
+	char	**env_temp;
+	char	*cmd_path;
+
+	if (!shell->exec->abs_path && !shell->exec->rel_path)
+	{
+		if (!command_exist(shell))
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(args[0], 2);
+			ft_putstr_fd(": command not found\n", 2);
+			exit(127);
+		}
+	}
+	cmd_path = shell->exec->cmd_path;
+	if (!cmd_path)
+		exit(127);
+	extern char **environ;
+	env_temp = environ;
+	execve(cmd_path, args, env_temp);
+	perror("execve failed");
+	exit(126);
 }
 
 int	identification(t_shell *shell)
@@ -148,10 +162,29 @@ int	identification(t_shell *shell)
 
 	if (!shell || !shell->cmd_list || !shell->exec)
 		return (ft_printf("Error: Shell or command list is NULL\n"), 0);
+	if (g_signal_received == SIGINT)
+	{
+		exit_codes(shell, 130, "");
+		if (shell->exec->nbr_process > 1)
+			exit(130);
+		return (130);
+	}
+	if (shell->exec->nbr_process > 1)
+	{
+		process = shell->cmd_list->args;
+		shell->exec->cmd = ft_strdup(shell->cmd_list->args[0]);
+		if (!shell->exec->cmd)
+			exit(127);
+		if (is_builtin(shell->cmd_list->args[0]))
+			exit_code = execute_builtin(shell);
+		else
+			exit_code = execute_externe_pipeline(process, shell);
+		exit(exit_code);
+	}
 	saved_stdout = dup(STDOUT_FILENO);
 	saved_stdin = dup(STDIN_FILENO);
 	process = shell->cmd_list->args;
-	apply_redir_result = apply_redirections(shell->cmd_list->redirections);
+	apply_redir_result = apply_redirections(shell->cmd_list->redirections, shell);
 	shell->exec->cmd = ft_strdup(shell->cmd_list->args[0]);
 	if (!shell->exec->cmd)
 		return (clear_std(saved_stdout, saved_stdin), 0);
@@ -159,8 +192,6 @@ int	identification(t_shell *shell)
 	{
 		clear_std(saved_stdout, saved_stdin);
 		exit_codes(shell, apply_redir_result, "");
-		if (shell->exec->nbr_process > 1)
-			exit(apply_redir_result);
 		return (apply_redir_result);
 	}
 	if (is_builtin(shell->cmd_list->args[0]))
@@ -169,8 +200,6 @@ int	identification(t_shell *shell)
 		exit_code = execute_externe(process, shell);
 	clear_std(saved_stdout, saved_stdin);
 	exit_codes(shell, exit_code, "");
-	if (shell->exec->nbr_process > 1)
-		exit(exit_code);
 	return (exit_code);
 }
 
