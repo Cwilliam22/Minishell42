@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:42:25 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/16 12:21:39 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/16 19:10:57 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,6 +222,8 @@ int	ft_exec(t_shell *shell)
 		if (check_args(shell))
 		{
 			exec_result = identification(shell);
+			//printf("exec_result 1 = %d\n", exec_result);
+			// pourquoi la condition suivante ???
 			if (exec_result == 0)
 				exec_result = shell->exec->out;
 		}
@@ -243,5 +245,6 @@ int	ft_exec(t_shell *shell)
 		exec_result = shell->exec->out;
 	handle_signal(shell);
 	free_var(shell->exec);
+	//printf("exec_result 2 = %d\n", exec_result);
 	return (exec_result);
 }

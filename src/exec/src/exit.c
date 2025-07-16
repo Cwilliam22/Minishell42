@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 14:23:34 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/10 06:35:50 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/16 19:29:17 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	builtin_exit(t_shell *shell)
 	ft_printf("exit\n");
 	exit_code = get_exit_code(exec, arg);
 	if (exec->nbr_arg > 2 && ft_is_a_number(arg[1]))
-		return (shell->exit_status = 1, 1);
+		return (shell->exec->out = 1, 1);
 	exec->exit = 1;
 	exit_codes(shell, exit_code, NULL);
 	return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 17:57:44 by root              #+#    #+#             */
-/*   Updated: 2025/07/16 12:33:52 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/16 18:51:13 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,6 +200,7 @@ static int	handle_execution_result(t_shell *shell, int exec_result)
 		cleanup_current_command(shell);
 		return (0);
 	}
+	shell->exec->out = exec_result;
 	cleanup_current_command(shell);
 	return (1);
 }
@@ -313,5 +314,6 @@ int	main(int argc, char **argv, char **envp)
 	shell_loop(&shell);
 	shell.exit_status = shell.exec->out;
 	cleanup_shell(&shell);
+	//printf("Exiting minishell with status %d\n", shell.exit_status);
 	return (shell.exit_status);
 }

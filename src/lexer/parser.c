@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 15:31:41 by root              #+#    #+#             */
-/*   Updated: 2025/07/04 16:13:23 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/16 19:33:15 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static t_cmd	*parse_single_command(t_token *tokens, t_shell *shell)
 	if (strcmp(tokens->value, "$?") == 0)
 	{
 		free(tokens->value);
-		tokens->value = ft_itoa(shell->exit_status);
+		tokens->value = ft_itoa(shell->exec->out);
 	}
 	cmd = create_command();
 	if (!cmd)

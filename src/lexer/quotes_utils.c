@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   quotes_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 11:24:27 by alfavre           #+#    #+#             */
-/*   Updated: 2025/07/07 11:41:02 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/16 19:10:20 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ char	*get_env_var(char *key, t_shell *shell)
 	if (!key || !shell)
 		return (ft_strdup(""));
 	if (ft_strcmp(key, "?") == 0)
-		return (ft_itoa(shell->exit_status));
+		return (ft_itoa(shell->exec->out));
 	current = shell->exec;
 	env_index = find_sth_in_env(key, current->env);
 	if (env_index >= 0)

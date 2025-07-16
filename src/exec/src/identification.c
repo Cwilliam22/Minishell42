@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   identification.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:44:01 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/16 14:05:12 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/16 19:59:26 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int	execute_builtin(t_shell *shell)
 		if (ft_strcmp(shell->cmd_list->args[0], tab_link[i].builtin) == 0)
 		{
 			exit_code = tab_link[i].fonction(shell);
+			//printf("Exit code: %d\n", exit_code);
 			return (exit_code);
 		}
 		i++;
@@ -147,6 +148,7 @@ int	execute_externe_pipeline(char **args, t_shell *shell)
 		exit(127);
 	extern char **environ;
 	env_temp = environ;
+	// Y a quoi dans env_temp ?
 	execve(cmd_path, args, env_temp);
 	perror("execve failed");
 	exit(126);
@@ -195,7 +197,11 @@ int	identification(t_shell *shell)
 		return (apply_redir_result);
 	}
 	if (is_builtin(shell->cmd_list->args[0]))
+	{
 		exit_code = execute_builtin(shell);
+		if (shell->exec->exit == 1)
+			exit_code = shell->exec->out;
+	}
 	else
 		exit_code = execute_externe(process, shell);
 	clear_std(saved_stdout, saved_stdin);

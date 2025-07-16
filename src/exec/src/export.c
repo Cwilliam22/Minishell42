@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexis <alexis@student.42.fr>              +#+  +:+       +#+        */
+/*   By: wcapt < wcapt@student.42lausanne.ch >      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/02 18:42:02 by wcapt             #+#    #+#             */
-/*   Updated: 2025/07/10 06:14:51 by alexis           ###   ########.fr       */
+/*   Updated: 2025/07/16 18:30:32 by wcapt            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ static int	export_args_only(t_shell *shell)
 			print_export_error(arg[i]);
 			error = 1;
 			i++;
-			continue ;
+			return (error);
 		}
 		else if (find_sth_in_env(arg[i], shell->exec->env) == -1)
 		{
